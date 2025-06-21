@@ -1,26 +1,764 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+  /* Force white background at the base layer */
+  html,
+  body,
+  #__next {
+    background-color: #FFFFFF !important;
+    color: #2D1810 !important;
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Design System - Chinar Leaf Theme */
+:root {
+  /* Primary Colors - Chinar Leaf Inspired */
+  --chinar-orange: #D2691E;      /* Main orange like autumn chinar */
+  --chinar-red: #CD5C5C;         /* Deeper red tone */
+  --chinar-light: #F4A460;       /* Light orange for accents */
+  --chinar-dark: #A0522D;        /* Dark brown for text */
+  
+  /* Background Colors - WHITE THEME */
+  --bg-primary: #FFFFFF;          /* Pure white background */
+  --bg-card: #FEFEFE;            /* Very light gray for cards */
+  --bg-card-right: #F9F9F9;      /* Slightly darker for right side of modal */
+  --bg-header: #FFFFFF;          /* Pure white for header */
+  
+  /* Text Colors */
+  --text-primary: #2D1810;       /* Dark brown for main text */
+  --text-secondary: #5D4037;     /* Medium brown for secondary text */
+  --text-muted: #8D6E63;         /* Light brown for muted text */
+  --text-kashmiri: #B8860B;      /* Golden brown for Kashmiri text */
+  
+  /* Border Colors */
+  --border-light: #E8D5C4;       /* Light border */
+  --border-medium: #D7C4B0;      /* Medium border */
+  
+  /* Shadow Colors */
+  --shadow-light: rgba(210, 105, 30, 0.1);
+  --shadow-medium: rgba(210, 105, 30, 0.15);
+  --shadow-strong: rgba(210, 105, 30, 0.25);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Dark mode - keeping the warm theme but darker */
+    --bg-primary: #1A1611;
+    --bg-card: #2A1F1A;
+    --bg-card-right: #332620;
+    --bg-header: #2D2419;
+    --text-primary: #F5E6D3;
+    --text-secondary: #E0C4A0;
+    --text-muted: #C4A484;
+    --text-kashmiri: #F4D03F;
+    --border-light: #3D2F24;
+    --border-medium: #4A3A2D;
   }
 }
 
+/* Force styles with higher specificity */
+html {
+  background: white !important;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: white !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#__next {
+  background: white !important;
+  min-height: 100vh !important;
+}
+
+/* Navigation System */
+.site-nav {
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 2px 4px var(--shadow-light);
+  padding: 1rem 0;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  flex-shrink: 0;
+}
+
+.brand-link {
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--chinar-orange);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.nav-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.nav-btn:hover {
+  background: var(--bg-card);
+  color: var(--chinar-orange);
+  border-color: var(--border-light);
+}
+
+.nav-btn-active {
+  background: linear-gradient(135deg, var(--chinar-orange), var(--chinar-red));
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.nav-btn-active:hover {
+  background: linear-gradient(135deg, var(--chinar-red), var(--chinar-orange));
+}
+
+/* Typography System */
+.text-kashmiri {
+  /* Kashmiri text - largest and most prominent */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-kashmiri);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.text-transliteration {
+  /* Transliteration - medium size, italic */
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.text-translation {
+  /* Translation - normal size */
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.text-meaning {
+  /* Meaning/moral - slightly smaller, more readable */
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Grid System for Cards - BIGGER CARDS */
+.idioms-grid {
+  display: grid;
+  /* INCREASED minimum card width for bigger cards */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+/* Mobile: Single column with side margins */
+@media (max-width: 767px) {
+  .idioms-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+}
+
+/* Tablet: Bigger minimum width */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .idioms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.75rem;
+    padding: 1.75rem;
+  }
+}
+
+/* Desktop: Even bigger cards */
+@media (min-width: 1024px) {
+  .idioms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2.5rem;
+    padding: 2.5rem;
+  }
+}
+
+/* Card System - BIGGER LANDSCAPE CARDS */
+.idiom-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 2.4rem;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  
+  /* BIGGER cards - increased height and better aspect ratio */
+  min-height: 180px; /* Increased from 140px */
+  aspect-ratio: 5/3; /* Changed from 5/2.35 to be taller */
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.idiom-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--shadow-medium);
+  border-color: var(--chinar-light);
+}
+
+.idiom-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+/* Card content area */
+.card-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Tags */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.tag {
+  background: linear-gradient(135deg, var(--chinar-light), var(--chinar-orange));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Search System */
+.search-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  margin: 2rem auto;
+  max-width: 1260px;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.search-container > div:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.search-input-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-input-row .flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.search-input-row .btn {
+  flex-shrink: 0;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--chinar-orange);
+  box-shadow: 0 0 0 3px var(--shadow-light);
+}
+
+.search-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.search-tags-row .text-sm {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.search-tags-row .btn-secondary {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.search-tags-row .tag {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Style the dropdown menu for filter categories */
+.search-container .absolute {
+  min-width: 200px;
+  background: transparent !important; /* Remove dropdown background */
+  border: none !important; /* Remove dropdown border */
+  box-shadow: none !important; /* Remove dropdown shadow */
+}
+
+/* Style individual filter option buttons in dropdown */
+.search-container .absolute button {
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  margin: 0.25rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  background: var(--bg-card) !important; /* Give each button its own background */
+  border: 1px solid var(--border-light) !important;
+  box-shadow: 0 2px 4px var(--shadow-light) !important; /* Individual shadows */
+}
+
+/* Hover state for dropdown options */
+.search-container .absolute button:hover {
+  background: var(--bg-card) !important;
+  border-color: var(--chinar-light) !important;
+  color: var(--chinar-orange) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px var(--shadow-medium) !important;
+}
+
+/* Selected state for dropdown options */
+.search-container .absolute button[style*="var(--chinar-orange)"] {
+  background: var(--bg-card) !important;
+  color: var(--chinar-orange) !important;
+  border-color: var(--chinar-orange) !important;
+  font-weight: 600 !important;
+}
+
+/* Add padding inside the dropdown container */
+.search-container .absolute > div,
+.search-container .absolute {
+  padding: 0.5rem !important;
+}
+
+/* Page Layout */
+.page-container {
+  padding: 2rem 0;
+  background: white !important;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #e67f36;
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #333333;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Button System */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--chinar-orange), var(--chinar-red));
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-right);
+  border-color: var(--chinar-light);
+}
+
+/* Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* FLIP CARD STYLES - BIGGER CARDS */
+.card-flip-container {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-flip {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  transform-origin: center center;
+}
+
+.card-flip.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Both sides - BIGGER sizing to match new idiom-card */
+.card-flip-front,
+.card-flip-back {
+  width: 100%;
+  backface-visibility: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  
+  /* MATCH the new bigger card dimensions */
+  min-height: 180px; /* Same as idiom-card */
+  aspect-ratio: 5/3; /* Same as idiom-card */
+  padding: 2.4rem;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.card-flip-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1.5rem; /* Reduced padding for back side */
+  justify-content: flex-start;
+}
+
+/* Back side content layout */
+.flip-back-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Reduced from 1rem */
+  height: 100%;
+}
+
+/* Audio section */
+.flip-audio-section {
+  flex-shrink: 0;
+}
+
+.flip-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.flip-audio-container {
+  width: 100%;
+}
+
+.flip-audio-player {
+  width: 100%;
+  height: 32px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  border: 1px solid var(--border-light);
+}
+
+.flip-audio-placeholder {
+  padding: 0.3rem 0.4rem; /* Even smaller */
+  border-radius: 4px;
+  text-align: center;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+}
+
+.flip-audio-icon {
+  font-size: 0.7rem; /* Smaller icon */
+  margin-bottom: 0.1rem; /* Less margin */
+}
+
+.flip-audio-text {
+  font-size: 0.6rem; /* Smaller text */
+  margin: 0;
+}
+
+/* Meaning section */
+.flip-meaning-section {
+  flex: 1;
+  overflow: hidden;
+}
+
+.flip-meaning-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6; /* More lines for bigger cards */
+  -webkit-box-orient: vertical;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .card-flip-front,
+  .card-flip-back {
+    padding: 2rem;
+  }
+  
+  .card-flip-back {
+    padding: 1.25rem;
+  }
+  
+  .flip-meaning-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* Form Container and Layout */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.submit-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+/* Form Help Text */
+.form-help-text {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Tag Input Row */
+.tag-input-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.tag-input {
+  flex: 1;
+}
+
+/* Tag Removable */
+.tag-removable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.tag-remove-btn:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Form Submit */
+.form-submit {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Success and Error Messages */
+.success-message {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  color: #0c4a6e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.success-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.error-message-container {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Button Large */
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .submit-form {
+    padding: 1.5rem;
+  }
+  
+  .tag-input-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Responsive text sizing */
+@media (max-width: 767px) {
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .text-kashmiri {
+    font-size: 1.3rem;
+  }
+  
+  .text-transliteration {
+    font-size: 1rem;
+  }
+}
+
+/* Ensure proper spacing between components */
+.main-content {
+  background: white !important;
+  min-height: calc(100vh - 200px);
+}
+
+/* Footer spacing */
+.site-footer {
+  margin-top: 4rem;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-light);
+  padding: 2rem 0;
+}
+
+/* Darken results count text */
+.results-count,
+[class*="results"],
+[class*="showing"] {
+  color: #333333 !important;
 }
