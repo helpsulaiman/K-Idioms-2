@@ -4,10 +4,11 @@ export interface Idiom {
   transliteration: string;
   translation: string;
   meaning: string;
-  audio_url?: string;
   tags: string[];
-  created_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
+
 
 export interface IdiomSubmission {
   idiom_kashmiri: string;

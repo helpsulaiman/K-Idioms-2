@@ -1,73 +1,66 @@
+import { useState } from 'react';
+import { Idiom } from '@/types/idiom';
+import { supabase } from '@/lib/supabaseClient';
 
-import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-interface AllIdiomsProps {
-  onUpdate: () => void;
-}
-
-interface Idiom {
-  id: number;
-  idiom_kashmiri: string;
-  transliteration: string;
-  translation: string;
-  meaning: string;
-  tags: string[];
-  contributor: string;
-  notes?: string;
-  created_at: string;
-}
-
-const AllIdioms: React.FC<AllIdiomsProps> = ({ onUpdate }) => {
-  const [idioms, setIdioms] = useState<Idiom[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<Idiom | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+const AllIdioms = ({ onUpdate }: { onUpdate?: () => void }) => {
   const [editingIdiom, setEditingIdiom] = useState<Idiom | null>(null);
 
+  const handleEdit = (idiom: Idiom) => {
+    setEditingIdiom(idiom);
+  };
 
-  const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this idiom?')) return;
 
-  useEffect(() => {
-    fetchIdioms();
-  }, []);
-
-  const fetchIdioms = async () => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
           .from('idioms')
-          .select('*')
-          .order('created_at', { ascending: false });
+          .delete()
+          .eq('id', id);
 
       if (error) throw error;
-      setIdioms(data || []);
+
+      // Refresh the list
+      onUpdate?.();
+      alert('Idiom deleted successfully!');
     } catch (error) {
-      console.error('Error fetching idioms:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error deleting idiom:', error);
+      alert('Error deleting idiom. Please try again.');
     }
   };
 
-  // ... (keep the existing handleEdit, handleCancelEdit, handleUpdate, handleDelete functions)
+  const handleUpdate = async (id: string) => {
+    if (!editingIdiom) return;
 
-  const filteredIdioms = idioms.filter(idiom =>
-      idiom.idiom_kashmiri.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      idiom.transliteration.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      idiom.translation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      idiom.meaning.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    try {
+      const { error } = await supabase
+          .from('idioms')
+          .update({
+            idiom_kashmiri: editingIdiom.idiom_kashmiri,
+            transliteration: editingIdiom.transliteration,
+            translation: editingIdiom.translation,
+            meaning: editingIdiom.meaning,
+            tags: editingIdiom.tags,
+          })
+          .eq('id', id);
 
-  if (loading) {
-    return <div className="text-center py-4">Loading idioms...</div>;
-  }
+      if (error) throw error;
+
+      // Refresh the list and close modal
+      onUpdate?.();
+      setEditingIdiom(null);
+      alert('Idiom updated successfully!');
+    } catch (error) {
+      console.error('Error updating idiom:', error);
+      alert('Error updating idiom. Please try again.');
+    }
+  };
 
   const handleCancelEdit = () => {
-    setEditingIdiom(null); // Reset the editing state
+    setEditingIdiom(null);
   };
+
+
 
 
   return (
@@ -245,15 +238,17 @@ const AllIdioms: React.FC<AllIdiomsProps> = ({ onUpdate }) => {
                   >
                     Cancel
                   </button>
-                  {/* ... other buttons */}
+                  <button
+                      onClick={() => handleUpdate(editingIdiom.id)}
+                      className="btn btn-primary"
+                  >
+                    Save Changes
+                  </button>
                 </div>
               </div>
             </div>
         )}
-
       </div>
-
-
   );
 };
 
