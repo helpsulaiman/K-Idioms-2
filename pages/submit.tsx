@@ -14,10 +14,11 @@ const SubmitPage: React.FC = () => {
     submitter_email: '',
     notes: ''
   });
-  const [tagInput, setTagInput] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [touchedFields, setTouchedFields] = useState<{[key: string]: boolean}>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,39 +28,41 @@ const SubmitPage: React.FC = () => {
     }));
   };
 
-  const handleAddTag = () => {
-    const tag = tagInput.trim();
-    if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({
-        ...prev,
-        tags: [...prev.tags, tag]
-      }));
-      setTagInput('');
-    }
-  };
 
-  const handleRemoveTag = (tagToRemove: string) => {
-    setFormData(prev => ({
+  const handleBlur = (fieldName: string) => {
+    setTouchedFields(prev => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      [fieldName]: true
     }));
   };
 
-  const handleTagInputKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddTag();
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Updated validation: (Kashmiri OR Transliteration) + Meaning + Name required
+
+    // Mark all fields as touched
+    setTouchedFields({
+      idiom_kashmiri: true,
+      transliteration: true,
+      meaning: true,
+      submitter_name: true
+    });
+
     const hasKashmiriOrTransliteration = formData.idiom_kashmiri.trim() || formData.transliteration.trim();
-    
+
     if (!hasKashmiriOrTransliteration || !formData.meaning.trim() || !formData.submitter_name.trim()) {
-      setErrorMessage('Please provide: (Kashmiri text OR transliteration) + meaning + your name.');
+      if (!formData.meaning.trim()) {
+        setErrorMessage('Please provide the meaning of the idiom.');
+        return;
+      }
+      if (!formData.submitter_name.trim()) {
+        setErrorMessage('Please provide your name.');
+        return;
+      }
+      if (!hasKashmiriOrTransliteration) {
+        setErrorMessage('Please provide either Kashmiri text OR transliteration.');
+        return;
+      }
       return;
     }
 
@@ -67,9 +70,9 @@ const SubmitPage: React.FC = () => {
       setIsSubmitting(true);
       setSubmitStatus('idle');
       setErrorMessage('');
-      
+
       await submitIdiom(formData);
-      
+
       setSubmitStatus('success');
       setFormData({
         idiom_kashmiri: '',
@@ -81,7 +84,8 @@ const SubmitPage: React.FC = () => {
         submitter_email: '',
         notes: ''
       });
-      setTagInput('');
+
+      setTouchedFields({}); // Reset touched fields
     } catch (error) {
       setSubmitStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit idiom');
@@ -89,6 +93,8 @@ const SubmitPage: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+
 
   return (
     <Layout 
@@ -133,13 +139,20 @@ const SubmitPage: React.FC = () => {
                 Kashmiri Text
               </label>
               <input
-                type="text"
-                id="idiom_kashmiri"
-                name="idiom_kashmiri"
-                value={formData.idiom_kashmiri}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Enter the idiom in Kashmiri"
+                  type="text"
+                  id="idiom_kashmiri"
+                  name="idiom_kashmiri"
+                  value={formData.idiom_kashmiri}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('idiom_kashmiri')}
+                  className={`form-input ${
+                      touchedFields.idiom_kashmiri &&
+                      !formData.idiom_kashmiri.trim() &&
+                      !formData.transliteration.trim()
+                          ? 'border-red-500'
+                          : ''
+                  }`}
+                  placeholder="Enter the idiom in Kashmiri"
               />
             </div>
 
@@ -148,13 +161,20 @@ const SubmitPage: React.FC = () => {
                 Transliteration
               </label>
               <input
-                type="text"
-                id="transliteration"
-                name="transliteration"
-                value={formData.transliteration}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Enter the transliteration in English"
+                  type="text"
+                  id="transliteration"
+                  name="transliteration"
+                  value={formData.transliteration}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('transliteration')}
+                  className={`form-input ${
+                      touchedFields.transliteration &&
+                      !formData.transliteration.trim() &&
+                      !formData.idiom_kashmiri.trim()
+                          ? 'border-red-500'
+                          : ''
+                  }`}
+                  placeholder="Enter the transliteration in English"
               />
               <p className="text-sm text-gray-500 mt-1">
                 * Either Kashmiri text OR transliteration is required
@@ -162,76 +182,27 @@ const SubmitPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="translation" className="form-label">
-                Literal Translation (Optional)
-              </label>
-              <input
-                type="text"
-                id="translation"
-                name="translation"
-                value={formData.translation}
-                onChange={handleInputChange}
-                className="form-input"
-                placeholder="Enter the literal English translation"
-              />
-            </div>
-
-            <div className="form-group">
               <label htmlFor="meaning" className="form-label">
                 Meaning/Moral *
               </label>
               <textarea
-                id="meaning"
-                name="meaning"
-                value={formData.meaning}
-                onChange={handleInputChange}
-                className="form-textarea"
-                placeholder="Explain the meaning, moral, or context of this idiom"
-                rows={4}
-                required
+                  id="meaning"
+                  name="meaning"
+                  value={formData.meaning}
+                  onChange={handleInputChange}
+                  onBlur={() => handleBlur('meaning')}
+                  className={`form-textarea ${
+                      touchedFields.meaning && !formData.meaning.trim()
+                          ? 'border-red-500'
+                          : ''
+                  }`}
+                  placeholder="Explain the meaning, moral, or context of this idiom"
+                  rows={4}
+                  required
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="tags" className="form-label">
-                Tags (Optional)
-              </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={handleTagInputKeyPress}
-                  className="form-input flex-1"
-                  placeholder="Add a tag (e.g., Advice, Wisdom, etc.)"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddTag}
-                  className="btn btn-secondary"
-                  disabled={!tagInput.trim()}
-                >
-                  Add
-                </button>
-              </div>
-              {formData.tags.length > 0 && (
-                <div className="tags-container">
-                  {formData.tags.map((tag, index) => (
-                    <span key={index} className="tag flex items-center gap-1">
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(tag)}
-                        className="text-xs hover:text-red-600"
-                        aria-label={`Remove ${tag} tag`}
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
+
 
             <div className="form-group">
               <label htmlFor="submitter_name" className="form-label">

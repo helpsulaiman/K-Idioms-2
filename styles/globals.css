@@ -49,7 +49,7 @@
     --bg-card: #2A1F1A;
     --bg-card-right: #332620;
     --bg-header: #2D2419;
-    --text-primary: #F5E6D3;
+    --text-primary: #9c6927;
     --text-secondary: #E0C4A0;
     --text-muted: #C4A484;
     --text-kashmiri: #F4D03F;
@@ -761,4 +761,548 @@ body {
 [class*="results"],
 [class*="showing"] {
   color: #333333 !important;
+}
+
+
+
+/* Existing global styles (if any) should remain at the top */
+
+/* Team Section Styles */
+.team-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.members-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 8rem;
+  padding: 2.7rem;
+}
+
+.member-card {
+  cursor: pointer;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 10px rgba(10, 71, 184, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+  transition: all 0.3s ease;
+}
+
+.member-card:hover {
+  background-color: #d4d4d4;
+  transform: translateY(-5px);
+}
+
+.member-image {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.member-info {
+  padding: 1.5rem;
+}
+
+.member-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.member-info h4 {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.member-info p {
+  margin: 0.5rem 0;
+  color: #777;
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #dc3545;
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.modal-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 4px solid #007bff;
+}
+
+//* Social Links Styles */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  color: #333333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+}
+
+.social-link i {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  width: 30px;
+}
+
+.social-link:hover {
+  transform: translateX(10px);
+  background-color: #eeeeee;
+}
+
+/* Social Platform Colors */
+.social-link.linkedin {
+  background: #e8f4f9;
+  color: #0077b5;
+  border-color: #b3e0f2;
+}
+
+.social-link.linkedin:hover {
+  background: #d1e9f5;
+}
+
+.social-link.instagram {
+  background: #fde8f7;
+  color: #e951c8;
+  border-color: #f9c2e9;
+}
+
+.social-link.instagram:hover {
+  background: #fbd3f1;
+}
+
+.social-link.github {
+  background: #f0f0f0;
+  color: #333;
+  border-color: #dddddd;
+}
+
+.social-link.github:hover {
+  background: #e6e6e6;
+}
+
+
+/* About Section Styles */
+.about-section {
+  max-width: 1000px;
+  margin: 0 auto 4rem auto;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 3.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  margin-top: 0.1rem;
+}
+
+.about-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 8rem;
+}
+
+/* Logo Styles */
+.logo-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.team-logo {
+  width: 25rem;
+  height: 25rem;
+  object-fit: contain;
+  margin: 0.2rem auto;
+  display: block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .members-container {
+    gap: 4rem;
+    padding: 1.5rem;
+  }
+
+  .main-title {
+    font-size: 2.5rem;
+  }
+
+  .team-title {
+    font-size: 3rem;
+  }
+
+  .about-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .members-container {
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .modal-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .social-link {
+    padding: 0.8rem 1.2rem;
+  }
+}
+
+
+
+/* Form Input Styles */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Form validation styles */
+.form-input.border-red-500,
+.form-textarea.border-red-500 {
+  border-color: #EF4444;
+}
+
+.form-input.border-red-500:focus,
+.form-textarea.border-red-500:focus {
+  box-shadow: 0 0 0 3px rgba(251, 32, 32, 1);
+}
+
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--chinar-orange);
+  box-shadow: 0 0 0 3px var(--shadow-light);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+
+
+/* Add these styles to your existing globals.css */
+
+/* Dashboard Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-sidebar {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  height: fit-content;
+}
+
+.dashboard-content {
+  min-height: 500px;
+}
+
+/* Card Styles */
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.btn-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+}
+
+/* Form Styles */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Utility Classes */
+.text-primary {
+  color: #3b82f6;
+}
+
+.text-secondary {
+  color: #6b7280;
+}
+
+.bg-muted {
+  background-color: #f3f4f6;
+}
+
+
+
+/* Add these new styles to your existing globals.css */
+
+
+
+.idiom-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-icon {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Additional utility classes */
+.text-primary {
+  color: #3b82f6;
+}
+
+.bg-primary {
+  background-color: #3b82f6;
+}
+
+.ring-primary {
+  --tw-ring-color: #3b82f6;
+}
+
+/* Search input styling */
+.form-input {
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+/* Animation utilities */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+.transform {
+  transform: translateZ(0);
+}
+
+.hover\:-translate-y-1:hover {
+  transform: translateY(-0.25rem);
+}
+
+.hover\:shadow-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

@@ -41,8 +41,8 @@ const Navigation: React.FC = () => {
               About Project
             </Link>
             <Link 
-              href="/about-us" 
-              className={`nav-btn ${isActive('/about-us') ? 'nav-btn-active' : ''}`}
+              href="/about-team"
+              className={`nav-btn ${isActive('/about-team') ? 'nav-btn-active' : ''}`}
             >
               About Us
             </Link>
