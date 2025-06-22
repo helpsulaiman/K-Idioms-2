@@ -24,6 +24,8 @@ const AllIdioms: React.FC<AllIdiomsProps> = ({ onUpdate }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<Idiom | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingIdiom, setEditingIdiom] = useState<Idiom | null>(null);
+
 
   const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -62,6 +64,11 @@ const AllIdioms: React.FC<AllIdiomsProps> = ({ onUpdate }) => {
   if (loading) {
     return <div className="text-center py-4">Loading idioms...</div>;
   }
+
+  const handleCancelEdit = () => {
+    setEditingIdiom(null); // Reset the editing state
+  };
+
 
   return (
       <div>
@@ -226,7 +233,27 @@ const AllIdioms: React.FC<AllIdiomsProps> = ({ onUpdate }) => {
               </div>
           ))}
         </div>
+
+        {editingIdiom && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg p-6 max-w-2xl w-full">
+                {/* ... form fields */}
+                <div className="flex justify-end space-x-2 pt-4 border-t">
+                  <button
+                      onClick={handleCancelEdit}
+                      className="btn btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                  {/* ... other buttons */}
+                </div>
+              </div>
+            </div>
+        )}
+
       </div>
+
+
   );
 };
 
