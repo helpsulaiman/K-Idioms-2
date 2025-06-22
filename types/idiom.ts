@@ -3,6 +3,7 @@ export interface Idiom {
   idiom_kashmiri: string;
   transliteration: string;
   translation: string;
+  audio_url?: string
   meaning: string;
   tags: string[];
   created_at?: string;
