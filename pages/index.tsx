@@ -121,7 +121,7 @@ const HomePage: React.FC = () => {
 
             {/* Idioms Grid */}
             {idioms.length > 0 ? (
-              <div className="idioms-grid">
+              <div className="idioms-grid p-4 sm:p-2">
                 {idioms.map((idiom) => (
                   <IdiomCardFlip key={idiom.id} idiom={idiom} isFlipped={flippedCardId === idiom.id} onFlip={() => handleCardFlip(idiom.id)} />
                 ))}
