@@ -17,10 +17,10 @@ const DashboardPage: React.FC = () => {
     const isAuth = localStorage.getItem('dashboardAuth') === 'true';
     setIsAuthenticated(isAuth);
     setShowLogin(!isAuth);
-    
+
     if (isAuth) {
       fetchIdioms();
-    }, [fetchIdioms]):
+    }
   }, []);
 
   const fetchIdioms = async () => {
