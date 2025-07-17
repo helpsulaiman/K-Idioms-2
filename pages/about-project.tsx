@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from '../components/Layout';
+import Image from "next/image";
 
 const AboutProjectPage: React.FC = () => {
   return (
@@ -8,9 +9,11 @@ const AboutProjectPage: React.FC = () => {
       description="Learn about our mission to preserve and digitize traditional Kashmiri idioms for future generations."
     >
       <div className="logo-container">
-        <img
+        <Image
           src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png"
           alt="Project Logo"
+          width={200}
+          height={200}
           className="team-logo"
         />
       </div>

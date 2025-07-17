@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import Image from 'next/image';
 
 const AboutTeam: React.FC = () => {
   const teamMembers = [
@@ -82,10 +83,12 @@ const AboutTeam: React.FC = () => {
           description="Meet the team behind the Kashmiri Idioms project and learn about our contributors."
       >
         <div className="logo-container">
-          <img
+          <Image
               src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png"
               alt="Team Logo"
               className="team-logo"
+              width={800}
+              height={800}
           />
         </div>
 
@@ -108,10 +111,12 @@ const AboutTeam: React.FC = () => {
                   className="member-card"
                   onClick={() => handleCardClick(member)}
               >
-                <img
+                <Image
                     src={member.image}
                     alt={member.name}
                     className="member-image"
+                    width={400}
+                    height={400}
                 />
                 <div className="member-info">
                   <h3>{member.name}</h3>
@@ -127,10 +132,12 @@ const AboutTeam: React.FC = () => {
               <div className="modal-content" onClick={e => e.stopPropagation()}>
                 <button className="close-button" onClick={closeModal}>×</button>
                 <div className="modal-header">
-                  <img
+                  <Image
                       src={selectedMember.image}
                       alt={selectedMember.name}
                       className="modal-image"
+                      width={400}
+                      height={400}
                   />
                   <h2>{selectedMember.name}</h2>
                   <h3>{selectedMember.role}</h3>
