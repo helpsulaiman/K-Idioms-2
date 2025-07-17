@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -495,9 +496,8 @@ body {
   border-radius: 12px;
   box-shadow: 0 2px 8px var(--shadow-light);
   
-  /* MATCH the new bigger card dimensions */
-  min-height: 180px; /* Same as idiom-card */
-  aspect-ratio: 5/3; /* Same as idiom-card */
+  min-height: 180px;
+  aspect-ratio: 5/3;
   padding: 2.4rem;
   
   display: flex;
@@ -512,8 +512,18 @@ body {
   top: 0;
   left: 0;
   height: 100%;
-  padding: 1.5rem; /* Reduced padding for back side */
+  padding: 1.5rem;
   justify-content: flex-start;
+  overflow: hidden; /* Add this */
+}
+
+.flip-back-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  overflow-y: auto; /* Add this */
+  padding-right: 6px; /* Add this for scrollbar spacing */
 }
 
 /* Back side content layout */
@@ -1055,254 +1065,5 @@ body {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-medium);
-  border-radius: 8px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-/* Form validation styles */
-.form-input.border-red-500,
-.form-textarea.border-red-500 {
-  border-color: #EF4444;
-}
-
-.form-input.border-red-500:focus,
-.form-textarea.border-red-500:focus {
-  box-shadow: 0 0 0 3px rgba(251, 32, 32, 1);
-}
-
-
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--chinar-orange);
-  box-shadow: 0 0 0 3px var(--shadow-light);
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-
-
-/* Add these styles to your existing globals.css */
-
-/* Dashboard Layout */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 2rem;
-}
-
-@media (max-width: 768px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.dashboard-sidebar {
-  padding: 1.5rem;
-  background-color: #f8f9fa;
-  border-radius: 0.5rem;
-  height: fit-content;
-}
-
-.dashboard-content {
-  min-height: 500px;
-}
-
-/* Card Styles */
-.card {
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-/* Button Styles */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-primary {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #2563eb;
-}
-
-.btn-secondary {
-  background-color: #e5e7eb;
-  color: #374151;
-}
-
-.btn-secondary:hover {
-  background-color: #d1d5db;
-}
-
-.btn-danger {
-  background-color: #ef4444;
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #dc2626;
-}
-
-.btn-success {
-  background-color: #10b981;
-  color: white;
-}
-
-.btn-success:hover {
-  background-color: #059669;
-}
-
-/* Form Styles */
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  transition: all 0.2s;
-}
-
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-/* Table Styles */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  font-weight: 600;
-  text-align: left;
-  padding: 0.75rem;
-  border-bottom: 2px solid #e5e7eb;
-}
-
-td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-/* Utility Classes */
-.text-primary {
-  color: #3b82f6;
-}
-
-.text-secondary {
-  color: #6b7280;
-}
-
-.bg-muted {
-  background-color: #f3f4f6;
-}
-
-
-
-/* Add these new styles to your existing globals.css */
-
-
-
-.idiom-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.btn-icon {
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Additional utility classes */
-.text-primary {
-  color: #3b82f6;
-}
-
-.bg-primary {
-  background-color: #3b82f6;
-}
-
-.ring-primary {
-  --tw-ring-color: #3b82f6;
-}
-
-/* Search input styling */
-.form-input {
-  transition: all 0.2s ease;
-}
-
-.form-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-/* Responsive grid adjustments */
-@media (max-width: 768px) {
-  .grid-cols-2 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-}
-
-/* Animation utilities */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.duration-200 {
-  transition-duration: 200ms;
-}
-
-.transform {
-  transform: translateZ(0);
-}
-
-.hover\:-translate-y-1:hover {
-  transform: translateY(-0.25rem);
-}
-
-.hover\:shadow-lg:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 8
 }

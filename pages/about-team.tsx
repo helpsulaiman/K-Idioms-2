@@ -97,7 +97,7 @@ const AboutTeam: React.FC = () => {
           <p className="about-text">
             We are a dedicated team of students from Kashmir University participating in the DYD (Design Your Degree) programme.
             Our project focuses on preserving and promoting Kashmiri culture through a digital platform dedicated to Kashmiri idioms.
-            As part of the DYD initiative, we've combined our diverse skills and shared passion for our cultural heritage to create
+            As part of the DYD initiative, we&apos;ve combined our diverse skills and shared passion for our cultural heritage to create
             this valuable resource for current and future generations.
           </p>
         </div>

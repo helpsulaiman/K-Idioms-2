@@ -116,7 +116,7 @@ const IdiomModal: React.FC<IdiomModalProps> = ({ idiom, onClose }) => {
                 >
                   <div className="text-3xl mb-2">🎤</div>
                   <p className="text-base">Audio not available</p>
-                  <p className="text-sm mt-1">We're working on adding pronunciations</p>
+                  <p className="text-sm mt-1">We&apos;re working on adding pronunciations</p>
                 </div>
               )}
             </div>

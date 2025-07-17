@@ -20,7 +20,7 @@ const DashboardPage: React.FC = () => {
     
     if (isAuth) {
       fetchIdioms();
-    }
+    }, [fetchIdioms]):
   }, []);
 
   const fetchIdioms = async () => {

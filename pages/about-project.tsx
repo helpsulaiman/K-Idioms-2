@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import Image from "next/image";
+import Link from "next/link";
 
 const AboutProjectPage: React.FC = () => {
   return (
@@ -42,7 +43,7 @@ const AboutProjectPage: React.FC = () => {
             <h2>Why It Matters</h2>
             <p>
               Idioms are more than just expressions—they carry the wisdom, values, and
-              worldview of a culture. By preserving Kashmiri idioms, we're safeguarding
+              worldview of a culture. By preserving Kashmiri idioms, we&apos;re safeguarding
               centuries of collective wisdom and cultural identity.
             </p>
           </div>
@@ -134,7 +135,7 @@ const AboutProjectPage: React.FC = () => {
         <div className="member-card">
           <div className="member-info">
             <p>
-              This project thrives on community participation. Whether you're a native
+              This project thrives on community participation. Whether you&apos;re a native
               speaker, a cultural enthusiast, or simply someone who appreciates the
               beauty of language, there are many ways to contribute:
             </p>
@@ -145,9 +146,9 @@ const AboutProjectPage: React.FC = () => {
               <li className="social-link">Provide feedback to help us improve the platform</li>
             </ul>
             <div className="modal-header">
-              <a href="/submit" className="social-link github">
+              <Link href="/submit" className="social-link github">
                 Contribute an Idiom
-              </a>
+              </Link>
             </div>
           </div>
         </div>
