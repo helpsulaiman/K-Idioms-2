@@ -34,8 +34,7 @@ const HomePage: React.FC = () => {
   const handleSearch = async (filters: SearchFilters) => {
     try {
       setLoading(true);
-      setSearchFilters(filters);
-      
+      setSearchFilters(filters)
       if (filters.query.trim() === '' && filters.tags.length === 0) {
         const data = await fetchIdioms();
         setIdioms(data);

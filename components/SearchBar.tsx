@@ -92,8 +92,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           {showTagDropdown && (
             <div 
               className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto min-w-48"
-              style={{ 
-                background: 'var(--bg-card)',
+              style={{
+                background: '.bg-white-card',
                 border: '1px solid var(--border-medium)',
                 boxShadow: '0 8px 24px var(--shadow-medium)'
               }}

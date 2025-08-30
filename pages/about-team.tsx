@@ -1,80 +1,63 @@
-
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import Image from 'next/image';
 
 const AboutTeam: React.FC = () => {
+  // --- UPDATED: More robust data structure ---
   const teamMembers = [
     {
-      id: 1,
+      id: 'sulaiman-shabir',
       name: "Sulaiman Shabir",
-      role: "Co-Leader",
-      description: "Technical lead and main developer of the project. Passionate about preserving Kashmiri culture through technology.",
-      image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//helpsulaiman.jpg",
-      socials: {
-        linkedin: "https://linkedin.com/in/helpsulaiman",
-        instagram: "https://instagram.com/helpsulaiman",
-        github: "https://github.com/helpsulaiman"
-      }
+      role: "Co-Leader & Developer",
+      bio: "Technical lead and main developer of the project. Passionate about preserving Kashmiri culture through technology.",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//helpsulaiman.jpg",
+      socials: [
+        { type: 'linkedin', url: 'https://linkedin.com/in/helpsulaiman' },
+        { type: 'instagram', url: 'https://instagram.com/helpsulaiman' },
+        { type: 'github', url: 'https://github.com/helpsulaiman' },
+      ],
     },
     {
-      id: 2,
+      id: 'tehniyah-rayaz',
       name: "Tehniyah Rayaz",
-      role: "Co-Leader",
-      description: "Writer, planner, and creative lead. Brings innovative ideas and cultural expertise to the project.",
-      image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: {
-        linkedin: "https://linkedin.com/in/",
-        instagram: "https://instagram.com/",
-        github: "https://github.com/"
-      }
+      role: "Co-Leader & Creative Lead",
+      bio: "Writer, planner, and creative lead. Brings innovative ideas and cultural expertise to the project.",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
+      socials: [
+        { type: 'linkedin', url: 'https://linkedin.com/in/' },
+        { type: 'instagram', url: 'https://instagram.com/' },
+      ],
     },
     {
-      id: 3,
+      id: 'furqan-malik',
       name: "Furqan Malik",
-      role: "Team Member",
-      description: "Contributing to content development and cultural research aspects of the project.",
-      image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: {
-        linkedin: "https://linkedin.com/in/",
-        instagram: "https://instagram.com/",
-        github: "https://github.com/"
-      }
+      role: "Content & Research",
+      bio: "Contributing to content development and cultural research aspects of the project.",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
+      socials: [],
     },
     {
-      id: 4,
+      id: 'farees-ahmed',
       name: "Farees Ahmed",
-      role: "Team Member",
-      description: "Focuses on user experience and content curation for the platform.",
-      image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: {
-        linkedin: "https://linkedin.com/in/",
-        instagram: "https://instagram.com/",
-        github: "https://github.com/"
-      }
+      role: "UX & Content Curation",
+      bio: "Focuses on user experience and content curation for the platform.",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
+      socials: [],
     },
     {
-      id: 5,
+      id: 'anha-nabi',
       name: "Anha Nabi",
-      role: "Team Member",
-      description: "Contributes to content verification and cultural authenticity of the project.",
-      image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: {
-        linkedin: "https://linkedin.com/in/",
-        instagram: "https://instagram.com/",
-        github: "https://github.com/"
-      }
+      role: "Content Verification",
+      bio: "Contributes to content verification and cultural authenticity of the project.",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
+      socials: [],
     }
   ];
 
-  const [selectedMember, setSelectedMember] = useState<typeof teamMembers[0] | null>(null);
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-  const handleCardClick = (member: typeof teamMembers[0]) => {
-    setSelectedMember(member);
-  };
-
-  const closeModal = () => {
-    setSelectedMember(null);
+  const handleCardClick = (memberId: string) => {
+    setExpandedCard(prev => (prev === memberId ? null : memberId));
   };
 
   return (
@@ -108,11 +91,11 @@ const AboutTeam: React.FC = () => {
           {teamMembers.map((member) => (
               <div
                   key={member.id}
-                  className="member-card"
-                  onClick={() => handleCardClick(member)}
+                  className={`member-card ${expandedCard === member.id ? 'expanded' : ''}`}
+                  onClick={() => handleCardClick(member.id)}
               >
                 <Image
-                    src={member.image}
+                    src={member.avatar}
                     alt={member.name}
                     className="member-image"
                     width={400}
@@ -121,65 +104,28 @@ const AboutTeam: React.FC = () => {
                 <div className="member-info">
                   <h3>{member.name}</h3>
                   <h4>{member.role}</h4>
-                  <p>{member.description}</p>
+                  <p>{member.bio}</p>
+                </div>
+
+                <div className="expandable-content">
+                  <div className="social-links-container">
+                    {member.socials.map((social) => (
+                        <a
+                            key={social.type}
+                            href={social.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`social-link ${social.type}`}
+                        >
+                          <i className={`fab fa-${social.type}`}></i>
+                          {social.type.charAt(0).toUpperCase() + social.type.slice(1)}
+                        </a>
+                    ))}
+                  </div>
                 </div>
               </div>
           ))}
         </div>
-
-        {selectedMember && (
-            <div className="modal-overlay" onClick={closeModal}>
-              <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <button className="close-button" onClick={closeModal}>×</button>
-                <div className="modal-header">
-                  <Image
-                      src={selectedMember.image}
-                      alt={selectedMember.name}
-                      className="modal-image"
-                      width={400}
-                      height={400}
-                  />
-                  <h2>{selectedMember.name}</h2>
-                  <h3>{selectedMember.role}</h3>
-                </div>
-                <div className="social-links">
-                  {selectedMember.socials?.linkedin && (
-                      <a
-                          href={selectedMember.socials.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="social-link linkedin"
-                      >
-                        <i className="fab fa-linkedin"></i>
-                        LinkedIn
-                      </a>
-                  )}
-                  {selectedMember.socials?.instagram && (
-                      <a
-                          href={selectedMember.socials.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="social-link instagram"
-                      >
-                        <i className="fab fa-instagram"></i>
-                        Instagram
-                      </a>
-                  )}
-                  {selectedMember.socials?.github && (
-                      <a
-                          href={selectedMember.socials.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="social-link github"
-                      >
-                        <i className="fab fa-github"></i>
-                        GitHub
-                      </a>
-                  )}
-                </div>
-              </div>
-            </div>
-        )}
       </Layout>
   );
 };

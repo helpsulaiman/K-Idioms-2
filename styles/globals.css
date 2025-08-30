@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,23 +19,23 @@
   --chinar-red: #CD5C5C;         /* Deeper red tone */
   --chinar-light: #F4A460;       /* Light orange for accents */
   --chinar-dark: #A0522D;        /* Dark brown for text */
-  
+
   /* Background Colors - WHITE THEME */
   --bg-primary: #FFFFFF;          /* Pure white background */
   --bg-card: #FEFEFE;            /* Very light gray for cards */
   --bg-card-right: #F9F9F9;      /* Slightly darker for right side of modal */
   --bg-header: #FFFFFF;          /* Pure white for header */
-  
+
   /* Text Colors */
   --text-primary: #2D1810;       /* Dark brown for main text */
   --text-secondary: #5D4037;     /* Medium brown for secondary text */
   --text-muted: #8D6E63;         /* Light brown for muted text */
   --text-kashmiri: #B8860B;      /* Golden brown for Kashmiri text */
-  
+
   /* Border Colors */
   --border-light: #E8D5C4;       /* Light border */
   --border-medium: #D7C4B0;      /* Medium border */
-  
+
   /* Shadow Colors */
   --shadow-light: rgba(210, 105, 30, 0.1);
   --shadow-medium: rgba(210, 105, 30, 0.15);
@@ -220,11 +219,11 @@ body {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  
+
   /* BIGGER cards - increased height and better aspect ratio */
   min-height: 180px; /* Increased from 140px */
   aspect-ratio: 5/3; /* Changed from 5/2.35 to be taller */
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -495,11 +494,11 @@ body {
   border: 1px solid var(--border-light);
   border-radius: 12px;
   box-shadow: 0 2px 8px var(--shadow-light);
-  
+
   min-height: 180px;
   aspect-ratio: 5/3;
   padding: 2.4rem;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -599,11 +598,11 @@ body {
   .card-flip-back {
     padding: 2rem;
   }
-  
+
   .card-flip-back {
     padding: 1.25rem;
   }
-  
+
   .flip-meaning-text {
     font-size: 0.85rem;
   }
@@ -725,7 +724,7 @@ body {
   .submit-form {
     padding: 1.5rem;
   }
-  
+
   .tag-input-row {
     flex-direction: column;
     gap: 0.5rem;
@@ -737,16 +736,16 @@ body {
   .page-title {
     font-size: 2rem;
   }
-  
+
   .page-subtitle {
     font-size: 1rem;
     padding: 0 1rem;
   }
-  
+
   .text-kashmiri {
     font-size: 1.3rem;
   }
-  
+
   .text-transliteration {
     font-size: 1rem;
   }
@@ -798,15 +797,26 @@ body {
   border-radius: 20px;
   box-shadow: 0 10px 10px rgba(10, 71, 184, 0.1);
   overflow: hidden;
-  transition: transform 0.3s ease;
   opacity: 0;
   animation: fadeIn 0.8s ease forwards;
-  transition: all 0.3s ease;
+  /* ADDED: Border for the card */
+  border: 1px solid #e5e7eb;
+
+  position: relative;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.member-card:hover {
-  background-color: #d4d4d4;
+.member-card:not(.expanded):hover {
+  background-color: #f3f4f6;
   transform: translateY(-5px);
+  z-index: 2; /* Bring hover card slightly forward */
+}
+
+.member-card.expanded {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(10, 71, 184, 0.2);
+  z-index: 10; /* Bring expanded card to the very front */
 }
 
 .member-image {
@@ -815,7 +825,15 @@ body {
   width: 100%;
   height: 250px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  /* UPDATED: Added filter and opacity to the transition */
+  transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+
+/* ADDED: Hover effect for the image */
+.member-card:hover .member-image {
+  filter: grayscale(50%);
+  opacity: 0.9;
 }
 
 .member-info {
@@ -899,7 +917,7 @@ body {
   border: 4px solid #007bff;
 }
 
-//* Social Links Styles */
+/* Social Links Styles */
 .social-links {
   display: flex;
   flex-direction: column;
@@ -1057,7 +1075,40 @@ body {
   }
 }
 
+.member-card {
+  /* Establish stacking context and prepare for transition */
+  position: relative;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, z-index 0s 0.4s;
+}
 
+.member-card.expanded {
+  /* Lift the card up and forward */
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(10, 71, 184, 0.2);
+  z-index: 10;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, z-index 0s;
+}
+
+.expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+  padding: 0 1.5rem; /* Maintain horizontal padding */
+}
+
+.member-card.expanded .expandable-content {
+  max-height: 300px; /* Animate to a height large enough for the content */
+  padding: 0 1.5rem 1.5rem 1.5rem; /* Add bottom padding when expanded */
+}
+
+.social-links-container {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
 
 /* Form Input Styles */
 .form-input,
@@ -1065,5 +1116,5 @@ body {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-medium);
-  border-radius: 8
+  border-radius: 8px;
 }
