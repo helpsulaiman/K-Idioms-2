@@ -43,7 +43,7 @@ const AboutProjectPage: React.FC = () => {
               <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Why It Matters</h2>
               <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
                 Idioms are more than just expressions—they carry the wisdom, values, and
-                worldview of a culture. By preserving Kashmiri idioms, we're safeguarding
+                worldview of a culture. By preserving Kashmiri idioms, we&apos;re safeguarding
                 centuries of collective wisdom and cultural identity.
               </p>
             </div>
@@ -135,7 +135,7 @@ const AboutProjectPage: React.FC = () => {
           <div className="idiom-card">
             <div className="card-content">
               <p className="text-meaning">
-                This project thrives on community participation. Whether you're a native
+                This project thrives on community participation. Whether you&apos;re a native
                 speaker, a cultural enthusiast, or simply someone who appreciates the
                 beauty of language, there are many ways to contribute:
               </p>

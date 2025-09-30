@@ -2,83 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  /* Force white background at the base layer */
-  html,
-  body,
-  #__next {
-    background-color: #FFFFFF !important;
-    color: #2D1810 !important;
-  }
-}
+/* --- "KASHMIRI MEADOW" THEME --- */
 
-/* Design System - Chinar Leaf Theme */
+/* 1. Light Mode Color Palette (Default) */
 :root {
-  /* Primary Colors - Chinar Leaf Inspired */
-  --chinar-orange: #D2691E;      /* Main orange like autumn chinar */
-  --chinar-red: #CD5C5C;         /* Deeper red tone */
-  --chinar-light: #F4A460;       /* Light orange for accents */
-  --chinar-dark: #A0522D;        /* Dark brown for text */
+  /* Primary/Accent Colors */
+  --color-primary: #2779a3;      /* Soft, muted sage green */
+  --color-primary-hover: #0f6cb8;
+  --color-danger: #c55353;       /* Muted red for errors/delete */
 
-  /* Background Colors - WHITE THEME */
-  --bg-primary: #FFFFFF;          /* Pure white background */
-  --bg-card: #FEFEFE;            /* Very light gray for cards */
-  --bg-card-right: #F9F9F9;      /* Slightly darker for right side of modal */
-  --bg-header: #FFFFFF;          /* Pure white for header */
+  /* Background Colors */
+  --bg-primary: #fbfaf8;         /* Warm, very light off-white */
+  --bg-card: #ffffff;            /* Clean white for cards */
+  --bg-subtle: #f4f4f2;          /* A subtle grey for hover, etc. */
 
   /* Text Colors */
-  --text-primary: #2D1810;       /* Dark brown for main text */
-  --text-secondary: #5D4037;     /* Medium brown for secondary text */
-  --text-muted: #8D6E63;         /* Light brown for muted text */
-  --text-kashmiri: #B8860B;      /* Golden brown for Kashmiri text */
+  --text-primary: #3a3a3a;       /* Dark charcoal, not pure black */
+  --text-secondary: #6b6b6b;     /* Medium grey */
+  --text-muted: #101010;         /* Light grey */
+  --text-on-primary: #000000;    /* White text for primary buttons */
+  --text-kashmiri: #11516e;
+  --text-transliteration: #047c81; /* A deep, earthy green for Kashmiri text */
 
   /* Border Colors */
-  --border-light: #E8D5C4;       /* Light border */
-  --border-medium: #D7C4B0;      /* Medium border */
+  --border-color: #252522;
 
   /* Shadow Colors */
-  --shadow-light: rgba(210, 105, 30, 0.1);
-  --shadow-medium: rgba(210, 105, 30, 0.15);
-  --shadow-strong: rgba(210, 105, 30, 0.25);
+  --shadow-color: rgba(58, 58, 58, 0.08);
 }
 
+/* 2. Dark Mode Color Palette */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark mode - keeping the warm theme but darker */
-    --bg-primary: #1A1611;
-    --bg-card: #2A1F1A;
-    --bg-card-right: #332620;
-    --bg-header: #2D2419;
-    --text-primary: #9c6927;
-    --text-secondary: #E0C4A0;
-    --text-muted: #C4A484;
-    --text-kashmiri: #F4D03F;
-    --border-light: #3D2F24;
-    --border-medium: #4A3A2D;
+    /* Primary/Accent Colors */
+    --color-primary: #6dbaea;
+    --color-primary-hover: #3895da;
+    --color-danger: #d46f6f;
+
+    /* Background Colors */
+    --bg-primary: #02132e;
+    --bg-card: #0d2545;
+    --bg-subtle: #31363c;
+
+    /* Text Colors */
+    --text-primary: #e1e1e1;
+    --text-secondary: #a0a0a0;
+    --text-muted: #e3dfdf;
+    --text-on-primary: #435b78;
+    --text-kashmiri: #34deed;
+    --text-transliteration: #52a5aa;
+
+    /* Border Colors */
+    --border-color: #99a0a6;
+
+    /* Shadow Colors */
+    --shadow-color: rgba(0, 0, 0, 0.2);
   }
 }
 
 /* Force styles with higher specificity */
-html {
-  background: white !important;
-}
+
 
 body {
-  background: white !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  line-height: 1.6 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-#__next {
-  background: white !important;
-  min-height: 100vh !important;
-}
 
 /* Navigation System */
 .site-nav {
-  background: var(--bg-header);
+  background: var(--bg-card);
   border-bottom: 1px solid var(--border-light);
   box-shadow: 0 2px 4px var(--shadow-light);
   padding: 1rem 0;
@@ -102,13 +96,7 @@ body {
 .brand-text {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--chinar-orange);
-}
-
-.nav-buttons {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
+  color: var(--color-primary);
 }
 
 .nav-btn {
@@ -122,19 +110,19 @@ body {
 }
 
 .nav-btn:hover {
-  background: var(--bg-card);
-  color: var(--chinar-orange);
+  background: var(--bg-subtle);
+  color: #e0e0e0;
   border-color: var(--border-light);
 }
 
 .nav-btn-active {
-  background: linear-gradient(135deg, var(--chinar-orange), var(--chinar-red));
+  background: linear-gradient(135deg, #7bc0da, #007bff);
   color: white;
   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .nav-btn-active:hover {
-  background: linear-gradient(135deg, var(--chinar-red), var(--chinar-orange));
+  background: linear-gradient(135deg, #1b80a5, #024fa5);
 }
 
 /* Typography System */
@@ -151,7 +139,7 @@ body {
   /* Transliteration - medium size, italic */
   font-size: 1.1rem;
   font-style: italic;
-  color: var(--text-secondary);
+  color: var(--text-transliteration);
   margin-bottom: 0.5rem;
 }
 
@@ -209,30 +197,16 @@ body {
 }
 
 /* Card System - BIGGER LANDSCAPE CARDS */
-.idiom-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 2.4rem;
-  box-shadow: 0 2px 8px var(--shadow-light);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-
-  /* BIGGER cards - increased height and better aspect ratio */
-  min-height: 180px; /* Increased from 140px */
-  aspect-ratio: 5/3; /* Changed from 5/2.35 to be taller */
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.idiom-card, .member-card {
+  background-color: #1A1611;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: all 0.2s ease-in-out;
 }
-
-.idiom-card:hover {
+.idiom-card:hover, .member-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px var(--shadow-medium);
-  border-color: var(--chinar-light);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  border-color: var(--border-color);
 }
 
 .idiom-card:active {
@@ -259,7 +233,7 @@ body {
 }
 
 .tag {
-  background: linear-gradient(135deg, var(--chinar-light), var(--chinar-orange));
+  background: linear-gradient(135deg, #b3e0f2, #0c4a6e);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -403,13 +377,13 @@ body {
 .page-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #e67f36;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .page-subtitle {
   font-size: 1.1rem;
-  color: #333333;
+  color: var(--text-primary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -430,7 +404,7 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--chinar-orange), var(--chinar-red));
+  background: linear-gradient(135deg, #7bc0da, rgba(48, 67, 228, 0.8));
   color: white;
   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
@@ -441,9 +415,9 @@ body {
 }
 
 .btn-secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
+  background: #007bff;
+  color: #ffffff;
+  border: 1px solid #7bc0da;
 }
 
 .btn-secondary:hover {
@@ -753,7 +727,7 @@ body {
 
 /* Ensure proper spacing between components */
 .main-content {
-  background: white !important;
+
   min-height: calc(100vh - 200px);
 }
 
@@ -791,21 +765,6 @@ body {
   padding: 2.7rem;
 }
 
-.member-card {
-  cursor: pointer;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 10px rgba(10, 71, 184, 0.1);
-  overflow: hidden;
-  opacity: 0;
-  animation: fadeIn 0.8s ease forwards;
-  /* ADDED: Border for the card */
-  border: 1px solid #e5e7eb;
-
-  position: relative;
-  z-index: 1;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
 
 .member-card:not(.expanded):hover {
   background-color: #f3f4f6;
@@ -829,12 +788,6 @@ body {
   transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
 }
 
-
-/* ADDED: Hover effect for the image */
-.member-card:hover .member-image {
-  filter: grayscale(50%);
-  opacity: 0.9;
-}
 
 .member-info {
   padding: 1.5rem;
@@ -1114,7 +1067,16 @@ body {
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border-medium);
+  padding: 0.7rem 0.1rem;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
+}
+
+[lang="ks"] {
+  font-family: var(--font-kashmiri), sans-serif;
+}
+/* You can also create a utility class */
+
+.font-kashmiri {
+  font-family: var(--font-kashmiri), sans-serif;
 }

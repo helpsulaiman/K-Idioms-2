@@ -1,0 +1,223 @@
+.lessonHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.lessonTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.restartButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.restartButton:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--text-secondary);
+}
+
+/* --- PREVIOUS STYLES (UNCHANGED) --- */
+
+.learnContainer {
+    display: flex;
+    flex-direction: column;
+    /* This ensures it takes up the remaining screen height below the nav bar */
+    min-height: calc(100vh - 70px); /* Adjust 70px to your nav bar's height if needed */
+    background-color: #f9fafb;
+}
+
+.mainContent {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    padding: 1rem;
+}
+
+.lessonWrapper {
+    width: 100%;
+    max-width: 600px;
+}
+
+.progressBarContainer {
+    padding: 0 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.progressBar {
+    width: 100%;
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--chinar-orange);
+    border-radius: 999px;
+    transition: width 0.3s ease-in-out;
+}
+
+/* A dedicated stylesheet for the learning page */
+
+.learnContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bg-primary); /* A light grey background */
+}
+
+.mainContent {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.lessonWrapper {
+    width: 100%;
+    max-width: 600px; /* A more compact width */
+}
+
+.progressBarContainer {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.progressBar {
+    width: 100%;
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: var(--chinar-orange);
+    border-radius: 999px;
+    transition: width 0.3s ease-in-out;
+}
+
+.lessonCard {
+    width: 100%;
+    background-color: var(--bg-card);
+    border-radius: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.promptText {
+    font-size: 1.75rem; /* Larger prompt text */
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.sentenceText {
+    font-size: 3.5rem; /* Much larger sentence text */
+    font-weight: 600;
+    color: var(--text-kashmiri);
+    text-align: center;
+    margin-bottom: 4.5rem;
+}
+
+.transliterationText {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-transliteration);
+    text-align: center;
+    margin-top: -1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* --- MCQ Button Styles --- */
+.mcqOption {
+    width: 100%;
+    margin-top: 0.7rem;
+    padding: 1rem;
+    font-size: 1.25rem; /* Larger option text */
+    font-weight: 600;
+    text-align: left;
+    border: 2px solid #007bff;
+    border-radius: 0.75rem;
+    background-color: var(--bg-card-right);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.mcqOption:hover:not(:disabled) {
+    border-color: var(--border-medium);
+    background-color: #e5e7eb;
+}
+
+.mcqOption.selected {
+    border-color: var(--chinar-orange);
+    background-color: #fef3c7;
+}
+
+.mcqOption.correct {
+    border-color: #16a34a;
+    background-color: #f0fdf4;
+    color: #15803d;
+    pointer-events: none; /* Disable clicks after checking */
+}
+
+.mcqOption.incorrect {
+    border-color: var(--chinar-red);
+    background-color: #fee2e2;
+    color: #b91c1c;
+    pointer-events: none; /* Disable clicks after checking */
+}
+
+/* --- Footer and Action Button --- */
+
+
+.feedbackArea {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.feedbackArea.correct { color: #16a34a; }
+.feedbackArea.incorrect { color: #bd0315; }
+
+.actionButton {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    color: var(--text-on-primary);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.actionButton.check { background-color: var(--bg-subtle); }
+.actionButton.check:hover { background-color: var(--color-primary-hover); }
+.actionButton.correct { background-color: #16a34a; }
+.actionButton.incorrect { background-color: var(--chinar-red); }
