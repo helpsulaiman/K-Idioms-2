@@ -1063,6 +1063,63 @@ body {
   gap: 0.75rem;
 }
 
+/* Fix for overflowing Kashmiri text on cards */
+.text-kashmiri, [lang="ks"] {
+  word-break: break-word; /* Allows long words to wrap */
+}
+
+/* Fix for flip-card back content being cut off */
+.flip-back-content {
+  overflow-y: auto; /* Adds a scrollbar if content is too long */
+}
+
+/* --- Hamburger Menu Styles --- */
+.hamburger-button {
+  display: none; /* Hidden on desktop */
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.mobile-menu {
+  display: none; /* Hidden on desktop */
+}
+
+/* --- Mobile Styles (for screens 768px wide or smaller) --- */
+@media (max-width: 768px) {
+  .nav-buttons {
+    display: none; /* Hide the desktop nav links */
+  }
+
+  .hamburger-button {
+    display: block; /* Show the hamburger button */
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .mobile-nav-btn {
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .mobile-nav-btn:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  /* Make idiom cards on homepage taller to fit text */
+  .idiom-card {
+    min-height: 200px;
+  }
+}
+
 /* Form Input Styles */
 .form-input,
 .form-textarea {

@@ -162,3 +162,24 @@
     justify-content: space-between;
     margin-top: 2rem;
 }
+
+@media (max-width: 768px) {
+    .pageContainer {
+        margin-top: 1rem;
+    }
+    .flashcard {
+        min-height: unset;
+    }
+    .letterColumn, .exampleColumn {
+        padding: 1.5rem;
+    }
+    .letterName {
+        font-size: 2rem;
+    }
+    .letterDisplay {
+        font-size: 7rem; /* Reduced from 10rem */
+    }
+    .exampleWordKashmiri {
+        font-size: 2rem;
+    }
+}

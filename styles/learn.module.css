@@ -221,3 +221,26 @@
 .actionButton.check:hover { background-color: var(--color-primary-hover); }
 .actionButton.correct { background-color: #16a34a; }
 .actionButton.incorrect { background-color: var(--chinar-red); }
+
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 1rem;
+    }
+    .lessonCard {
+        padding: 1.5rem;
+    }
+    .promptText {
+        font-size: 1.25rem; /* Reduced from 1.75rem */
+    }
+    .sentenceText {
+        font-size: 2.25rem; /* Reduced from 3.5rem */
+    }
+    .mcqOption {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    .actionButton {
+        padding: 0.75rem;
+        font-size: 1.1rem;
+    }
+}
