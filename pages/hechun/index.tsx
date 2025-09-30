@@ -117,7 +117,7 @@ const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => 
                     <div className={styles.exampleColumn}>
                         <h3 className={styles.exampleHeader}>Pronunciation & Example</h3>
                         <p className={styles.pronunciationText}>
-                            Sounds like: "{currentLesson.pronunciation}"
+                            Sounds like: &quot;{currentLesson.pronunciation}&quot;
                         </p>
                         <div className={styles.exampleWordContainer}>
                             <div>
@@ -132,7 +132,7 @@ const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => 
                                     🔊
                                 </button>
                             </div>
-                            <p className={styles.exampleWordEnglish}>is "{currentLesson.example_word_english}"</p>
+                            <p className={styles.exampleWordEnglish}>is &quot;{currentLesson.example_word_english}&quot;</p>
                         </div>
                     </div>
                 </div>
