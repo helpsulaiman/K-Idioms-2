@@ -44,7 +44,7 @@ const Navigation: React.FC = () => {
               {isOpen && (
                   <div className="mobile-menu">
                     <Link href="/" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Home</Link>
-                    <Link href="/hechun" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Hećhun (Learn)</Link>
+                    <Link href="/hechun" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Hećhun</Link>
                     <Link href="/submit" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Submit Idiom</Link>
                     <Link href="/about-project" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Project</Link>
                     <Link href="/about-team" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Us</Link>

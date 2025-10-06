@@ -1,6 +1,7 @@
 // pages/dashboard/idioms.tsx
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
+import DashboardLayout from "../../components/DashboardLayout";
 
 // Define a simple type for the idiom
 interface Idiom {
@@ -68,7 +69,8 @@ const ManageIdiomsPage: React.FC = () => {
 
     return (
         <Layout title="Manage Idioms">
-            <div className="container mx-auto px-4 py-8">
+            <DashboardLayout>
+                <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold mb-6">Manage Idioms</h1>
 
                 <form onSubmit={handleSubmit} className="mb-8 p-4 border rounded-lg space-y-4">
@@ -100,6 +102,7 @@ const ManageIdiomsPage: React.FC = () => {
                     ))}
                 </div>
             </div>
+            </DashboardLayout>
         </Layout>
     );
 };

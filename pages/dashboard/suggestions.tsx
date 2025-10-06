@@ -1,6 +1,7 @@
 // pages/dashboard/suggestions.tsx
 import React, { useState, useEffect } from 'react';
 import Layout from '../../components/Layout';
+import DashboardLayout from "@/components/DashboardLayout";
 
 interface Suggestion {
     id: string;
@@ -45,6 +46,7 @@ const ManageSuggestionsPage: React.FC = () => {
 
     return (
         <Layout title="Manage Suggestions">
+            <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <h1 className="text-3xl font-bold mb-6">Manage Suggestions</h1>
                 {suggestions.length === 0 ? (
@@ -67,6 +69,7 @@ const ManageSuggestionsPage: React.FC = () => {
                     </div>
                 )}
             </div>
+            </DashboardLayout>
         </Layout>
     );
 };

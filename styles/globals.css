@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@font-face {
+  font-family: 'kashmirifont'; /* You can name this whatever you like */
+  src: url('fonts/Afan.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
 /* --- "KASHMIRI MEADOW" THEME --- */
 
 /* 1. Light Mode Color Palette (Default) */
@@ -24,11 +32,13 @@
   --text-kashmiri: #11516e;
   --text-transliteration: #047c81; /* A deep, earthy green for Kashmiri text */
 
-  /* Border Colors */
+    /* Border Colors */
   --border-color: #252522;
 
   /* Shadow Colors */
   --shadow-color: rgba(58, 58, 58, 0.08);
+
+  --font-kashmiri: 'KashmiriFont', sans-serif;
 }
 
 /* 2. Dark Mode Color Palette */
@@ -60,13 +70,31 @@
   }
 }
 
-/* Force styles with higher specificity */
 
+/* Force styles with higher specificity */
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.idiom-card .text-kashmiri, [lang="ks"] {
+  font-family: var(--font-kashmiri, sans-serif);
+  color: var(--text-kashmiri);
+  word-break: break-word; /* Prevents overflow */
+}
+
+/* --- FIX for Mobile Menu Links --- */
+.mobile-menu {
+  display: none;
+  background-color: var(--bg-card); /* Add a solid background */
+}
+.mobile-nav-btn {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  color: var(--text-primary); /* Use high-contrast text color */
 }
 
 
@@ -75,7 +103,9 @@ body {
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-light);
   box-shadow: 0 2px 4px var(--shadow-light);
-  padding: 1rem 0;
+  padding: 1.1rem 0;
+  min-width: fit-content;
+  border-radius: 40px;
 }
 
 .nav-content {
@@ -160,7 +190,7 @@ body {
 /* Grid System for Cards - BIGGER CARDS */
 .idioms-grid {
   display: grid;
-  /* INCREASED minimum card width for bigger cards */
+  /* This is the default desktop style: multiple columns */
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
   padding: 2rem;
@@ -171,10 +201,11 @@ body {
 /* Mobile: Single column with side margins */
 @media (max-width: 767px) {
   .idioms-grid {
-    grid-template-columns: 1fr;
+    /* This overrides the desktop style for mobile */
+    grid-template-columns: minmax(0, 400px);
+    justify-content: center;
+    padding: 1rem;
     gap: 1.5rem;
-    padding: 1.5rem;
-    margin: 0 1rem;
   }
 }
 
@@ -190,10 +221,13 @@ body {
 /* Desktop: Even bigger cards */
 @media (min-width: 1024px) {
   .idioms-grid {
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 2.5rem;
-    padding: 2.5rem;
+    display: grid;
+    justify-content: center; /* Centers that column in the grid container */
+    padding: 1rem;
+    gap: 1.5rem;
   }
+  .hamburger-button { display: block; }
+  .mobile-menu { display: flex; flex-direction: column; /* ... */ }
 }
 
 /* Card System - BIGGER LANDSCAPE CARDS */
@@ -1120,6 +1154,37 @@ body {
   }
 }
 
+.dashboard-layout {
+  display: flex;
+  min-height: calc(100vh - 70px); /* Adjust 70px to your nav height */
+}
+.dashboard-sidebar {
+  width: 250px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  padding: 1.5rem;
+}
+.dashboard-sidebar a {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.dashboard-sidebar a:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+.dashboard-sidebar a.active {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+}
+.dashboard-content {
+  flex-grow: 1;
+  padding: 2rem;
+}
+
 /* Form Input Styles */
 .form-input,
 .form-textarea {
@@ -1129,11 +1194,3 @@ body {
   border-radius: 8px;
 }
 
-[lang="ks"] {
-  font-family: var(--font-kashmiri), sans-serif;
-}
-/* You can also create a utility class */
-
-.font-kashmiri {
-  font-family: var(--font-kashmiri), sans-serif;
-}
