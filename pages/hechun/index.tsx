@@ -72,10 +72,7 @@ const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => 
     const progressPercentage = ((currentLetterIndex + 1) / alphabetData.length) * 100;
 
     return (
-        <Layout
-            title="Learn the Alphabet - Hečhun"
-            description="Start your journey into the Kashmiri language by learning the alphabet from Alif to Ye."
-        >
+        <Layout>
             <div className={styles.pageContainer}>
                 <div className={styles.pageHeader}>
                     <h1 className={styles.pageTitle}>Hečhun</h1>

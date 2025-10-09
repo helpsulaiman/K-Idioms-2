@@ -1,10 +1,12 @@
-// components/DashboardLayout.tsx
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSupabaseClient } from '@supabase/auth-helpers-react'; // Import Supabase hook
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const router = useRouter();
+    const supabase = useSupabaseClient(); // Get the Supabase client
+
     const navLinks = [
         { href: '/dashboard', label: 'Overview' },
         { href: '/dashboard/idioms', label: 'Manage Idioms' },
@@ -13,9 +15,14 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
         { href: '/dashboard/lessons', label: 'Manage Lessons' },
     ];
 
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/'); // Redirect to homepage after logout
+    };
+
     return (
         <div className="dashboard-layout">
-            <aside className="dashboard-sidebar">
+            <aside className="dashboard-sidebar flex flex-col justify-between">
                 <nav>
                     {navLinks.map(link => (
                         <Link key={link.href} href={link.href} className={router.pathname === link.href ? 'active' : ''}>
@@ -23,6 +30,11 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
                         </Link>
                     ))}
                 </nav>
+                <div>
+                    <button onClick={handleLogout} className="btn-secondary">
+                        Log Out
+                    </button>
+                </div>
             </aside>
             <main className="dashboard-content">
                 {children}

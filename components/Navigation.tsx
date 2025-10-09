@@ -1,7 +1,7 @@
-// components/Navigation.tsx
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Image from 'next/image'; // 1. Import the Image component
 
 const Navigation: React.FC = () => {
   const router = useRouter();
@@ -14,7 +14,9 @@ const Navigation: React.FC = () => {
         <div className="container">
           <div className="nav-content">
             <div className="nav-brand">
-              <Link href="/" className="brand-link" onClick={() => setIsOpen(false)}>
+              {/* 2. Use the new styles from the module file */}
+              <Link href="/" className="brand-container" onClick={() => setIsOpen(false)}>
+
                 <span className="brand-text">🍁KashWords</span>
               </Link>
             </div>
@@ -27,7 +29,6 @@ const Navigation: React.FC = () => {
               <Link href="/" className={`nav-btn ${router.pathname === '/' ? 'nav-btn-active' : ''}`}>
                 Home
               </Link>
-              {/* UPDATED: Link now points to /hechun */}
               <Link href="/hechun" className={`nav-btn ${isActive('/hechun') ? 'nav-btn-active' : ''}`}>
                 Hećhun (Learn)
               </Link>
@@ -40,18 +41,18 @@ const Navigation: React.FC = () => {
               <Link href="/about-team" className={`nav-btn ${isActive('/about-team') ? 'nav-btn-active' : ''}`}>
                 About Us
               </Link>
-
-              {isOpen && (
-                  <div className="mobile-menu">
-                    <Link href="/" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Home</Link>
-                    <Link href="/hechun" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Hećhun</Link>
-                    <Link href="/submit" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Submit Idiom</Link>
-                    <Link href="/about-project" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Project</Link>
-                    <Link href="/about-team" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Us</Link>
-                  </div>
-              )}
             </div>
           </div>
+
+          {isOpen && (
+              <div className="mobile-menu">
+                <Link href="/" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Home</Link>
+                <Link href="/hechun" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Hećhun (Learn)</Link>
+                <Link href="/submit" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Submit Idiom</Link>
+                <Link href="/about-project" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Project</Link>
+                <Link href="/about-team" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Us</Link>
+              </div>
+          )}
         </div>
       </nav>
   );

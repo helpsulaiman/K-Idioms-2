@@ -22,10 +22,9 @@ const AboutTeam: React.FC = () => {
       name: "Tehniyah Rayaz",
       role: "Co-Leader & Creative Lead",
       bio: "Writer, planner, and creative lead. Brings innovative ideas and cultural expertise to the project.",
-      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/tehniyah.jpg",
       socials: [
         { type: 'linkedin', url: 'https://linkedin.com/in/' },
-        { type: 'instagram', url: 'https://instagram.com/' },
       ],
     },
     {
@@ -33,16 +32,20 @@ const AboutTeam: React.FC = () => {
       name: "Furqan Malik",
       role: "Content & Research",
       bio: "Contributing to content development and cultural research aspects of the project.",
-      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: [],
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/furqan.jpg",
+      socials: [
+        { type: 'instagram', url: 'https://instagram.com/ffurqann18' },
+      ],
     },
     {
       id: 'farees-ahmed',
       name: "Farees Ahmed",
       role: "UX & Content Curation",
       bio: "Focuses on user experience and content curation for the platform.",
-      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png",
-      socials: [],
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Farees2.jpg",
+      socials: [
+        { type: 'instagram', url: 'https://instagram.com/ahangerfarees' },
+      ],
     },
     {
       id: 'anha-nabi',
@@ -72,12 +75,13 @@ const AboutTeam: React.FC = () => {
               className="team-logo"
               width={800}
               height={800}
+              style={{objectFit: "cover", borderRadius: "50%", paddingTop: "15px"}}
           />
         </div>
 
         <div className="about-section">
-          <h1 className="main-title">About Us</h1>
-          <p className="about-text">
+          <h1 className="page-title">About Us</h1>
+          <p className="page-subtitle">
             We are a dedicated team of students from Kashmir University participating in the DYD (Design Your Degree) programme.
             Our project focuses on preserving and promoting Kashmiri culture through a digital platform dedicated to Kashmiri idioms.
             As part of the DYD initiative, we&apos;ve combined our diverse skills and shared passion for our cultural heritage to create
@@ -85,7 +89,9 @@ const AboutTeam: React.FC = () => {
           </p>
         </div>
 
-        <h2 className="team-title">Meet Our Team</h2>
+        <div className="about-section">
+          <h1 className="page-title">Meet Our Team</h1>
+        </div>
 
         <div className="members-container">
           {teamMembers.map((member) => (

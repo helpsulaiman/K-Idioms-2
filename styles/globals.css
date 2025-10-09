@@ -80,7 +80,7 @@ body {
 }
 
 .idiom-card .text-kashmiri, [lang="ks"] {
-  font-family: var(--font-kashmiri, sans-serif);
+  font-family: var(--font-kashmiri, sans-serif), serif;
   color: var(--text-kashmiri);
   word-break: break-word; /* Prevents overflow */
 }
@@ -153,6 +153,20 @@ body {
 
 .nav-btn-active:hover {
   background: linear-gradient(135deg, #1b80a5, #024fa5);
+}
+
+.brand-container {
+  display: flex;
+  align-items: center; /* This will vertically center the logo and text */
+  gap: 12px; /* This creates space between the logo and text */
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* This forces the image to be a circle */
+  object-fit: cover; /* Ensures the image covers the circular area nicely */
 }
 
 /* Typography System */
@@ -236,6 +250,8 @@ body {
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px var(--shadow-color);
   transition: all 0.2s ease-in-out;
+  padding: 1rem;
+  border-radius: 1rem;
 }
 .idiom-card:hover, .member-card:hover {
   transform: translateY(-2px);
@@ -412,13 +428,14 @@ body {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+
 }
 
 .page-subtitle {
   font-size: 1.1rem;
   color: var(--text-primary);
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   line-height: 1.6;
 }
@@ -618,8 +635,85 @@ body {
 
 /* Form Container and Layout */
 .form-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.form-input, .form-textarea {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+
+.form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+.form-help-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.tag-input-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.tag-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tag-removable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: var(--text-on-primary);
+  opacity: 0.7;
+  cursor: pointer;
+  font-weight: bold;
+}
+.tag-remove-btn:hover {
+  opacity: 1;
 }
 
 .submit-form {
@@ -633,49 +727,20 @@ body {
 /* Form Help Text */
 .form-help-text {
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--text-on-primary);
   margin-top: 0.5rem;
   margin-bottom: 0;
-}
-
-/* Tag Input Row */
-.tag-input-row {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
 }
 
 .tag-input {
   flex: 1;
 }
 
-/* Tag Removable */
-.tag-removable {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tag-remove-btn {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s ease;
-}
-
-.tag-remove-btn:hover {
-  color: rgba(255, 255, 255, 1);
-}
-
 /* Form Submit */
 .form-submit {
   text-align: center;
   margin-top: 2rem;
+  color: var(--text-muted);
 }
 
 /* Success and Error Messages */
@@ -795,13 +860,13 @@ body {
 .members-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 8rem;
-  padding: 2.7rem;
+  gap: 6rem;
+  padding: 2rem;
 }
 
 
 .member-card:not(.expanded):hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-card);
   transform: translateY(-5px);
   z-index: 2; /* Bring hover card slightly forward */
 }
@@ -830,17 +895,17 @@ body {
 .member-info h3 {
   margin: 0;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-secondary);
 }
 
 .member-info h4 {
   margin: 0.5rem 0;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .member-info p {
   margin: 0.5rem 0;
-  color: #777;
+  color: var(--text-secondary);
 }
 
 .animate-on-scroll {
@@ -1184,13 +1249,3 @@ body {
   flex-grow: 1;
   padding: 2rem;
 }
-
-/* Form Input Styles */
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: 0.7rem 0.1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-}
-

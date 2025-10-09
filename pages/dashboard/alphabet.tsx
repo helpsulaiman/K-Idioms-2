@@ -88,17 +88,38 @@ const ManageAlphabetPage: React.FC = () => {
             <DashboardLayout>
                 <h1 className="text-3xl font-bold mb-6">Manage Alphabet</h1>
 
-                <form onSubmit={handleSubmit} className="mb-8 p-6 border rounded-lg space-y-4 bg-white dark:bg-gray-800 shadow-sm">
-                    <h2 className="text-xl font-semibold">{editingId ? `Editing: ${formData.name}` : 'Add New Letter'}</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input name="lesson_order" type="number" placeholder="Order" onChange={handleInputChange} value={formData.lesson_order || ''} className="form-input" required />
-                        <input name="letter" placeholder="Letter (e.g., ا)" onChange={handleInputChange} value={formData.letter || ''} className="form-input" required />
-                        <input name="name" placeholder="Name (e.g., Alif)" onChange={handleInputChange} value={formData.name || ''} className="form-input" required />
-                        <input name="pronunciation" placeholder="Pronunciation" onChange={handleInputChange} value={formData.pronunciation || ''} className="form-input md:col-span-3" />
-                        <input name="example_word_kashmiri" placeholder="Kashmiri Example" onChange={handleInputChange} value={formData.example_word_kashmiri || ''} className="form-input" />
-                        <input name="example_word_english" placeholder="English Example" onChange={handleInputChange} value={formData.example_word_english || ''} className="form-input" />
+                <form onSubmit={handleSubmit} className="mb-8 p-6 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                    <h2 className="text-xl font-semibold mb-4">{editingId ? `Editing: ${formData.name}` : 'Add New Letter'}</h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
+                        <div className="form-group">
+                            <label className="form-label">Order</label>
+                            <input name="lesson_order" type="number" placeholder="1" onChange={handleInputChange} value={formData.lesson_order || ''} className="form-input" required />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Letter</label>
+                            <input name="letter" placeholder="ا" onChange={handleInputChange} value={formData.letter || ''} className="form-input" required />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Name</label>
+                            <input name="name" placeholder="Alif" onChange={handleInputChange} value={formData.name || ''} className="form-input" required />
+                        </div>
                     </div>
-                    <div className="flex gap-4 pt-2">
+                    <div className="form-group">
+                        <label className="form-label">Pronunciation</label>
+                        <input name="pronunciation" placeholder="like 'a' in 'apple'" onChange={handleInputChange} value={formData.pronunciation || ''} className="form-input" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                        <div className="form-group">
+                            <label className="form-label">Kashmiri Example</label>
+                            <input name="example_word_kashmiri" placeholder="أنار (Anār)" onChange={handleInputChange} value={formData.example_word_kashmiri || ''} className="form-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">English Example</label>
+                            <input name="example_word_english" placeholder="Pomegranate" onChange={handleInputChange} value={formData.example_word_english || ''} className="form-input" />
+                        </div>
+                    </div>
+                    <div className="flex gap-4 pt-4 border-t">
                         <button type="submit" className="btn btn-primary">{editingId ? 'Update Letter' : 'Add Letter'}</button>
                         {editingId && <button type="button" onClick={cancelEdit} className="btn btn-secondary">Cancel</button>}
                     </div>

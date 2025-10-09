@@ -2,32 +2,34 @@ import React from 'react';
 import Layout from '../components/Layout';
 import Image from "next/image";
 import Link from "next/link";
+import styles from "@/styles/Alphabet.module.css";
 
 const AboutProjectPage: React.FC = () => {
   return (
-      <Layout
-          title="About the Project - Kashmiri Idioms"
-          description="Learn about our mission to preserve and digitize traditional Kashmiri idioms for future generations."
-      >
+      <Layout>
         <div className="logo-container">
           <Image
               src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png"
               alt="Project Logo"
               width={200}
               height={200}
+              style={{objectFit: "cover", borderRadius: "50%"}}
               className="team-logo"
           />
         </div>
 
-        <div className="about-section" style={{ marginBottom: '2rem' }}>
-          <h1 className="main-title" style={{ fontSize: '4rem' }}>About the Project</h1>
-          <p className="about-text" style={{ marginBottom: '2rem', fontSize: '1.4rem' }}>
-            Preserving Kashmiri Cultural Heritage Through Digital Innovation
-          </p>
+        <div className={styles.pageContainer}>
+          <div className={styles.pageHeader}>
+            <h1 className={styles.pageTitle}>About the Project</h1>
+            <p className={styles.pageSubtitle}>
+              Preserving Kashmiri Cultural Heritage Through Digital Innovation
+            </p>
+          </div>
         </div>
 
+
         {/* --- Mission & Why It Matters --- */}
-        <div className="idioms-grid" style={{ maxWidth: '1000px', paddingBlock: '0' }}>
+        <div className="idioms-grid" style={{ maxWidth: '1000px', paddingBlock: '1' }}>
           <div className="idiom-card">
             <div className="card-content">
               <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Our Mission</h2>
@@ -52,7 +54,7 @@ const AboutProjectPage: React.FC = () => {
 
         {/* --- What We Offer --- */}
         <div className="about-section" style={{ marginBlock: '2rem' }}>
-          <h2 className="team-title" style={{ fontSize: '2.9rem' }}>What We Offer</h2>
+          <h2 className={styles.pageTitle}>What We Offer</h2>
         </div>
         <div className="idioms-grid" style={{ paddingBlock: '0' }}>
           <div className="idiom-card">
@@ -95,7 +97,7 @@ const AboutProjectPage: React.FC = () => {
 
         {/* --- Our Approach --- */}
         <div className="about-section" style={{ marginBlock: '2rem' }}>
-          <h2 className="team-title" style={{ fontSize: '2.9rem' }}>Our Approach</h2>
+          <h2 className={styles.pageTitle}>Our Approach</h2>
         </div>
         <div className="idioms-grid" style={{ paddingBlock: '0' }}>
           <div className="idiom-card">
@@ -129,17 +131,17 @@ const AboutProjectPage: React.FC = () => {
 
         {/* --- Join Our Mission (Restored) --- */}
         <div className="about-section" style={{ marginBlock: '2rem' }}>
-          <h2 className="team-title" style={{ fontSize: '2.9rem' }}>Join Our Mission</h2>
+          <h2 className={styles.pageTitle}>Join Our Mission</h2>
         </div>
         <div className="idioms-grid" style={{ maxWidth: '700px', gridTemplateColumns: '1fr', paddingBlock: '0' }}>
           <div className="idiom-card">
             <div className="card-content">
-              <p className="text-meaning">
+              <p className="text-primary">
                 This project thrives on community participation. Whether you&apos;re a native
                 speaker, a cultural enthusiast, or simply someone who appreciates the
                 beauty of language, there are many ways to contribute:
               </p>
-              <ul className="list-disc list-inside text-left text-meaning my-4 space-y-2">
+              <ul className="list-disc list-inside text-left text-primary my-4 space-y-2">
                 <li>Submit idioms you know through our contribution form</li>
                 <li>Help with translations and cultural context</li>
                 <li>Share the project with others who might be interested</li>
