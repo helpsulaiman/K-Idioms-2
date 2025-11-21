@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+ import { supabase } from './supabase';
 import { Idiom, IdiomSubmission, SearchFilters, Suggestion } from '../types/idiom';
 
 export class ApiError extends Error {

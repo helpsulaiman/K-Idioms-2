@@ -39,11 +39,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
+    const newTags = selectedTags.includes(tag)
+      ? selectedTags.filter(t => t !== tag)
+      : [...selectedTags, tag];
+
+    setSelectedTags(newTags);
+    onSearch({
+      query: query.trim(),
+      tags: newTags
+    });
   };
 
   const clearFilters = () => {
@@ -79,7 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
           Filter by category:
         </span>
-        
+
         {/* Add Tag Dropdown */}
         <div className="relative">
           <button
@@ -88,9 +92,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           >
             + Add Category
           </button>
-          
+
           {showTagDropdown && (
-            <div 
+            <div
               className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto min-w-48"
               style={{
                 background: '.bg-white-card',
@@ -105,12 +109,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                     toggleTag(tag);
                     setShowTagDropdown(false);
                   }}
-                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-50 transition-colors ${
-                    selectedTags.includes(tag) 
-                      ? 'font-medium' 
+                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-50 transition-colors ${selectedTags.includes(tag)
+                      ? 'font-medium'
                       : ''
-                  }`}
-                  style={{ 
+                    }`}
+                  style={{
                     color: selectedTags.includes(tag) ? 'var(--chinar-orange)' : 'var(--text-primary)',
                     background: selectedTags.includes(tag) ? 'var(--bg-card-right)' : 'transparent'
                   }}

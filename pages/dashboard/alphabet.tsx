@@ -23,6 +23,7 @@ const ManageAlphabetPage: React.FC = () => {
         lesson_order: undefined,
     });
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [isFormVisible, setIsFormVisible] = useState(false);
 
     const fetchAlphabet = async () => {
         try {
@@ -63,6 +64,8 @@ const ManageAlphabetPage: React.FC = () => {
         console.log("Editing lesson:", lesson); // For debugging
         setEditingId(lesson.id);
         setFormData(lesson);
+        setIsFormVisible(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = async (id: number) => {
@@ -81,63 +84,84 @@ const ManageAlphabetPage: React.FC = () => {
             letter: '', name: '', pronunciation: '', example_word_kashmiri: '',
             example_word_english: '', lesson_order: undefined,
         });
+        setIsFormVisible(false);
     };
 
     return (
         <Layout title="Manage Alphabet">
             <DashboardLayout>
-                <h1 className="text-3xl font-bold mb-6">Manage Alphabet</h1>
+                <div className="flex justify-between items-center mb-8" style={{ marginBottom: '2rem' }}>
+                    <h1 className="text-3xl font-bold">Manage Alphabet</h1>
+                    {!isFormVisible && (
+                        <button
+                            onClick={() => setIsFormVisible(true)}
+                            className="btn btn-primary"
+                        >
+                            + Add New Letter
+                        </button>
+                    )}
+                </div>
 
-                <form onSubmit={handleSubmit} className="mb-8 p-6 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-                    <h2 className="text-xl font-semibold mb-4">{editingId ? `Editing: ${formData.name}` : 'Add New Letter'}</h2>
+                {isFormVisible && (
+                    <form onSubmit={handleSubmit} className="mb-8 p-6 border rounded-lg bg-white dark:bg-gray-800 shadow-sm fade-in">
+                        <h2 className="text-xl font-semibold mb-4">{editingId ? `Editing: ${formData.name}` : 'Add New Letter'}</h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
-                        <div className="form-group">
-                            <label className="form-label">Order</label>
-                            <input name="lesson_order" type="number" placeholder="1" onChange={handleInputChange} value={formData.lesson_order || ''} className="form-input" required />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
+                            <div className="form-group">
+                                <label className="form-label">Order</label>
+                                <input name="lesson_order" type="number" placeholder="1" onChange={handleInputChange} value={formData.lesson_order || ''} className="form-input" required />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Letter</label>
+                                <input name="letter" placeholder="ا" onChange={handleInputChange} value={formData.letter || ''} className="form-input" required />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Name</label>
+                                <input name="name" placeholder="Alif" onChange={handleInputChange} value={formData.name || ''} className="form-input" required />
+                            </div>
                         </div>
                         <div className="form-group">
-                            <label className="form-label">Letter</label>
-                            <input name="letter" placeholder="ا" onChange={handleInputChange} value={formData.letter || ''} className="form-input" required />
+                            <label className="form-label">Pronunciation</label>
+                            <input name="pronunciation" placeholder="like 'a' in 'apple'" onChange={handleInputChange} value={formData.pronunciation || ''} className="form-input" />
                         </div>
-                        <div className="form-group">
-                            <label className="form-label">Name</label>
-                            <input name="name" placeholder="Alif" onChange={handleInputChange} value={formData.name || ''} className="form-input" required />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                            <div className="form-group">
+                                <label className="form-label">Kashmiri Example</label>
+                                <input name="example_word_kashmiri" placeholder="أنار (Anār)" onChange={handleInputChange} value={formData.example_word_kashmiri || ''} className="form-input" />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">English Example</label>
+                                <input name="example_word_english" placeholder="Pomegranate" onChange={handleInputChange} value={formData.example_word_english || ''} className="form-input" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Pronunciation</label>
-                        <input name="pronunciation" placeholder="like 'a' in 'apple'" onChange={handleInputChange} value={formData.pronunciation || ''} className="form-input" />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-                        <div className="form-group">
-                            <label className="form-label">Kashmiri Example</label>
-                            <input name="example_word_kashmiri" placeholder="أنار (Anār)" onChange={handleInputChange} value={formData.example_word_kashmiri || ''} className="form-input" />
+                        <div className="flex gap-4 pt-4 border-t">
+                            <button type="submit" className="btn btn-primary">{editingId ? 'Update Letter' : 'Add Letter'}</button>
+                            <button type="button" onClick={cancelEdit} className="btn btn-secondary">Cancel</button>
                         </div>
-                        <div className="form-group">
-                            <label className="form-label">English Example</label>
-                            <input name="example_word_english" placeholder="Pomegranate" onChange={handleInputChange} value={formData.example_word_english || ''} className="form-input" />
-                        </div>
-                    </div>
-                    <div className="flex gap-4 pt-4 border-t">
-                        <button type="submit" className="btn btn-primary">{editingId ? 'Update Letter' : 'Add Letter'}</button>
-                        {editingId && <button type="button" onClick={cancelEdit} className="btn btn-secondary">Cancel</button>}
-                    </div>
-                </form>
+                    </form>
+                )}
 
-                <div className="space-y-4">
+                <div className="dashboard-grid">
                     {lessons.map((lesson) => (
-                        <div key={lesson.id} className="p-4 border rounded-lg flex justify-between items-center bg-white dark:bg-gray-800">
-                            <div className="flex items-center gap-4">
-                                <span className="font-mono text-gray-500 text-sm">#{lesson.lesson_order}</span>
-                                <div>
-                                    <span className="font-bold text-2xl" lang="ks">{lesson.letter}</span>
-                                    <span className="ml-2 text-lg">{lesson.name}</span>
+                        <div key={lesson.id} className="dashboard-card">
+                            <div className="mb-2 text-center">
+                                <div className="text-5xl font-bold text-kashmiri my-1" lang="ks">{lesson.letter}</div>
+                                <h3 className="text-lg font-semibold">{lesson.name}</h3>
+                                <p className="text-xs text-gray-500 italic">{lesson.pronunciation}</p>
+                            </div>
+                            <div className="mt-1 pt-2 border-t border-gray-100 dark:border-gray-700 text-xs">
+                                <div className="flex justify-between mb-1">
+                                    <span className="text-gray-500">Example:</span>
+                                    <span className="font-medium" lang="ks">{lesson.example_word_kashmiri}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">Meaning:</span>
+                                    <span className="font-medium">{lesson.example_word_english}</span>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
-                                <button onClick={() => handleEdit(lesson)} className="btn btn-secondary">Edit</button>
-                                <button onClick={() => handleDelete(lesson.id)} className="btn btn-danger text-white">Delete</button>
+                            <div className="flex justify-end gap-2 mt-auto pt-2 border-t border-gray-100 dark:border-gray-700">
+                                <button onClick={() => handleEdit(lesson)} className="btn btn-sm btn-secondary">Edit</button>
+                                <button onClick={() => handleDelete(lesson.id)} className="btn btn-sm btn-danger text-white">Delete</button>
                             </div>
                         </div>
                     ))}
