@@ -122,7 +122,7 @@ const HechunLoginPage: React.FC = () => {
                 </div>
 
                 <div className="mt-8 text-center text-gray-600">
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <Link href="/auth/register" className="text-blue-600 font-bold hover:underline">
                         Register
                     </Link>

@@ -30,7 +30,7 @@ const LeaderboardPage: React.FC = () => {
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold mb-4">🏆 Leaderboard</h1>
                     <p className="text-gray-600 dark:text-gray-300">
-                        See who's mastering Kashmiri the fastest!
+                        See who&apos;s mastering Kashmiri the fastest!
                     </p>
                 </div>
 
@@ -41,8 +41,8 @@ const LeaderboardPage: React.FC = () => {
                             key={p}
                             onClick={() => setPeriod(p)}
                             className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition-all ${period === p
-                                    ? 'bg-chinar-orange text-white shadow-md'
-                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
+                                ? 'bg-chinar-orange text-white shadow-md'
+                                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
                                 }`}
                         >
                             {p.replace('_', ' ')}
