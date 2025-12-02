@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import styles from '../../styles/learn.module.css';
-import Navigation from '../../components/Navigation'; //
+import Layout from '../../components/Layout';
 import { createClient } from '@supabase/supabase-js';
 
 export interface LessonExercise {
@@ -53,10 +53,9 @@ const LearnPage: React.FC<LearnPageProps> = ({ exercises }) => {
 
     if (!exercises || exercises.length === 0) {
         return (
-            <>
-                <Head><title>Kashmiri Lesson</title></Head>
+            <Layout title="Kashmiri Lesson">
                 <p className="text-center p-8">Loading sentence lessons...</p>
-            </>
+            </Layout>
         );
     }
 
@@ -127,11 +126,7 @@ const LearnPage: React.FC<LearnPageProps> = ({ exercises }) => {
     };
 
     return (
-        <>
-            <Head>
-                <title>Kashmiri Lesson</title>
-            </Head>
-            <Navigation />
+        <Layout title="Kashmiri Lesson">
             <div className={styles.learnContainer}>
                 <div className={styles.lessonHeader}>
                     <h1 className={styles.lessonTitle}>Kashmiri Lesson</h1>
@@ -208,7 +203,7 @@ const LearnPage: React.FC<LearnPageProps> = ({ exercises }) => {
                     </div>
                 </footer>
             </div>
-        </>
+        </Layout>
     );
 };
 

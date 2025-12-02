@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import Navigation from '../../../components/Navigation';
+import Layout from '../../../components/Layout';
 import styles from '../../../styles/learn.module.css';
 import { fetchLessonWithSteps, submitLessonProgress, fetchNextLesson } from '../../../lib/learning-api';
 import { LearningLesson, LessonStep } from '../../../types/learning';
@@ -132,21 +132,17 @@ const LessonRunner: React.FC = () => {
 
     if (loading) {
         return (
-            <>
-                <Head><title>Loading Lesson...</title></Head>
-                <Navigation />
+            <Layout title="Loading Lesson...">
                 <div className={styles.learnContainer}>
                     <p className="text-center p-8">Loading lesson...</p>
                 </div>
-            </>
+            </Layout>
         );
     }
 
     if (isCompleted) {
         return (
-            <>
-                <Head><title>Lesson Complete!</title></Head>
-                <Navigation />
+            <Layout title="Lesson Complete!">
                 <div className={styles.learnContainer}>
                     <main className={`${styles.mainContent} flex-col justify-center`}>
                         <div className={`${styles.lessonCard} text-center max-w-md mx-auto`}>
@@ -177,18 +173,14 @@ const LessonRunner: React.FC = () => {
                         </div>
                     </main>
                 </div>
-            </>
+            </Layout>
         );
     }
 
     if (!currentStep) return null;
 
     return (
-        <>
-            <Head>
-                <title>{lesson?.title || 'Lesson'}</title>
-            </Head>
-            <Navigation />
+        <Layout title={lesson?.title || 'Lesson'}>
             <div className={styles.learnContainer}>
                 <div className={`${styles.lessonHeader} mb-2`}>
                     <h1 className="text-xl font-bold">{lesson?.title}</h1>
@@ -273,7 +265,7 @@ const LessonRunner: React.FC = () => {
                     </div>
                 </main>
             </div>
-        </>
+        </Layout>
     );
 };
 
