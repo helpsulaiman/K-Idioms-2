@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { gsap } from 'gsap';
 import styles from '../styles/ChromaGrid.module.css';
 
@@ -36,8 +37,8 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
 }) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const fadeRef = useRef<HTMLDivElement>(null);
-    const setX = useRef<((value: any) => void) | null>(null);
-    const setY = useRef<((value: any) => void) | null>(null);
+    const setX = useRef<Function | null>(null);
+    const setY = useRef<Function | null>(null);
     const pos = useRef({ x: 0, y: 0 });
 
     const demo: ChromaGridItem[] = [
@@ -137,7 +138,7 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
                     } as React.CSSProperties}
                 >
                     <div className={styles.chromaImgWrapper}>
-                        <img src={c.image} alt={c.title} loading="lazy" />
+                        <Image src={c.image} alt={c.title} fill style={{ objectFit: 'cover' }} />
                     </div>
                     <footer className={styles.chromaInfo}>
                         <h3 className={styles.name}>{c.title}</h3>
