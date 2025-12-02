@@ -76,6 +76,23 @@
     justify-content: center;
     gap: 1.5rem;
     margin-top: 2rem;
+    flex-wrap: wrap;
+    /* Allow wrapping if needed */
+}
+
+@media (max-width: 768px) {
+    .buttonContainer {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    .headerButton {
+        width: 100%;
+        max-width: 300px;
+        /* Prevent them from being too wide */
+    }
 }
 
 /* --- PREVIOUS STYLES (UNCHANGED) --- */
