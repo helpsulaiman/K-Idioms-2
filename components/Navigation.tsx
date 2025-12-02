@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image'; // 1. Import the Image component
+import { useUser } from '@supabase/auth-helpers-react';
 
 const Navigation: React.FC = () => {
   const router = useRouter();
+  const user = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (path: string) => router.pathname.startsWith(path);
@@ -41,9 +43,15 @@ const Navigation: React.FC = () => {
             <Link href="/about-team" className={`nav-btn ${isActive('/about-team') ? 'nav-btn-active' : ''}`}>
               About Us
             </Link>
-            <Link href="/auth/login" className={`nav-btn ${isActive('/auth/login') ? 'nav-btn-active' : ''}`}>
-              Login
-            </Link>
+            {user ? (
+              <Link href="/profile" className={`nav-btn ${isActive('/profile') ? 'nav-btn-active' : ''}`}>
+                Profile
+              </Link>
+            ) : (
+              <Link href="/auth/login" className={`nav-btn ${isActive('/auth/login') ? 'nav-btn-active' : ''}`}>
+                Login
+              </Link>
+            )}
           </div>
         </div>
 
@@ -54,7 +62,11 @@ const Navigation: React.FC = () => {
             <Link href="/submit" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Submit Idiom</Link>
             <Link href="/about-project" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Project</Link>
             <Link href="/about-team" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>About Us</Link>
-            <Link href="/auth/login" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Login</Link>
+            {user ? (
+              <Link href="/profile" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Profile</Link>
+            ) : (
+              <Link href="/auth/login" className="mobile-nav-btn" onClick={() => setIsOpen(false)}>Login</Link>
+            )}
           </div>
         )}
       </div>

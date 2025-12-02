@@ -121,12 +121,57 @@ export async function fetchLessonWithSteps(lessonId: number): Promise<{ lesson: 
         throw error instanceof ApiError ? error : new ApiError('Failed to fetch lesson content');
     }
 }
+// --- USER PROFILE ---
+
+export async function updateUserProfile(userId: string, username: string): Promise<void> {
+    try {
+        // Update user_stats with new username
+        const { error } = await supabase
+            .from('user_stats')
+            .upsert({
+                user_id: userId,
+                username: username,
+                updated_at: new Date().toISOString()
+            }, { onConflict: 'user_id' });
+
+        if (error) throw new ApiError(`Failed to update profile: ${error.message}`);
+
+        // Also update auth metadata for consistency if needed
+        await supabase.auth.updateUser({
+            data: { full_name: username }
+        });
+
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        throw error instanceof ApiError ? error : new ApiError('Failed to update profile');
+    }
+}
+
+export async function fetchUserStats(userId: string): Promise<UserStats | null> {
+    try {
+        const { data, error } = await supabase
+            .from('user_stats')
+            .select('*')
+            .eq('user_id', userId)
+            .single();
+
+        if (error) {
+            if (error.code === 'PGRST116') return null; // Not found
+            throw new ApiError(`Failed to fetch stats: ${error.message}`);
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching user stats:', error);
+        return null;
+    }
+}
 
 // --- PROGRESS & STATS ---
 
 export async function submitLessonProgress(userId: string | undefined, lessonId: number, stars: number): Promise<void> {
     try {
         if (!userId) {
+            console.log('Submitting guest progress for lesson', lessonId, 'stars', stars);
             // Guest mode: Save to localStorage
             if (typeof window !== 'undefined') {
                 const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
@@ -134,10 +179,13 @@ export async function submitLessonProgress(userId: string | undefined, lessonId:
                 if ((localProgress[lessonId] || 0) < stars) {
                     localProgress[lessonId] = stars;
                     localStorage.setItem('hechun_guest_progress', JSON.stringify(localProgress));
+                    console.log('Guest progress saved to localStorage');
                 }
             }
             return;
         }
+
+        console.log('Submitting user progress for', userId, 'lesson', lessonId, 'stars', stars);
 
         // 1. Upsert user_progress
         const { error: progressError } = await supabase
@@ -212,6 +260,7 @@ export async function fetchLeaderboard(period: 'daily' | 'weekly' | 'all_time' =
 
 async function checkAndAwardBadges(userId: string, lessonId: number) {
     try {
+        console.log('Checking badges for user', userId, 'lesson', lessonId);
         // Get the lesson to find out which level it belongs to
         const { data: lesson } = await supabase
             .from('learning_lessons')
@@ -219,7 +268,12 @@ async function checkAndAwardBadges(userId: string, lessonId: number) {
             .eq('id', lessonId)
             .single();
 
-        if (!lesson) return;
+        if (!lesson) {
+            console.log('Badge check: Lesson not found');
+            return;
+        }
+
+        console.log('Badge check: Lesson belongs to level', lesson.level_id);
 
         // Check if all lessons in this level are completed
         const { data: levelLessons } = await supabase
@@ -227,7 +281,10 @@ async function checkAndAwardBadges(userId: string, lessonId: number) {
             .select('id')
             .eq('level_id', lesson.level_id);
 
-        if (!levelLessons) return;
+        if (!levelLessons) {
+            console.log('Badge check: No lessons found for level');
+            return;
+        }
 
         const { data: userProgress } = await supabase
             .from('user_progress')
@@ -238,25 +295,36 @@ async function checkAndAwardBadges(userId: string, lessonId: number) {
         const completedLessonIds = new Set(userProgress?.map(p => p.lesson_id));
         const allCompleted = levelLessons.every(l => completedLessonIds.has(l.id));
 
+        console.log('Badge check: Level lessons', levelLessons.map(l => l.id), 'Completed', Array.from(completedLessonIds), 'All completed?', allCompleted);
+
         if (allCompleted) {
             // Find the badge for this level
-            // In a real app, we'd query the badges table with criteria, but for now we'll hardcode or use a convention
-            // Let's assume badge ID corresponds to level ID for simplicity, or query by criteria
             const { data: badges } = await supabase
                 .from('badges')
                 .select('*');
 
-            const levelBadge = badges?.find(b => b.criteria?.type === 'level_complete' && b.criteria?.level_id === lesson.level_id);
+            // Parse criteria JSON if it's a string, or use it directly if it's an object
+            // Supabase returns JSON columns as objects usually, but let's be safe
+            const levelBadge = badges?.find(b => {
+                const criteria = typeof b.criteria === 'string' ? JSON.parse(b.criteria) : b.criteria;
+                return criteria?.type === 'level_complete' && criteria?.level_id === lesson.level_id;
+            });
 
             if (levelBadge) {
+                console.log('Badge check: Found badge to award', levelBadge.name);
                 // Award badge if not already owned
-                await supabase
+                const { error: awardError } = await supabase
                     .from('user_badges')
                     .upsert({
                         user_id: userId,
                         badge_id: levelBadge.id,
                         awarded_at: new Date().toISOString()
                     }, { onConflict: 'user_id, badge_id' });
+
+                if (awardError) console.error('Badge check: Error awarding badge', awardError);
+                else console.log('Badge check: Badge awarded successfully');
+            } else {
+                console.log('Badge check: No badge found for this level');
             }
         }
     } catch (error) {

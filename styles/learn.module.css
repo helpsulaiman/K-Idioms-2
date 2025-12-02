@@ -252,6 +252,7 @@
 
 .feedbackArea {
     text-align: center;
+    padding-top: 1rem;
     margin-bottom: 1rem;
     font-size: 1.25rem;
     font-weight: 600;
@@ -269,7 +270,7 @@
     width: 100%;
     padding: 1rem;
     border-radius: 0.75rem;
-    color: var(--text-on-primary);
+    color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 700;
     border: var(--border-color);

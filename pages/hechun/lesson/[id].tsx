@@ -241,7 +241,7 @@ const LessonRunner: React.FC = () => {
                                                 key={choice}
                                                 onClick={() => setSelectedChoice(choice)}
                                                 disabled={sessionStatus === 'checked'}
-                                                className={getChoiceClass(choice)}
+                                                className={`${getChoiceClass(choice)} text-kashmiri`}
                                             >
                                                 {choice}
                                             </button>
