@@ -1,6 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import Navigation from './Navigation';
+import { useRouter } from 'next/router';
+import { useUser } from '@supabase/auth-helpers-react';
+import PillNav from './PillNav';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -9,10 +11,22 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({
-                                           children,
-                                           title = 'Kashmiri Idioms - Preserving Cultural Heritage',
-                                           description = 'Discover traditional Kashmiri idioms and their meanings. Explore our collection of cultural expressions that carry the wisdom of Kashmir.'
-                                       }) => {
+    children,
+    title = 'Kashmiri Idioms - Preserving Cultural Heritage',
+    description = 'Discover traditional Kashmiri idioms and their meanings. Explore our collection of cultural expressions that carry the wisdom of Kashmir.'
+}) => {
+    const router = useRouter();
+    const user = useUser();
+
+    const navItems = React.useMemo(() => [
+        { label: 'Home', href: '/' },
+        { label: 'Hečhun (Learn)', href: '/hechun' },
+        { label: 'Submit Idiom', href: '/submit' },
+        { label: 'About Project', href: '/about-project' },
+        { label: 'About Us', href: '/about' },
+        user ? { label: 'Profile', href: '/profile' } : { label: 'Login', href: '/auth/login' }
+    ], [user]);
+
     return (
         <>
             <Head>
@@ -32,8 +46,18 @@ const Layout: React.FC<LayoutProps> = ({
             </Head>
 
             <div className="min-h-screen flex flex-col">
-                <header>
-                    <Navigation />
+                <header className="container mx-auto flex pt-4 px-4">
+                    <PillNav
+                        logo="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritWOTextLight.png"
+                        logoDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDspiritWOtextDark.png"
+                        logoAlt="KashWords Logo"
+                        items={navItems}
+                        activeHref={router.pathname}
+                        baseColor="#1e293b" // Slate-800
+                        pillColor="#fdba74" // Light Orange (Orange-300)
+                        pillTextColor="#1e293b"
+                        hoveredPillTextColor="#ffffff"
+                    />
                 </header>
 
                 <main className="flex-1">

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../components/Layout';
+import BadgeShareModal from '../../components/BadgeShareModal';
 import { fetchUserBadges, fetchUserStats } from '../../lib/learning-api';
 
 const ProgressPage: React.FC = () => {
@@ -11,6 +12,7 @@ const ProgressPage: React.FC = () => {
     const [stats, setStats] = useState({ totalStars: 0, lessonsCompleted: 0 });
     const [badges, setBadges] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedBadge, setSelectedBadge] = useState<any | null>(null);
 
     useEffect(() => {
         const loadData = async () => {
@@ -43,16 +45,8 @@ const ProgressPage: React.FC = () => {
         loadData();
     }, [user]);
 
-    const handleShare = (badgeName: string) => {
-        if (navigator.share) {
-            navigator.share({
-                title: 'Earned a Badge!',
-                text: `I just earned the ${badgeName} badge on Hečhun!`,
-                url: window.location.href,
-            }).catch(console.error);
-        } else {
-            alert('Sharing is not supported on this browser, but you can take a screenshot!');
-        }
+    const handleShare = (badge: any) => {
+        setSelectedBadge(badge);
     };
 
     return (
@@ -127,7 +121,7 @@ const ProgressPage: React.FC = () => {
                             <h3 className="text-lg font-bold text-gray-800 mb-2">{badge.badge.name}</h3>
                             <p className="text-sm text-gray-600 mb-4">{badge.badge.description}</p>
                             <button
-                                onClick={() => handleShare(badge.badge.name)}
+                                onClick={() => handleShare(badge)}
                                 className="btn btn-secondary btn-sm"
                             >
                                 Share
@@ -135,6 +129,17 @@ const ProgressPage: React.FC = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Badge Share Modal */}
+                {selectedBadge && (
+                    <BadgeShareModal
+                        isOpen={!!selectedBadge}
+                        onClose={() => setSelectedBadge(null)}
+                        badgeName={selectedBadge.badge.name}
+                        badgeDescription={selectedBadge.badge.description}
+                        badgeImageUrl={selectedBadge.badge.icon_url}
+                    />
+                )}
             </div>
         </Layout>
     );

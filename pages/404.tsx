@@ -10,7 +10,7 @@ const NotFoundPage: React.FC = () => {
           <div className="text-8xl mb-6">🔍</div>
           <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
           <p className="text-xl text-secondary mb-8">
-            <p>We&apos;re sorry, the page you&apos;re looking for doesn&apos;t exist.</p>
+            We&apos;re sorry, the page you&apos;re looking for doesn&apos;t exist.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/" className="btn btn-primary">

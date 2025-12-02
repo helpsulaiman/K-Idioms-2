@@ -469,3 +469,46 @@
     background-color: #fffbeb;
     /* Very light gold bg */
 }
+
+@keyframes popup {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popupAnimation {
+    animation: popup 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+}
+
+.teamLogoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    margin-top: 4rem;
+    /* Added margin to avoid nav bar overlap */
+}
+
+.teamLogo {
+    width: 15rem;
+    /* Increased size */
+    height: 15rem;
+    /* Increased size */
+
+    object-fit: cover;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
