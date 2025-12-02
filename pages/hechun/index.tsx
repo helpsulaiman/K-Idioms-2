@@ -94,7 +94,7 @@ const HechunPage: React.FC = () => {
                                                     {!isLocked && (
                                                         <div className="absolute -bottom-8 flex gap-1 text-sm">
                                                             {[1, 2, 3].map(star => (
-                                                                <span key={star} className={star <= (lesson.user_progress?.[0]?.stars || 0) ? 'text-yellow-400' : 'text-gray-300'}>
+                                                                <span key={star} className={star <= (lesson.user_stars || 0) ? 'text-yellow-400' : 'text-gray-300'}>
                                                                     ★
                                                                 </span>
                                                             ))}
