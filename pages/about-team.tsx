@@ -10,10 +10,10 @@ const AboutTeam: React.FC = () => {
       name: "Sulaiman Shabir",
       role: "Co-Leader & Developer",
       bio: "Technical lead and main developer of the project. Passionate about preserving Kashmiri culture through technology.",
-      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//helpsulaiman.jpg",
+      avatar: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/helpsulaiman.png",
       socials: [
         { type: 'linkedin', url: 'https://linkedin.com/in/helpsulaiman' },
-        { type: 'instagram', url: 'https://instagram.com/helpsulaiman' },
+        { type: 'instagram', url: 'https://instagram.com/helpsulaiman.jpg' },
         { type: 'github', url: 'https://github.com/helpsulaiman' },
       ],
     },
@@ -64,75 +64,75 @@ const AboutTeam: React.FC = () => {
   };
 
   return (
-      <Layout
-          title="About Us - Kashmiri Idioms"
-          description="Meet the team behind the Kashmiri Idioms project and learn about our contributors."
-      >
-        <div className="logo-container">
-          <Image
-              src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png"
-              alt="Team Logo"
-              className="team-logo"
-              width={800}
-              height={800}
-              style={{objectFit: "cover", borderRadius: "50%", paddingTop: "15px"}}
-          />
-        </div>
+    <Layout
+      title="About Us - Kashmiri Idioms"
+      description="Meet the team behind the Kashmiri Idioms project and learn about our contributors."
+    >
+      <div className="logo-container">
+        <Image
+          src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images//DYDsSpirit.png"
+          alt="Team Logo"
+          className="team-logo"
+          width={800}
+          height={800}
+          style={{ objectFit: "cover", borderRadius: "50%", paddingTop: "15px" }}
+        />
+      </div>
 
-        <div className="about-section">
-          <h1 className="page-title">About Us</h1>
-          <p className="page-subtitle">
-            We are a dedicated team of students from Kashmir University participating in the DYD (Design Your Degree) programme.
-            Our project focuses on preserving and promoting Kashmiri culture through a digital platform dedicated to Kashmiri idioms.
-            As part of the DYD initiative, we&apos;ve combined our diverse skills and shared passion for our cultural heritage to create
-            this valuable resource for current and future generations.
-          </p>
-        </div>
+      <div className="about-section">
+        <h1 className="page-title">About Us</h1>
+        <p className="page-subtitle">
+          We are a dedicated team of students from Kashmir University participating in the DYD (Design Your Degree) programme.
+          Our project focuses on preserving and promoting Kashmiri culture through a digital platform dedicated to Kashmiri idioms.
+          As part of the DYD initiative, we&apos;ve combined our diverse skills and shared passion for our cultural heritage to create
+          this valuable resource for current and future generations.
+        </p>
+      </div>
 
-        <div className="about-section">
-          <h1 className="page-title">Meet Our Team</h1>
-        </div>
+      <div className="about-section">
+        <h1 className="page-title">Meet Our Team</h1>
+      </div>
 
-        <div className="members-container">
-          {teamMembers.map((member) => (
-              <div
-                  key={member.id}
-                  className={`member-card ${expandedCard === member.id ? 'expanded' : ''}`}
-                  onClick={() => handleCardClick(member.id)}
-              >
-                <Image
-                    src={member.avatar}
-                    alt={member.name}
-                    className="member-image"
-                    width={400}
-                    height={400}
-                />
-                <div className="member-info">
-                  <h3>{member.name}</h3>
-                  <h4>{member.role}</h4>
-                  <p>{member.bio}</p>
-                </div>
+      <div className="members-container">
+        {teamMembers.map((member) => (
+          <div
+            key={member.id}
+            className={`member-card ${expandedCard === member.id ? 'expanded' : ''}`}
+            onClick={() => handleCardClick(member.id)}
+          >
+            <Image
+              src={member.avatar}
+              alt={member.name}
+              className="member-image"
+              width={400}
+              height={400}
+            />
+            <div className="member-info">
+              <h3>{member.name}</h3>
+              <h4>{member.role}</h4>
+              <p>{member.bio}</p>
+            </div>
 
-                <div className="expandable-content">
-                  <div className="social-links-container">
-                    {member.socials.map((social) => (
-                        <a
-                            key={social.type}
-                            href={social.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`social-link ${social.type}`}
-                        >
-                          <i className={`fab fa-${social.type}`}></i>
-                          {social.type.charAt(0).toUpperCase() + social.type.slice(1)}
-                        </a>
-                    ))}
-                  </div>
-                </div>
+            <div className="expandable-content">
+              <div className="social-links-container">
+                {member.socials.map((social) => (
+                  <a
+                    key={social.type}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`social-link ${social.type}`}
+                  >
+                    <i className={`fab fa-${social.type}`}></i>
+                    {social.type.charAt(0).toUpperCase() + social.type.slice(1)}
+                  </a>
+                ))}
               </div>
-          ))}
-        </div>
-      </Layout>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Layout>
   );
 };
 

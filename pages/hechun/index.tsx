@@ -1,158 +1,117 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
-import styles from '../../styles/Alphabet.module.css';
-import { createClient } from '@supabase/supabase-js'; // Import Supabase client
+import { useUser } from '@supabase/auth-helpers-react';
+import { fetchLevelsWithLessons } from '../../lib/learning-api';
+import { LearningLevel } from '../../types/learning';
+import styles from '../../styles/learn.module.css';
 
-// Define the type for the data coming from Supabase
-interface AlphabetLesson {
-    id: number;
-    letter: string;
-    name: string;
-    pronunciation: string;
-    example_word_kashmiri: string;
-    example_word_english: string;
-}
+const HechunPage: React.FC = () => {
+    const user = useUser();
+    const [levels, setLevels] = useState<LearningLevel[]>([]);
+    const [loading, setLoading] = useState(true);
 
-// Define the props for the page component
-interface AlphabetPageProps {
-    alphabetData: AlphabetLesson[];
-}
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const data = await fetchLevelsWithLessons(user?.id);
+                setLevels(data);
+            } catch (error) {
+                console.error('Failed to load learning path:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-// This function runs on the server at build time to fetch data
-export async function getStaticProps() {
-    const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY! // Use the secure service key on the server
-    );
-
-    const { data, error } = await supabase
-        .from('alphabet')
-        .select('*')
-        .order('lesson_order', { ascending: true });
-
-    if (error) {
-        console.error('Error fetching alphabet data:', error);
-    }
-
-    return {
-        props: {
-            alphabetData: data || [],
-        },
-        // Optional: re-fetch the data every 60 seconds to check for updates
-    };
-}
-
-const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => {
-    const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
-
-    // Handle case where data is not yet loaded or is empty
-    if (!alphabetData || alphabetData.length === 0) {
-        return <Layout><p className="text-center p-8">Loading alphabet lessons...</p></Layout>;
-    }
-
-    const currentLesson = alphabetData[currentLetterIndex];
-
-    const handleNext = () => {
-        if (currentLetterIndex < alphabetData.length - 1) {
-            setCurrentLetterIndex(currentLetterIndex + 1);
-        }
-    };
-
-    const handlePrevious = () => {
-        if (currentLetterIndex > 0) {
-            setCurrentLetterIndex(currentLetterIndex - 1);
-        }
-    };
-
-    const playSound = (sound: string) => {
-        console.log(`Playing sound for: ${sound}`);
-    };
-
-    const progressPercentage = ((currentLetterIndex + 1) / alphabetData.length) * 100;
+        loadData();
+    }, [user]);
 
     return (
-        <Layout>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageHeader}>
-                    <h1 className={styles.pageTitle}>Hečhun</h1>
-                    <p className={styles.pageSubtitle}>
-                        Click through the letters to learn their names and sounds.
+        <Layout title="Hechun - Learn Kashmiri">
+            <div className={styles.learnContainer}>
+                <div className="text-center pt-10 pb-4 px-4">
+                    <h1 className={styles.pagetitle}>Hečhun</h1>
+                    <p className={styles.pagesubtitle}>
+                        Master Kashmiri step by step.
                     </p>
 
-                    <div className="mt-6">
-                        <Link href="/hechun/sentences" className="btn btn-primary">
-                            Start Sentence Lessons →
+                    <div className={styles.buttonContainer}>
+                        <Link href="/hechun/alphabet" className={`btn ${styles.headerButton}`}>
+                            🔤 Alphabet
+                        </Link>
+                        <Link href="/leaderboard" className={`btn ${styles.headerButton}`}>
+                            🏆 Leaderboard
+                        </Link>
+                        <Link href="/hechun/progress" className={`btn ${styles.headerButton}`}>
+                            👤 My Progress
                         </Link>
                     </div>
                 </div>
 
-                <div className={styles.progressBarContainer}>
-                    <div className={styles.progressBar}>
-                        <div className={styles.progressFill} style={{ width: `${progressPercentage}%` }} />
-                    </div>
-                    <p className={styles.progressText}>
-                        Letter {currentLetterIndex + 1} of {alphabetData.length}
-                    </p>
-                </div>
+                {loading ? (
+                    <div className="text-center py-20">Loading your path...</div>
+                ) : (
+                    <div className={styles.pathContainer}>
+                        {levels.map((level) => (
+                            <div key={level.id} className={styles.levelSection}>
+                                {/* Level Header */}
+                                <div className={`${styles.levelHeader} ${level.is_locked ? 'opacity-75' : ''}`}>
+                                    <div>
+                                        <h2 className={styles.levelTitle}>{level.name}</h2>
+                                        <p className={styles.levelDesc}>{level.description}</p>
+                                    </div>
+                                    {level.is_locked && (
+                                        <div className="text-xs bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-bold">
+                                            🔒 {level.min_stars_required}★
+                                        </div>
+                                    )}
+                                </div>
 
-                <div className={styles.flashcard}>
-                    <div className={styles.letterColumn}>
-                        <h2 className={styles.letterName}>{currentLesson.name}</h2>
-                        <div className={styles.letterDisplay} lang="ks">
-                            {currentLesson.letter}
-                        </div>
-                        <button
-                            onClick={() => playSound(currentLesson.name)}
-                            className={styles.soundButton}
-                            aria-label={`Play sound for ${currentLesson.name}`}
-                        >
-                            🔊
-                        </button>
-                    </div>
+                                {/* Nodes Container */}
+                                <div className={styles.nodesContainer}>
+                                    {/* Connecting Line */}
+                                    <div className={styles.connectingLine} />
 
-                    <div className={styles.exampleColumn}>
-                        <h3 className={styles.exampleHeader}>Pronunciation & Example</h3>
-                        <p className={styles.pronunciationText}>
-                            Sounds like: &quot;{currentLesson.pronunciation}&quot;
-                        </p>
-                        <div className={styles.exampleWordContainer}>
-                            <div>
-                <span className={styles.exampleWordKashmiri} lang="ks">
-                  {currentLesson.example_word_kashmiri}
-                </span>
-                                <button
-                                    onClick={() => playSound(currentLesson.example_word_kashmiri)}
-                                    className={styles.soundButton}
-                                    aria-label={`Play sound for ${currentLesson.example_word_kashmiri}`}
-                                >
-                                    🔊
-                                </button>
+                                    {/* Lesson Nodes */}
+                                    {/* @ts-ignore - lessons is joined in API */}
+                                    {level.lessons?.map((lesson, index) => {
+                                        const isLocked = !!(level.is_locked || lesson.is_locked);
+
+                                        return (
+                                            <Link
+                                                href={isLocked ? '#' : `/hechun/lesson/${lesson.id}`}
+                                                key={lesson.id}
+                                                className="transform transition-transform"
+                                            >
+                                                <div className={`${styles.lessonNode} ${isLocked ? styles.locked : ''}`}>
+                                                    {isLocked ? (
+                                                        <span>🔒</span>
+                                                    ) : (
+                                                        <span>{lesson.lesson_order}</span>
+                                                    )}
+
+                                                    {/* Stars (Floating below) */}
+                                                    {!isLocked && (
+                                                        <div className="absolute -bottom-8 flex gap-1 text-sm">
+                                                            {[1, 2, 3].map(star => (
+                                                                <span key={star} className={star <= (lesson.user_progress?.[0]?.stars || 0) ? 'text-yellow-400' : 'text-gray-300'}>
+                                                                    ★
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                            <p className={styles.exampleWordEnglish}>is &quot;{currentLesson.example_word_english}&quot;</p>
-                        </div>
+                        ))}
                     </div>
-                </div>
-
-                <div className={styles.navigation}>
-                    <button
-                        onClick={handlePrevious}
-                        disabled={currentLetterIndex === 0}
-                        className="btn btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        ← Previous
-                    </button>
-                    <button
-                        onClick={handleNext}
-                        disabled={currentLetterIndex === alphabetData.length - 1}
-                        className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Next →
-                    </button>
-                </div>
+                )}
             </div>
         </Layout>
     );
 };
 
-export default KashmiriAlphabetPage;
+export default HechunPage;

@@ -30,7 +30,7 @@ const LoginPage = () => {
 
     return (
         <Layout title="Login">
-            <div className="form-container" style={{maxWidth: '450px'}}>
+            <div className="form-container" style={{ maxWidth: '450px' }}>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold mb-2">Dashboard Login</h1>
                     <p className="text-secondary mb-8">Please sign in to continue.</p>
