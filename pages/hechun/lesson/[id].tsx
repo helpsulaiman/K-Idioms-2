@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Navigation from '../../../components/Navigation';
 import styles from '../../../styles/learn.module.css';
 import { fetchLessonWithSteps, submitLessonProgress, fetchNextLesson } from '../../../lib/learning-api';
@@ -11,6 +11,7 @@ const LessonRunner: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
     const user = useUser();
+    const supabase = useSupabaseClient();
 
     const [lesson, setLesson] = useState<LearningLesson | null>(null);
     const [steps, setSteps] = useState<LessonStep[]>([]);
@@ -30,12 +31,12 @@ const LessonRunner: React.FC = () => {
         if (id) {
             const loadLesson = async () => {
                 try {
-                    const data = await fetchLessonWithSteps(Number(id));
+                    const data = await fetchLessonWithSteps(supabase, Number(id));
                     setLesson(data.lesson);
                     setSteps(data.steps);
 
                     // Fetch next lesson
-                    const next = await fetchNextLesson(data.lesson.level_id, data.lesson.lesson_order);
+                    const next = await fetchNextLesson(supabase, data.lesson.level_id, data.lesson.lesson_order);
                     setNextLesson(next);
                 } catch (error) {
                     console.error('Failed to load lesson:', error);
@@ -45,7 +46,7 @@ const LessonRunner: React.FC = () => {
             };
             loadLesson();
         }
-    }, [id]);
+    }, [id, supabase]);
 
     const currentStep = steps[currentStepIndex];
     const progressPercentage = ((currentStepIndex + 1) / steps.length) * 100;
@@ -97,7 +98,7 @@ const LessonRunner: React.FC = () => {
 
         if (stars > 0) {
             try {
-                await submitLessonProgress(user?.id, lesson.id, stars);
+                await submitLessonProgress(supabase, user?.id, lesson.id, stars);
             } catch (error) {
                 console.error('Failed to save progress:', error);
             }

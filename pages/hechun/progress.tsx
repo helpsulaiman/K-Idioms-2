@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../components/Layout';
-import { fetchUserBadges } from '../../lib/learning-api';
+import { fetchUserBadges, fetchUserStats } from '../../lib/learning-api';
 
 const ProgressPage: React.FC = () => {
     const user = useUser();
+    const supabase = useSupabaseClient();
     const [stats, setStats] = useState({ totalStars: 0, lessonsCompleted: 0 });
     const [badges, setBadges] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -15,10 +16,16 @@ const ProgressPage: React.FC = () => {
         const loadData = async () => {
             try {
                 if (user) {
-                    const userBadges = await fetchUserBadges(user.id);
+                    const userBadges = await fetchUserBadges(supabase, user.id);
                     setBadges(userBadges);
-                    // Mock stats or fetch real ones if API exists
-                    // For now, we'll just leave stats as 0 or mock them based on badges/local storage if needed
+
+                    const userStats = await fetchUserStats(supabase, user.id);
+                    if (userStats) {
+                        setStats({
+                            totalStars: userStats.total_stars,
+                            lessonsCompleted: userStats.lessons_completed
+                        });
+                    }
                 } else {
                     // Guest mode
                     const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');

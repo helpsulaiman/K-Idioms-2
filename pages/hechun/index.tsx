@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import Link from 'next/link';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { fetchLevelsWithLessons } from '../../lib/learning-api';
 import { LearningLevel } from '../../types/learning';
 import styles from '../../styles/learn.module.css';
 
 const HechunPage: React.FC = () => {
     const user = useUser();
+    const supabase = useSupabaseClient();
     const [levels, setLevels] = useState<LearningLevel[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const data = await fetchLevelsWithLessons(user?.id);
+                const data = await fetchLevelsWithLessons(supabase, user?.id);
                 setLevels(data);
             } catch (error) {
                 console.error('Failed to load learning path:', error);

@@ -26,7 +26,7 @@ const ProfilePage: React.FC = () => {
     const loadProfile = async () => {
         if (!user) return;
         try {
-            const stats = await fetchUserStats(user.id);
+            const stats = await fetchUserStats(supabase, user.id);
             if (stats?.username) {
                 setUsername(stats.username);
             } else {
@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
         setMessage(null);
 
         try {
-            await updateUserProfile(user.id, username);
+            await updateUserProfile(supabase, user.id, username);
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
         } catch (error: any) {
             setMessage({ type: 'error', text: error.message || 'Failed to update profile' });

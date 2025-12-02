@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../components/Layout';
 import { fetchLeaderboard } from '../lib/learning-api';
 import { UserStats } from '../types/learning';
 
 const LeaderboardPage: React.FC = () => {
+    const supabase = useSupabaseClient();
     const [users, setUsers] = useState<UserStats[]>([]);
     const [loading, setLoading] = useState(true);
     const [period, setPeriod] = useState<'daily' | 'weekly' | 'all_time'>('all_time');
@@ -12,7 +14,7 @@ const LeaderboardPage: React.FC = () => {
         const loadLeaderboard = async () => {
             setLoading(true);
             try {
-                const data = await fetchLeaderboard(period);
+                const data = await fetchLeaderboard(supabase, period);
                 setUsers(data);
             } catch (error) {
                 console.error('Failed to load leaderboard:', error);

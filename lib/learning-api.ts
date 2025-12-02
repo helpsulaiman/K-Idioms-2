@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { ApiError } from './api';
 import {
     LearningLevel,
@@ -10,7 +10,7 @@ import {
 
 // --- LEVELS & LESSONS ---
 
-export async function fetchLevelsWithLessons(userId?: string): Promise<LearningLevel[]> {
+export async function fetchLevelsWithLessons(supabase: SupabaseClient, userId?: string): Promise<LearningLevel[]> {
     try {
         // 1. Fetch all levels
         const { data: levels, error: levelsError } = await supabase
@@ -95,7 +95,7 @@ export async function fetchLevelsWithLessons(userId?: string): Promise<LearningL
     }
 }
 
-export async function fetchLessonWithSteps(lessonId: number): Promise<{ lesson: LearningLesson, steps: LessonStep[] }> {
+export async function fetchLessonWithSteps(supabase: SupabaseClient, lessonId: number): Promise<{ lesson: LearningLesson, steps: LessonStep[] }> {
     try {
         // Fetch lesson details
         const { data: lesson, error: lessonError } = await supabase
@@ -123,7 +123,7 @@ export async function fetchLessonWithSteps(lessonId: number): Promise<{ lesson: 
 }
 // --- USER PROFILE ---
 
-export async function updateUserProfile(userId: string, username: string): Promise<void> {
+export async function updateUserProfile(supabase: SupabaseClient, userId: string, username: string): Promise<void> {
     try {
         // Update user_stats with new username
         const { error } = await supabase
@@ -147,7 +147,7 @@ export async function updateUserProfile(userId: string, username: string): Promi
     }
 }
 
-export async function fetchUserStats(userId: string): Promise<UserStats | null> {
+export async function fetchUserStats(supabase: SupabaseClient, userId: string): Promise<UserStats | null> {
     try {
         const { data, error } = await supabase
             .from('user_stats')
@@ -168,7 +168,7 @@ export async function fetchUserStats(userId: string): Promise<UserStats | null> 
 
 // --- PROGRESS & STATS ---
 
-export async function submitLessonProgress(userId: string | undefined, lessonId: number, stars: number): Promise<void> {
+export async function submitLessonProgress(supabase: SupabaseClient, userId: string | undefined, lessonId: number, stars: number): Promise<void> {
     try {
         if (!userId) {
             console.log('Submitting guest progress for lesson', lessonId, 'stars', stars);
@@ -185,19 +185,33 @@ export async function submitLessonProgress(userId: string | undefined, lessonId:
             return;
         }
 
+        // Verify auth state inside the function
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+        console.log('API Internal Auth Check:', authUser?.id, 'Error:', authError);
+
+        if (authUser?.id !== userId) {
+            console.warn('MISMATCH: Argument userId', userId, 'does not match authUser', authUser?.id);
+        }
+
         console.log('Submitting user progress for', userId, 'lesson', lessonId, 'stars', stars);
 
         // 1. Upsert user_progress
-        const { error: progressError } = await supabase
+        const { data: progressData, error: progressError } = await supabase
             .from('user_progress')
             .upsert({
                 user_id: userId,
                 lesson_id: lessonId,
                 stars: stars,
                 updated_at: new Date().toISOString()
-            }, { onConflict: 'user_id, lesson_id' });
+            }, { onConflict: 'user_id, lesson_id' })
+            .select();
 
-        if (progressError) throw new ApiError(`Failed to save progress: ${progressError.message}`);
+        if (progressError) {
+            console.error('Supabase WRITE ERROR:', JSON.stringify(progressError, null, 2));
+            throw new ApiError(`Failed to save progress: ${progressError.message}`);
+        }
+
+        console.log('Supabase WRITE SUCCESS:', progressData);
 
         // 2. Update user_stats (re-calculate totals)
         // Fetch all progress for this user to calculate total stars
@@ -230,7 +244,7 @@ export async function submitLessonProgress(userId: string | undefined, lessonId:
         }
 
         // 3. Check for badges
-        await checkAndAwardBadges(userId, lessonId);
+        await checkAndAwardBadges(supabase, userId, lessonId);
 
     } catch (error) {
         console.error('Error submitting progress:', error);
@@ -238,7 +252,7 @@ export async function submitLessonProgress(userId: string | undefined, lessonId:
     }
 }
 
-export async function fetchLeaderboard(period: 'daily' | 'weekly' | 'all_time' = 'all_time'): Promise<UserStats[]> {
+export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily' | 'weekly' | 'all_time' = 'all_time'): Promise<UserStats[]> {
     // For now, we'll just return all-time stats sorted by stars
     // Implementing true daily/weekly requires a separate 'activity_log' table
     try {
@@ -258,7 +272,7 @@ export async function fetchLeaderboard(period: 'daily' | 'weekly' | 'all_time' =
 
 // --- BADGES ---
 
-async function checkAndAwardBadges(userId: string, lessonId: number) {
+async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, lessonId: number) {
     try {
         console.log('Checking badges for user', userId, 'lesson', lessonId);
         // Get the lesson to find out which level it belongs to
@@ -333,7 +347,7 @@ async function checkAndAwardBadges(userId: string, lessonId: number) {
     }
 }
 
-export async function fetchUserBadges(userId: string) {
+export async function fetchUserBadges(supabase: SupabaseClient, userId: string) {
     try {
         const { data, error } = await supabase
             .from('user_badges')
@@ -348,7 +362,7 @@ export async function fetchUserBadges(userId: string) {
     }
 }
 
-export async function fetchNextLesson(levelId: number, currentLessonOrder: number): Promise<LearningLesson | null> {
+export async function fetchNextLesson(supabase: SupabaseClient, levelId: number, currentLessonOrder: number): Promise<LearningLesson | null> {
     const { data, error } = await supabase
         .from('learning_lessons')
         .select('*')
