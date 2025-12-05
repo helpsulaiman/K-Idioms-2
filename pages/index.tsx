@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar';
 import { Idiom, SearchFilters } from '../types/idiom';
 import { fetchIdioms, searchIdioms } from '../lib/api';
 
+
 const HomePage: React.FC = () => {
   const [idioms, setIdioms] = useState<Idiom[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +62,7 @@ const HomePage: React.FC = () => {
           <div className="error-message">
             ⚠️ {error}
           </div>
-          <button 
+          <button
             onClick={loadIdioms}
             className="btn btn-primary"
           >
@@ -81,7 +82,7 @@ const HomePage: React.FC = () => {
             Kashmiri Idioms Collection
           </h1>
           <p className="page-subtitle">
-            Discover the wisdom and beauty of traditional Kashmiri sayings. 
+            Discover the wisdom and beauty of traditional Kashmiri sayings.
             Each idiom carries centuries of cultural heritage and timeless insights.
           </p>
         </div>
@@ -94,8 +95,8 @@ const HomePage: React.FC = () => {
           <div className="loading-container">
             <div className="loading-spinner"></div>
             <div className="loading-text">
-              {searchFilters.query || searchFilters.tags.length > 0 
-                ? 'Searching idioms...' 
+              {searchFilters.query || searchFilters.tags.length > 0
+                ? 'Searching idioms...'
                 : 'Loading idioms...'
               }
             </div>
@@ -106,13 +107,13 @@ const HomePage: React.FC = () => {
         {!loading && (
           <>
             {/* Results count */}
-            <div style={{ 
-              textAlign: 'center', 
+            <div style={{
+              textAlign: 'center',
               marginBottom: '1rem',
               color: 'var(--text-secondary)',
               fontSize: '0.9rem'
             }}>
-              {searchFilters.query || searchFilters.tags.length > 0 
+              {searchFilters.query || searchFilters.tags.length > 0
                 ? `Found ${idioms.length} idiom${idioms.length !== 1 ? 's' : ''}`
                 : `Showing ${idioms.length} idiom${idioms.length !== 1 ? 's' : ''}`
               }
@@ -134,7 +135,7 @@ const HomePage: React.FC = () => {
                 <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
                   Try different keywords or remove some filters.
                 </p>
-                <button 
+                <button
                   onClick={() => handleSearch({ query: '', tags: [] })}
                   className="btn btn-secondary"
                 >

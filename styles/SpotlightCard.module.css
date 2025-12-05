@@ -2,7 +2,7 @@
     position: relative;
     border-radius: 1rem;
     padding: 2.5rem;
-    overflow: hidden;
+    /* overflow: hidden; Removed to fix cutoff */
     --mouse-x: 50%;
     --mouse-y: 50%;
     height: 100%;

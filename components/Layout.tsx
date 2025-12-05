@@ -60,7 +60,7 @@ const Layout: React.FC<LayoutProps> = ({
                     />
                 </header>
 
-                <main className="flex-1">
+                <main className="flex-1 w-full max-w-[1400px] mx-auto">
                     {/* FIX: This line was missing. It renders the actual page content. */}
                     {children}
                 </main>

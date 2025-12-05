@@ -3,7 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../components/Layout';
-import BadgeShareModal from '../../components/BadgeShareModal';
+import MagicBento from '../../components/MagicBento';
+import TiltedCard from '../../components/TiltedCard';
 import { fetchUserBadges, fetchUserStats } from '../../lib/learning-api';
 
 const ProgressPage: React.FC = () => {
@@ -12,7 +13,6 @@ const ProgressPage: React.FC = () => {
     const [stats, setStats] = useState({ totalStars: 0, lessonsCompleted: 0 });
     const [badges, setBadges] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedBadge, setSelectedBadge] = useState<any | null>(null);
 
     useEffect(() => {
         const loadData = async () => {
@@ -45,15 +45,53 @@ const ProgressPage: React.FC = () => {
         loadData();
     }, [user]);
 
-    const handleShare = (badge: any) => {
-        setSelectedBadge(badge);
-    };
+
+
+    // Prepare data for MagicBento (Stats)
+    const bentoCards = [
+        {
+            color: '#1e293b', // Dark slate
+            title: stats.totalStars.toString(),
+            description: 'Total Stars Earned',
+            label: 'Stars ⭐'
+        },
+        {
+            color: '#0f172a', // Slate 900
+            title: stats.lessonsCompleted.toString(),
+            description: 'Lessons Completed',
+            label: 'Lessons 📚'
+        },
+        {
+            color: '#312e81', // Indigo 900
+            title: 'Keep Going!',
+            description: 'Consistency is key to learning.',
+            label: 'Motivation 🚀'
+        },
+        {
+            color: '#4c1d95', // Violet 900
+            title: 'Kashmiri',
+            description: 'Language of the Valley',
+            label: 'Focus 🧠'
+        },
+        {
+            color: '#060010',
+            title: 'Streak',
+            description: 'Day 1',
+            label: 'Consistency 🔥'
+        },
+        {
+            color: '#060010',
+            title: 'Rank',
+            description: 'Novice',
+            label: 'Status 🔰'
+        }
+    ];
 
     return (
         <Layout title="My Progress - Hečhun">
             <div className="main-content">
                 {/* Page Header */}
-                <div className="page-header">
+                <div className="page-header mb-8">
                     <h1 className="page-title">My Progress</h1>
                     <p className="page-subtitle">
                         Track your journey in learning the Kashmiri language.
@@ -76,70 +114,70 @@ const ProgressPage: React.FC = () => {
                     </div>
                 )}
 
-                {/* Stats Section */}
-                <div className="container mb-4">
-                    <h2 className="text-2xl font-bold mb-4 px-4 text-gray-800">Statistics</h2>
-                </div>
-                <div className="idioms-grid">
-                    {/* Total Stars Card */}
-                    <div className="idiom-card flex flex-col items-center justify-center text-center">
-                        <div className="text-5xl mb-4">⭐</div>
-                        <h3 className="text-xl font-bold text-gray-700 mb-2">Total Stars</h3>
-                        <p className="text-4xl font-bold text-yellow-500">{stats.totalStars}</p>
+                {/* Stats Section with MagicBento */}
+                <div className="container mb-12">
+                    <h2 className="text-2xl font-bold mb-6 px-4 text-gray-800">Statistics</h2>
+                    <div className="flex justify-center">
+                        <MagicBento
+                            cards={bentoCards}
+                            textAutoHide={false}
+                            enableStars={true}
+                            enableSpotlight={true}
+                            enableBorderGlow={true}
+                            enableTilt={true}
+                            enableMagnetism={true}
+                            clickEffect={true}
+                            spotlightRadius={300}
+                            particleCount={12}
+                            glowColor="132, 0, 255"
+                        />
                     </div>
-
-                    {/* Lessons Completed Card */}
-                    <div className="idiom-card flex flex-col items-center justify-center text-center">
-                        <div className="text-5xl mb-4">📚</div>
-                        <h3 className="text-xl font-bold text-gray-700 mb-2">Lessons Completed</h3>
-                        <p className="text-4xl font-bold text-blue-500">{stats.lessonsCompleted}</p>
-                    </div>
                 </div>
 
-                {/* Badges Section */}
-                <div className="container mt-8 mb-4">
-                    <h2 className="text-2xl font-bold mb-4 px-4 text-gray-800">Badges</h2>
-                </div>
-                <div className="idioms-grid">
-                    {/* Placeholder Badges */}
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="idiom-card flex flex-col items-center justify-center text-center opacity-60 bg-gray-50">
-                            <div className="w-20 h-20 bg-gray-200 rounded-full mb-4 flex items-center justify-center text-3xl grayscale">
-                                🏆
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-500 mb-2">Locked Badge</h3>
-                            <p className="text-sm text-gray-400">Keep learning to unlock!</p>
+                {/* Badges Section with TiltedCard */}
+                <div className="container mb-12">
+                    <h2 className="text-2xl font-bold mb-8 px-4 text-gray-800">My Badges Collection</h2>
+
+                    {badges.length === 0 ? (
+                        <div className="text-center p-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                            <p className="text-xl text-gray-500">No badges yet. Complete lessons to earn them!</p>
                         </div>
-                    ))}
-
-                    {/* Actual Badges */}
-                    {badges.map((badge) => (
-                        <div key={badge.id} className="idiom-card flex flex-col items-center justify-center text-center border-yellow-400 border-2 bg-yellow-50">
-                            <div className="w-20 h-20 bg-white rounded-full mb-4 flex items-center justify-center text-3xl shadow-sm">
-                                🏅
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-800 mb-2">{badge.badge.name}</h3>
-                            <p className="text-sm text-gray-600 mb-4">{badge.badge.description}</p>
-                            <button
-                                onClick={() => handleShare(badge)}
-                                className="btn btn-secondary btn-sm"
-                            >
-                                Share
-                            </button>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                            {badges.map((badge) => (
+                                <div key={badge.id} className="relative">
+                                    <TiltedCard
+                                        imageSrc={badge.badge.icon_url || '/images/badge-placeholder.png'}
+                                        altText={badge.badge.name}
+                                        captionText={badge.badge.name}
+                                        containerHeight="250px"
+                                        containerWidth="250px"
+                                        imageHeight="250px"
+                                        imageWidth="250px"
+                                        rotateAmplitude={12}
+                                        scaleOnHover={1.1}
+                                        showMobileWarning={false}
+                                        showTooltip={true}
+                                        displayOverlayContent={true}
+                                        overlayContent={
+                                            <div className="bg-black/50 p-2 rounded-b-xl w-full absolute bottom-0 text-white backdrop-blur-sm text-center">
+                                                <p className="font-bold text-sm">{badge.badge.name}</p>
+                                            </div>
+                                        }
+                                        onClick={() => {
+                                            const link = document.createElement('a');
+                                            link.href = badge.badge.icon_url || '/images/badge-placeholder.png';
+                                            link.download = `${badge.badge.name.replace(/\s+/g, '_')}_badge.png`;
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+                                        }}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    )}
                 </div>
-
-                {/* Badge Share Modal */}
-                {selectedBadge && (
-                    <BadgeShareModal
-                        isOpen={!!selectedBadge}
-                        onClose={() => setSelectedBadge(null)}
-                        badgeName={selectedBadge.badge.name}
-                        badgeDescription={selectedBadge.badge.description}
-                        badgeImageUrl={selectedBadge.badge.icon_url}
-                    />
-                )}
             </div>
         </Layout>
     );

@@ -269,4 +269,17 @@ const LessonRunner: React.FC = () => {
     );
 };
 
+export const getStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking',
+    };
+};
+
+export const getStaticProps = async () => {
+    return {
+        props: {},
+    };
+};
+
 export default LessonRunner;

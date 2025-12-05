@@ -260,14 +260,14 @@ const PillNav: React.FC<PillNavProps> = ({
     const renderLogo = () => {
         if (logoDark) {
             return (
-                <span ref={logoImgRef} className={styles.logoWrapper}>
+                <span ref={logoImgRef} className={styles.logoWrapper} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <img src={logo} alt={logoAlt} className={themeStyles.lightImage} />
-                    <img src={logoDark} alt={logoAlt} className={themeStyles.darkImage} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                    <img src={logoDark} alt={logoAlt} className={themeStyles.darkImage} style={{ width: 'auto', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 </span>
             );
         }
         return (
-            <span ref={logoImgRef} className={styles.logoWrapper}>
+            <span ref={logoImgRef} className={styles.logoWrapper} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <img src={logo} alt={logoAlt} />
             </span>
         );

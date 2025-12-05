@@ -293,8 +293,8 @@ body {
 .idioms-grid {
   display: grid;
   /* This is the default desktop style: multiple columns */
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 4rem 6rem;
   padding: 2rem;
   margin: 0 auto;
   max-width: 1400px;
@@ -307,7 +307,7 @@ body {
     grid-template-columns: minmax(0, 400px);
     justify-content: center;
     padding: 1rem;
-    gap: 1.5rem;
+    gap: 2rem 3rem;
   }
 }
 
@@ -315,7 +315,7 @@ body {
 @media (min-width: 768px) and (max-width: 1023px) {
   .idioms-grid {
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 1.75rem;
+    gap: 2.5rem 4rem;
     padding: 1.75rem;
   }
 }
@@ -327,7 +327,7 @@ body {
     justify-content: center;
     /* Centers that column in the grid container */
     padding: 1rem;
-    gap: 1.5rem;
+    gap: 3rem 6rem;
   }
 
   .hamburger-button {
@@ -682,8 +682,7 @@ body {
   height: 100%;
   padding: 1.5rem;
   justify-content: flex-start;
-  overflow: hidden;
-  /* Add this */
+  /* overflow: hidden; Removed to fix cutoff */
 }
 
 .flip-back-content {
@@ -756,18 +755,19 @@ body {
 /* Meaning section */
 .flip-meaning-section {
   flex: 1;
-  overflow: hidden;
+  flex: 1;
+  /* overflow: hidden; Removed to allow scrolling */
 }
 
 .flip-meaning-text {
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--text-secondary);
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  /* More lines for bigger cards */
-  -webkit-box-orient: vertical;
+  /* overflow: hidden; Removed */
+  /* display: -webkit-box; Removed */
+  /* Removed line-clamp to allow scrolling */
+  /* -webkit-line-clamp: 6; */
+  /* -webkit-box-orient: vertical; */
 }
 
 /* Responsive adjustments */
