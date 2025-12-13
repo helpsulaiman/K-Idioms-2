@@ -142,8 +142,15 @@ const LessonRunner: React.FC = () => {
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
+            const mimeType = MediaRecorder.isTypeSupported('audio/webm')
+                ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4')
+                    ? 'audio/mp4'
+                    : 'audio/ogg'; // Fallback
+
+            const mediaRecorder = new MediaRecorder(stream, { mimeType });
             mediaRecorderRef.current = mediaRecorder;
+            (mediaRecorderRef.current as any).mimeType = mimeType; // Store for valid blob creation
             const chunks: BlobPart[] = [];
 
             mediaRecorder.ondataavailable = (e) => {
@@ -151,9 +158,10 @@ const LessonRunner: React.FC = () => {
             };
 
             mediaRecorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'audio/webm' });
+                const mimeType = (mediaRecorderRef.current as any).mimeType || 'audio/webm';
+                const blob = new Blob(chunks, { type: mimeType });
                 setAudioBlob(blob);
-                handleTranscribe(blob);
+                handleTranscribe(blob, mimeType);
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -175,10 +183,11 @@ const LessonRunner: React.FC = () => {
         }
     };
 
-    const handleTranscribe = async (blob: Blob) => {
+    const handleTranscribe = async (blob: Blob, mimeType: string) => {
         setIsTranscribing(true);
         const formData = new FormData();
-        formData.append('audio', blob, 'recording.webm');
+        const ext = mimeType.split('/')[1] || 'webm';
+        formData.append('audio', blob, `recording.${ext}`);
 
         try {
             const response = await fetch('/api/transcribe', {
