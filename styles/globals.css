@@ -56,15 +56,30 @@
   --shadow-2xs: 0 1px 2px 0 hsla(220 28% 12% / 0.03);
   --shadow-xs: 0 1px 3px 0 hsla(220 28% 12% / 0.05), 0 1px 2px -1px hsla(220 28% 12% / 0.05);
   --shadow-sm: 0 2px 4px -1px hsla(220 28% 12% / 0.06), 0 2px 4px -2px hsla(220 28% 12% / 0.06);
-  --shadow: 0 4px 6px -1px hsla(220 28% 12% / 0.1), 0 2px 4px -2px hsla(220 28% 12% / 0.1);
   --shadow-md: 0 10px 15px -3px hsla(220 28% 12% / 0.1), 0 4px 6px -4px hsla(220 28% 12% / 0.1);
-  --shadow-lg: 0 20px 25px -5px hsla(220 28% 12% / 0.1), 0 8px 10px -6px hsla(220 28% 12% / 0.1);
+  --highlight: #b89b76;
+
+  --shadow-lg: 0 20px 25px -5px hsla(220 28% 12% / 0.1),
+    0 8px 10px -6px hsla(220 28% 12% / 0.1);
   --shadow-xl: 0 25px 50px -12px hsla(220 28% 12% / 0.15);
   --shadow-2xl: 0 30px 60px -15px hsla(220 28% 12% / 0.25);
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Poppins', ui-serif, Georgia, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-sans: 'Inter',
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  --font-serif: 'Poppins',
+    ui-serif,
+    Georgia,
+    serif;
+  --font-mono: ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    'Liberation Mono',
+    'Courier New',
+    monospace;
   --tracking-normal: -0.025em;
   --spacing: 0.25rem;
 
@@ -83,7 +98,8 @@
   --border-color: var(--border);
   --text-kashmiri: #11516e;
   --text-transliteration: #047c81;
-  --font-kashmiri: 'KashmiriFont', sans-serif;
+  --font-kashmiri: 'KashmiriFont',
+    sans-serif;
   --chinar-red: #c92a2a;
   --chinar-orange: #f59f00;
 }
@@ -146,7 +162,25 @@
     --text-kashmiri: #34deed;
     --text-transliteration: #52a5aa;
     --shadow-color: rgba(0, 0, 0, 0.4);
+    --highlight: #d8b98f;
   }
+}
+
+/* Global Highlight Styles */
+strong,
+b {
+  color: var(--highlight);
+}
+
+h1:not(.logo-text),
+h2,
+h3,
+h4,
+h5,
+h6,
+.pagetitle,
+.page-title {
+  color: var(--highlight);
 }
 
 .dark {
@@ -761,6 +795,25 @@ body {
 
   .flip-meaning-text {
     font-size: 0.85rem;
+  }
+}
+
+@layer base {
+
+  strong,
+  b {
+    color: var(--highlight);
+  }
+
+  h1:not(.logo-text),
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .pagetitle,
+  .page-title {
+    color: var(--highlight);
   }
 }
 

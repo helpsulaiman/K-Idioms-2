@@ -1,40 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Kashmiri Idioms: Preserving Cultural Heritage
 
-## Getting Started
+## 🌟 Vision
+Kashmir has a rich oral tradition filled with proverbs (*kahawat*) and idioms that encapsulate centuries of wisdom. As generations shift, this linguistic heritage is at risk of fading. **Kashmiri Idioms** is a digital platform designed to preserve, celebrate, and teach this cultural treasure to the modern world using cutting-edge technology.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 📖 Comprehensive Idiom Library
+Explore a vast, searchable collection of authentic Kashmiri idioms. Each entry provides:
+- **Kashmiri text** (Perso-Arabic script)
+- **Roman transliteration** for pronunciation
+- **English translation** and literal meaning
+- **Cultural context** to understand usage
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🎓 Hečhun (Learning)
+A structured, gamified learning path (`/hechun`) taking users from the basics to fluency:
+- **Alphabet Lessons**: Learn the script and sounds.
+- **Interactive Quizzes**: Test your knowledge.
+- **Progress Tracking**: Earn badges and climb the leaderboard.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 🤖 AI Speech Recognition
+Practice your pronunciation with our integrated AI model. The system listens to you speak Kashmiri words/phrases and provides real-time feedback, making learning interactive and effective.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### 🏆 Gamification
+- **Leaderboards**: Compete with other learners (`/leaderboard`).
+- **Streaks & XP**: Stay motivated with daily goals.
+- **Badges**: Unlock achievements for your milestones.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### 🤝 Community Driven
+Users can submit new idioms (`/submit`) to grow the archive. Submissions are verified to maintain authenticity.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Tech Stack
+- **Frontend**: Next.js 16 (React), Tailwind CSS
+- **Backend & Auth**: Supabase
+- **Styling**: Tailwind V4, Custom "Gold & Navy" Theme
+- **Data**: Postgres
+- **AI/ML**: Custom Speech-to-Text inference (Python)
 
-## Learn More
+## 🎨 Theme
+The project features a premium **Gold & Navy** aesthetic, inspired by Kashmiri craftsmanship (Papier-mâché, wood carving), offering a visually stunning experience.
 
-To learn more about Next.js, take a look at the following resources:
+## 👥 The Team
+Built by students from **Kashmir University** as part of the **Design Your Degree (DYD)** program. We are passionate about merging culture with technology.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+---
+*Preserving the past, building for the future.*

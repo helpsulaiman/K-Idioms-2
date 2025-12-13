@@ -59,12 +59,12 @@
 }
 
 .bubble-menu .logo-content {
-  --logo-max-height: 60%;
+  --logo-max-height: 70%;
   --logo-max-width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 90px;
+  width: 50px;
   height: 100%;
 }
 

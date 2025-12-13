@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import radixStyles from '../../styles/RadixTabs.module.css';
+import { Google } from '../../components/icons/Google';
 
 const HechunLoginPage: React.FC = () => {
     const supabase = useSupabaseClient();
@@ -52,7 +53,7 @@ const HechunLoginPage: React.FC = () => {
             <div className="form-container" style={{ maxWidth: '450px' }}>
                 <div className="text-center">
                     <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-                    <p className="text-secondary mb-8">Sign in to continue your learning journey.</p>
+                    <p className="text-muted-foreground mb-8">Sign in to continue your learning journey.</p>
                 </div>
 
 
@@ -100,25 +101,20 @@ const HechunLoginPage: React.FC = () => {
                 <div className="mt-6">
                     <div className="relative mb-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300"></div>
+                            <div className="w-full border-t border-border"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                            <span className="px-2 bg-card text-muted-foreground">Or continue with</span>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3">
                         <button
                             onClick={() => handleSocialLogin('google')}
-                            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition"
+                            className="w-full flex justify-center items-center py-2 px-4 border border-border rounded-md shadow-sm bg-card text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition"
                         >
+                            <Google className="w-5 h-5 mr-3" />
                             Google
-                        </button>
-                        <button
-                            onClick={() => handleSocialLogin('facebook')}
-                            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition"
-                        >
-                            Facebook
                         </button>
                     </div>
                 </div>
