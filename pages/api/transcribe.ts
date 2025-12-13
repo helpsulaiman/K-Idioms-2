@@ -3,6 +3,7 @@ import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import formidable from 'formidable';
+import { HfInference } from '@huggingface/inference';
 
 export const config = {
     api: {
@@ -47,49 +48,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const audioPath = audioFile.filepath;
 
                 try {
-                    // Read file
-                    const fileData = fs.readFileSync(audioPath);
+                    // Spawn Python process
+                    // Using existing model/inference.py
+                    const pythonScript = path.join(process.cwd(), 'model', 'inference.py');
 
-                    // Hugging Face Inference API
-                    const MODEL_ID = "helpsulaiman/kashmiri-wav2vec2";
-                    const HF_API_URL = `https://api-inference.huggingface.co/models/${MODEL_ID}`;
-                    const HF_TOKEN = process.env.HF_ACCESS_TOKEN;
-
-                    if (!HF_TOKEN) {
-                        throw new Error("Missing HF_ACCESS_TOKEN. Please set it in .env.local");
+                    if (!fs.existsSync(pythonScript)) {
+                        if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+                        res.status(500).json({ error: 'Inference script not found' });
+                        return resolve(null);
                     }
 
-                    const response = await fetch(HF_API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${HF_TOKEN}`,
-                            'Content-Type': 'audio/webm', // HF handles raw audio bytes usually, but we'll send the blob directly
-                        },
-                        body: fileData,
+                    console.log('Spawning inference script:', pythonScript);
+                    const pythonProcess = spawn('python3', [pythonScript, audioPath]);
+
+                    let resultString = '';
+                    let errorString = '';
+
+                    pythonProcess.stdout.on('data', (data) => {
+                        resultString += data.toString();
                     });
 
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('HF API Error:', errorText);
+                    pythonProcess.stderr.on('data', (data) => {
+                        errorString += data.toString();
+                    });
 
-                        if (response.status === 503) {
-                            throw new Error("Model is loading (Cold Boot). Please try again in 20 seconds.");
+                    pythonProcess.on('close', (code) => {
+                        // Cleanup audio file
+                        if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+
+                        if (code !== 0) {
+                            console.error('Python script error:', errorString);
+                            res.status(500).json({ error: 'Transcription failed', details: errorString });
+                            return resolve(null);
                         }
 
-                        throw new Error(`Inference failed: ${response.status} ${response.statusText}`);
-                    }
-
-                    const result = await response.json();
-
-                    // Cleanup upload
-                    if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
-
-                    return res.status(200).json(result);
+                        try {
+                            const result = JSON.parse(resultString);
+                            res.status(200).json(result);
+                            resolve(null);
+                        } catch (e) {
+                            console.error('Parse error:', e, 'Raw:', resultString);
+                            res.status(500).json({ error: 'Invalid response from model', details: resultString });
+                            resolve(null);
+                        }
+                    });
 
                 } catch (error: any) {
                     console.error('Processing error:', error);
                     if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
-                    return res.status(500).json({ error: 'Transcription failed', details: error.message });
+                    return res.status(500).json({ error: 'Internal server error', details: error.message });
                 }
             });
         });

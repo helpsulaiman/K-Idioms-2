@@ -203,7 +203,16 @@ const LessonRunner: React.FC = () => {
             });
 
             const data = await response.json();
-            if (data.error) throw new Error(data.error);
+            console.log('Transcription API Response:', data); // DEBUG LOG
+
+            if (data.error) {
+                console.error('API Error Details:', data.details);
+                throw new Error(data.details || data.error);
+            }
+
+            if (!data.text) {
+                console.warn('Transcription success but empty text:', data);
+            }
 
             setTranscription(data.text);
 
