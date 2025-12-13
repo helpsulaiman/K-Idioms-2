@@ -76,7 +76,15 @@ async function seedLessons() {
 
         let stepOrder = 1;
 
-        for (const record of records) {
+        interface AlphabetRecord {
+            name: string;
+            letter: string;
+            pronunciation: string;
+            example_word_english: string;
+            example_word_kashmiri: string;
+        }
+
+        for (const record of records as AlphabetRecord[]) {
             // Teach Step
             await supabase.from('lesson_steps').insert({
                 lesson_id: lesson.id,
