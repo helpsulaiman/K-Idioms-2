@@ -44,15 +44,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     try {
                         console.log('Connecting to HF Space: helpsulaiman/kashmiri-asr-api');
+
+                        // Direct fetch to Gradio API (more robust for Node.js uploads)
+                        const fileContent = fs.readFileSync(audioFile.filepath);
+                        const fileBlob = new Blob([fileContent], { type: audioFile.mimetype || 'audio/webm' });
+
+                        // Gradio API requires specific payload structure
+                        // For audio input, we often send the file as a base64 or via upload endpoint
+                        // But easiest with Client is to let it handle it, IF it doesn't disconnect.
+                        // Since Client is failing, let's try increasing timeout or using 'handle_file' utility if available.
+                        // Actually, let's simply retry the Client connection with a lighter approach.
+
+                        // Alternative: Use the fallback HF Inference API which we know works? 
+                        // No, the user wants to use their custom Space.
+
+                        // Let's try to just read the file and send it as a base64 data URI
+                        // This avoids the multipart streaming issues often seen in Node->Gradio
+                        const base64Data = fs.readFileSync(audioFile.filepath, { encoding: 'base64' });
+                        const dataUri = `data:${audioFile.mimetype || 'audio/webm'};base64,${base64Data}`;
+
                         const app = await Client.connect("helpsulaiman/kashmiri-asr-api");
-
-                        // Read file buffer
-                        const audioBuffer = fs.readFileSync(audioFile.filepath);
-                        const audioBlob = new Blob([audioBuffer], { type: audioFile.mimetype || 'audio/webm' });
-
-                        console.log('Sending audio to cloud...');
                         const prediction = await app.predict("/predict", [
-                            audioBlob,
+                            dataUri
                         ]);
 
                         console.log('Cloud Response:', prediction.data);
