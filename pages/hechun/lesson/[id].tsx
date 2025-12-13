@@ -142,15 +142,13 @@ const LessonRunner: React.FC = () => {
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mimeType = MediaRecorder.isTypeSupported('audio/webm')
-                ? 'audio/webm'
-                : MediaRecorder.isTypeSupported('audio/mp4')
-                    ? 'audio/mp4'
-                    : 'audio/ogg'; // Fallback
-
-            const mediaRecorder = new MediaRecorder(stream, { mimeType });
+            // Let browser decide the best mimeType first (safest for cross-browser)
+            const mediaRecorder = new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
-            (mediaRecorderRef.current as any).mimeType = mimeType; // Store for valid blob creation
+
+            // We'll detect the actual mimeType used by the browser
+            // Note: mediaRecorder.mimeType is populated after start() or creation depending on browser
+
             const chunks: BlobPart[] = [];
 
             mediaRecorder.ondataavailable = (e) => {
@@ -158,10 +156,11 @@ const LessonRunner: React.FC = () => {
             };
 
             mediaRecorder.onstop = () => {
-                const mimeType = (mediaRecorderRef.current as any).mimeType || 'audio/webm';
-                const blob = new Blob(chunks, { type: mimeType });
+                // Get the actual mime type used by the browser
+                const usedMimeType = mediaRecorder.mimeType || 'audio/webm';
+                const blob = new Blob(chunks, { type: usedMimeType });
                 setAudioBlob(blob);
-                handleTranscribe(blob, mimeType);
+                handleTranscribe(blob, usedMimeType);
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -170,9 +169,17 @@ const LessonRunner: React.FC = () => {
             setTranscription(null);
             setIsCorrect(null);
             setSessionStatus('answering');
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error accessing microphone:', err);
-            alert('Could not access microphone');
+
+            // Helpful error for non-secure contexts
+            if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                alert('Microphone access denied. Please allow permission.');
+            } else if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+                alert('Microphone requires a secure connection (HTTPS). If testing on mobile, use "localhost" forwarding or a tunnel like ngrok.');
+            } else {
+                alert('Could not access microphone: ' + (err.message || 'Unknown error'));
+            }
         }
     };
 
