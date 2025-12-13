@@ -190,9 +190,12 @@
 
 .progressFill {
     height: 100%;
-    background-color: var(--chinar-orange);
+    background-color: var(--color-primary);
+    /* Match Theme */
     border-radius: 999px;
-    transition: width 0.3s ease-in-out;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(184, 155, 118, 0.4);
+    /* Subtle Glow */
 }
 
 .lessonCard {
@@ -206,72 +209,90 @@
 
 .promptText {
     font-size: 1.75rem;
-    /* Larger prompt text */
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--foreground);
+    /* Modern Text */
     text-align: center;
     margin-bottom: 2rem;
+    line-height: 1.3;
 }
 
 .sentenceText {
     font-size: 3.5rem;
-    /* Much larger sentence text */
-    font-weight: 600;
-    color: var(--text-kashmiri);
+    font-weight: 700;
+    color: var(--color-primary);
+    /* Gold/Primary Theme */
     text-align: center;
-    margin-bottom: 4.5rem;
+    margin-bottom: 3.5rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .transliterationText {
     font-size: 1.25rem;
-    font-style: italic;
-    color: var(--text-transliteration);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    /* Earthy/Muted */
     text-align: center;
     margin-top: -1.5rem;
     margin-bottom: 2.5rem;
+    opacity: 0.9;
 }
 
+/* --- MCQ Button Styles --- */
 /* --- MCQ Button Styles --- */
 .mcqOption {
     width: 100%;
     margin-top: 0.7rem;
-    padding: 1rem;
+    padding: 1.25rem;
     font-size: 1.25rem;
-    /* Larger option text */
-    font-weight: 600;
+    font-weight: 500;
     text-align: left;
-    border: 2px solid #007bff;
-    border-radius: 0.75rem;
-    background-color: var(--bg-card-right);
-    color: var(--text-secondary);
-    transition: all 0.2s ease;
+
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--card);
+    /* Glassy card bg */
+    color: var(--foreground);
+
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .mcqOption:hover:not(:disabled) {
-    border-color: var(--border-medium);
-    background-color: #e5e7eb;
+    border-color: var(--color-primary);
+    background-color: var(--accent);
+    /* Subtle highlight */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .mcqOption.selected {
-    border-color: var(--chinar-orange);
-    background-color: #fef3c7;
+    border-color: var(--color-primary);
+    background-color: var(--sidebar-accent);
+    /* Warmer selection */
+    color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
 }
 
+/* Success State */
 .mcqOption.correct {
     border-color: #16a34a;
-    background-color: #f0fdf4;
+    background-color: rgba(22, 163, 74, 0.1);
+    /* Transparent Green */
     color: #15803d;
     pointer-events: none;
-    /* Disable clicks after checking */
 }
 
+/* Error State */
 .mcqOption.incorrect {
-    border-color: var(--chinar-red);
-    background-color: #fee2e2;
-    color: #b91c1c;
+    border-color: var(--destructive);
+    background-color: rgba(239, 68, 68, 0.1);
+    /* Transparent Red */
+    color: var(--destructive);
     pointer-events: none;
-    /* Disable clicks after checking */
 }
 
 /* --- Footer and Action Button --- */
@@ -295,30 +316,44 @@
 
 .actionButton {
     width: 100%;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    color: var(--text-primary);
+    padding: 1.25rem;
+    border-radius: 99px;
+    /* Pill shape */
+    color: var(--primary-foreground);
     font-size: 1.25rem;
     font-weight: 700;
-    border: var(--border-color);
+    border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.actionButton:active {
+    transform: scale(0.98);
 }
 
 .actionButton.check {
-    background-color: var(--bg-subtle);
+    background-color: var(--color-primary);
+    /* Gold/Primary */
 }
 
 .actionButton.check:hover {
     background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .actionButton.correct {
     background-color: #16a34a;
+    /* Green */
 }
 
 .actionButton.incorrect {
-    background-color: var(--chinar-red);
+    background-color: var(--destructive);
+    /* Red */
 }
 
 @media (max-width: 768px) {
