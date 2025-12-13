@@ -80,11 +80,7 @@ const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => 
                         Click through the letters to learn their names and sounds.
                     </p>
 
-                    <div className="mt-6">
-                        <Link href="/hechun/sentences" className="btn btn-primary">
-                            Start Sentence Lessons →
-                        </Link>
-                    </div>
+
                 </div>
 
                 <div className={styles.progressBarContainer}>
@@ -118,9 +114,9 @@ const KashmiriAlphabetPage: React.FC<AlphabetPageProps> = ({ alphabetData }) => 
                         </p>
                         <div className={styles.exampleWordContainer}>
                             <div>
-                <span className={styles.exampleWordKashmiri} lang="ks">
-                  {currentLesson.example_word_kashmiri}
-                </span>
+                                <span className={styles.exampleWordKashmiri} lang="ks">
+                                    {currentLesson.example_word_kashmiri}
+                                </span>
                                 <button
                                     onClick={() => playSound(currentLesson.example_word_kashmiri)}
                                     className={styles.soundButton}

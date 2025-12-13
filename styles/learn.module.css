@@ -57,9 +57,19 @@
     border-radius: 9999px;
     transition: all 0.2s ease;
     justify-content: center;
-    background-color: var(--bg-card);
-    border: 2px solid var(--border-color);
-    color: var(--text-primary);
+    /* .learnContainer */
+    background-color: var(--background);
+    border: 2px solid var(--border);
+    color: var(--foreground);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Ensure text/icon is centered */
+}
+
+.lessonNode {
+    /* ... */
+    background-color: var(--card);
+    border: 2px solid var(--border);
+    color: var(--foreground);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     /* Ensure text/icon is centered */
 }
@@ -361,10 +371,10 @@
 
 .levelHeader {
     width: 100%;
-    background-color: var(--bg-card);
+    background-color: var(--card);
     padding: 1.5rem;
     border-radius: 1rem;
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border);
     margin-bottom: 2rem;
     display: flex;
     justify-content: space-between;
@@ -499,16 +509,11 @@
     display: flex;
     justify-content: center;
     margin-bottom: 2rem;
-    margin-top: 4rem;
-    /* Added margin to avoid nav bar overlap */
+    margin-top: 1rem;
 }
 
 .teamLogo {
     width: 15rem;
-    /* Increased size */
     height: 15rem;
-    /* Increased size */
-
     object-fit: cover;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

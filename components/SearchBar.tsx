@@ -57,30 +57,30 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="search-container">
+    <div className="w-full max-w-[1260px] mx-auto mb-8 bg-card border border-border rounded-xl p-6 shadow-sm">
       {/* Main Search Input */}
-      <div className="search-input-row mb-4">
-        <div className="flex-1">
+      <div className="flex gap-4 items-center mb-4">
+        <div className="flex-1 min-w-0">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Search idioms by Kashmiri text, meaning, or translation..."
-            className="search-input"
+            className="w-full px-4 py-3 bg-secondary/30 ml-1 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring outline-none text-foreground placeholder:text-muted-foreground transition-all"
           />
         </div>
         <button
           onClick={handleSearch}
-          className="btn btn-primary px-6"
+          className="btn btn-primary px-6 shrink-0"
         >
           🔍 Search
         </button>
       </div>
 
       {/* Tags Filter Section */}
-      <div className="search-tags-row">
-        <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm font-medium text-muted-foreground">
           Filter by category:
         </span>
 
@@ -88,19 +88,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         <div className="relative">
           <button
             onClick={() => setShowTagDropdown(!showTagDropdown)}
-            className="btn btn-secondary text-sm"
+            className="btn btn-secondary text-sm px-4 py-2 rounded-full"
           >
             + Add Category
           </button>
 
           {showTagDropdown && (
             <div
-              className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto min-w-48"
-              style={{
-                background: '.bg-white-card',
-                border: '1px solid var(--border-medium)',
-                boxShadow: '0 8px 24px var(--shadow-medium)'
-              }}
+              className="absolute top-full left-0 mt-2 bg-popover rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto min-w-48 border border-border p-2"
             >
               {availableTags.map(tag => (
                 <button
@@ -109,14 +104,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                     toggleTag(tag);
                     setShowTagDropdown(false);
                   }}
-                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-opacity-50 transition-colors ${selectedTags.includes(tag)
-                      ? 'font-medium'
-                      : ''
+                  className={`block w-full text-left px-4 py-2 text-sm rounded-md transition-colors ${selectedTags.includes(tag)
+                    ? 'font-medium text-primary-foreground bg-primary'
+                    : 'text-foreground hover:bg-muted'
                     }`}
-                  style={{
-                    color: selectedTags.includes(tag) ? 'var(--chinar-orange)' : 'var(--text-primary)',
-                    background: selectedTags.includes(tag) ? 'var(--bg-card-right)' : 'transparent'
-                  }}
                 >
                   {selectedTags.includes(tag) ? '✓ ' : ''}{tag}
                 </button>
@@ -129,11 +120,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         {selectedTags.map(tag => (
           <span
             key={tag}
-            className="tag cursor-pointer hover:opacity-80 transition-opacity"
+            className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-1"
             onClick={() => toggleTag(tag)}
             title="Click to remove"
           >
-            {tag} ×
+            {tag} <span className="text-xs opacity-70">×</span>
           </span>
         ))}
 
@@ -141,8 +132,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         {(query || selectedTags.length > 0) && (
           <button
             onClick={clearFilters}
-            className="text-sm hover:underline transition-all"
-            style={{ color: 'var(--text-muted)' }}
+            className="text-sm hover:underline transition-all text-muted-foreground ml-2"
           >
             Clear all filters
           </button>

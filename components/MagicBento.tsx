@@ -86,7 +86,7 @@ const updateCardGlowProperties = (card: HTMLElement, mouseX: number, mouseY: num
     card.style.setProperty('--glow-radius', `${radius}px`);
 };
 
-interface ParticleCardProps {
+export interface ParticleCardProps {
     children: React.ReactNode;
     className?: string;
     disableAnimations?: boolean;
@@ -98,7 +98,7 @@ interface ParticleCardProps {
     enableMagnetism?: boolean;
 }
 
-const ParticleCard: React.FC<ParticleCardProps> = ({
+export const ParticleCard: React.FC<ParticleCardProps> = ({
     children,
     className = '',
     disableAnimations = false,
@@ -335,15 +335,15 @@ const ParticleCard: React.FC<ParticleCardProps> = ({
     );
 };
 
-interface GlobalSpotlightProps {
-    gridRef: React.RefObject<HTMLDivElement>;
+export interface GlobalSpotlightProps {
+    gridRef: React.RefObject<HTMLDivElement | null>;
     disableAnimations?: boolean;
     enabled?: boolean;
     spotlightRadius?: number;
     glowColor?: string;
 }
 
-const GlobalSpotlight: React.FC<GlobalSpotlightProps> = ({
+export const GlobalSpotlight: React.FC<GlobalSpotlightProps> = ({
     gridRef,
     disableAnimations = false,
     enabled = true,
@@ -475,13 +475,13 @@ const GlobalSpotlight: React.FC<GlobalSpotlightProps> = ({
     return null;
 };
 
-const BentoCardGrid: React.FC<{ children: React.ReactNode; gridRef: React.RefObject<HTMLDivElement> }> = ({ children, gridRef }) => (
+export const BentoCardGrid: React.FC<{ children: React.ReactNode; gridRef: React.RefObject<HTMLDivElement | null> }> = ({ children, gridRef }) => (
     <div className="card-grid bento-section" ref={gridRef}>
         {children}
     </div>
 );
 
-const useMobileDetection = () => {
+export const useMobileDetection = () => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {

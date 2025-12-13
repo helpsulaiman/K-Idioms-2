@@ -85,13 +85,13 @@ const LeaderboardPage: React.FC = () => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="font-medium text-gray-900 dark:text-gray-100">
-                                                    User {user.user_id.slice(0, 8)}...
+                                                    {user.username || `User ${user.user_id.slice(0, 8)}...`}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-gray-500">
                                                 {user.lessons_completed}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-chinar-orange">
+                                            <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-yellow-600 dark:text-yellow-400">
                                                 {user.total_stars} ★
                                             </td>
                                         </tr>

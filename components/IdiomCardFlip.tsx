@@ -34,15 +34,15 @@ const IdiomCardFlip: React.FC<IdiomCardFlipProps> = ({ idiom, isFlipped, onFlip 
         <div className={`card-flip ${isFlipped ? 'flipped' : ''}`}>
           {/* FRONT SIDE */}
           <div className="card-flip-front" style={{ background: 'transparent', border: 'none', boxShadow: 'none', padding: 0 }}>
-            <SpotlightCard className="h-full flex flex-col justify-between magic-bento-card magic-bento-card--border-glow">
+            <SpotlightCard className="h-full flex flex-col justify-between bg-card border border-border shadow-md rounded-xl p-6 text-foreground">
               <div className="card-content">
-                <div className="text-kashmiri">
+                <div className="text-kashmiri text-xl font-bold mb-2 text-primary">
                   {idiom.idiom_kashmiri}
                 </div>
-                <div className="text-transliteration">
+                <div className="text-transliteration text-lg italic mb-2 text-muted-foreground">
                   {idiom.transliteration}
                 </div>
-                <div className="text-translation">
+                <div className="text-translation text-base">
                   {idiom.translation}
                 </div>
               </div>
@@ -50,12 +50,12 @@ const IdiomCardFlip: React.FC<IdiomCardFlipProps> = ({ idiom, isFlipped, onFlip 
               {idiom.tags && idiom.tags.length > 0 && (
                 <div className="card-tags">
                   {idiom.tags.slice(0, 3).map((tag, index) => (
-                    <span key={index} className="tag">
+                    <span key={index} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-medium">
                       {tag}
                     </span>
                   ))}
                   {idiom.tags.length > 3 && (
-                    <span className="tag">
+                    <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-medium">
                       +{idiom.tags.length - 3} more
                     </span>
                   )}
@@ -66,7 +66,7 @@ const IdiomCardFlip: React.FC<IdiomCardFlipProps> = ({ idiom, isFlipped, onFlip 
 
           {/* BACK SIDE */}
           <div className="card-flip-back" style={{ background: 'transparent', border: 'none', boxShadow: 'none', padding: 0 }}>
-            <SpotlightCard className="h-full magic-bento-card magic-bento-card--border-glow !p-6">
+            <SpotlightCard className="h-full bg-card border border-border shadow-md rounded-xl p-6 text-foreground">
               <div className="flip-back-content h-full flex flex-col gap-2 overflow-y-auto pr-1">
                 {/* Audio Section */}
                 <div className="flip-audio-section shrink-0">

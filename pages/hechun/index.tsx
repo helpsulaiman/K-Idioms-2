@@ -43,7 +43,7 @@ const HechunPage: React.FC = () => {
                         <Link href="/leaderboard" className={`btn ${styles.headerButton}`}>
                             🏆 Leaderboard
                         </Link>
-                        <Link href="/hechun/progress" className={`btn ${styles.headerButton}`}>
+                        <Link href="/profile" className={`btn ${styles.headerButton}`}>
                             👤 My Progress
                         </Link>
                     </div>
@@ -62,7 +62,7 @@ const HechunPage: React.FC = () => {
                                         <p className={styles.levelDesc}>{level.description}</p>
                                     </div>
                                     {level.is_locked && (
-                                        <div className="text-xs bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full font-bold">
+                                        <div className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-3 py-1 rounded-full font-bold">
                                             🔒 {level.min_stars_required}★
                                         </div>
                                     )}
@@ -82,24 +82,36 @@ const HechunPage: React.FC = () => {
                                             <Link
                                                 href={isLocked ? '#' : `/hechun/lesson/${lesson.id}`}
                                                 key={lesson.id}
-                                                className="transform transition-transform"
+                                                className="transform transition-transform group"
                                             >
-                                                <div className={`${styles.lessonNode} ${isLocked ? styles.locked : ''}`}>
+                                                <div className={`${styles.lessonNode} ${isLocked ? styles.locked : ''} flex flex-col items-center justify-center gap-1`}>
                                                     {isLocked ? (
-                                                        <span>🔒</span>
+                                                        <span className="text-2xl">🔒</span>
                                                     ) : (
-                                                        <span>{lesson.lesson_order}</span>
-                                                    )}
-
-                                                    {/* Stars (Floating below) */}
-                                                    {!isLocked && (
-                                                        <div className="absolute -bottom-8 flex gap-1 text-sm">
-                                                            {[1, 2, 3].map(star => (
-                                                                <span key={star} className={star <= (lesson.user_stars || 0) ? 'text-yellow-400' : 'text-gray-300'}>
-                                                                    ★
-                                                                </span>
-                                                            ))}
-                                                        </div>
+                                                        <>
+                                                            <span className="text-xl font-bold leading-none">{lesson.lesson_order}</span>
+                                                            {/* Stars (Inside circle) */}
+                                                            <div className="flex gap-0.5">
+                                                                {[1, 2, 3].map(star => {
+                                                                    const isEarned = star <= (lesson.user_stars || 0);
+                                                                    return (
+                                                                        <svg
+                                                                            key={star}
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24"
+                                                                            fill={isEarned ? "currentColor" : "none"}
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2"
+                                                                            strokeLinecap="round"
+                                                                            strokeLinejoin="round"
+                                                                            className={`w-3 h-3 ${isEarned ? 'text-yellow-500' : 'text-gray-300'}`}
+                                                                        >
+                                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                                                        </svg>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </>
                                                     )}
                                                 </div>
                                             </Link>

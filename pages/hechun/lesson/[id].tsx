@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../../components/Layout';
 import styles from '../../../styles/learn.module.css';
+import { Mic, Square } from 'lucide-react';
 import { fetchLessonWithSteps, submitLessonProgress, fetchNextLesson } from '../../../lib/learning-api';
 import { LearningLesson, LessonStep } from '../../../types/learning';
 
@@ -26,6 +27,14 @@ const LessonRunner: React.FC = () => {
     const [sessionStatus, setSessionStatus] = useState<'answering' | 'checked'>('answering');
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+
+    // Speaking State
+    const [isRecording, setIsRecording] = useState(false);
+    const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
+    const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const [transcription, setTranscription] = useState<string | null>(null);
+    const [hasCompletedSpeak, setHasCompletedSpeak] = useState(false);
+    const [isTranscribing, setIsTranscribing] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -130,6 +139,92 @@ const LessonRunner: React.FC = () => {
         return 'Continue';
     };
 
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorderRef.current = mediaRecorder;
+            const chunks: BlobPart[] = [];
+
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                setAudioBlob(blob);
+                handleTranscribe(blob);
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            setIsRecording(true);
+            setTranscription(null);
+            setIsCorrect(null);
+            setSessionStatus('answering');
+        } catch (err) {
+            console.error('Error accessing microphone:', err);
+            alert('Could not access microphone');
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current && isRecording) {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+        }
+    };
+
+    const handleTranscribe = async (blob: Blob) => {
+        setIsTranscribing(true);
+        const formData = new FormData();
+        formData.append('audio', blob, 'recording.webm');
+
+        try {
+            const response = await fetch('/api/transcribe', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            setTranscription(data.text);
+
+            // Simple check logic (fuzzy match ideally, but simple includes/match for now)
+            // Or if backend returns confidence/correctness
+            // Normalize strings for comparison (lowercase, trim)
+            const normalizedTranscription = data.text?.toLowerCase().trim() || "";
+            const targets = [
+                currentStep.content.correct_answer?.toLowerCase().trim(),
+                currentStep.content.kashmiri?.toLowerCase().trim(),
+                currentStep.content.text?.toLowerCase().trim()
+            ].filter(Boolean); // Filter out null/undefined
+
+            console.log('Verification Debug:', {
+                transcription: normalizedTranscription,
+                targets: targets
+            });
+
+            // Check if transcription matches any of the target strings
+            // We use 'includes' for leniency, or exact match if preferred
+            const isMatch = targets.some((t: string) => normalizedTranscription.includes(t) || t.includes(normalizedTranscription));
+
+            setIsCorrect(isMatch);
+            setSessionStatus('checked');
+            if (isMatch) setCorrectAnswersCount(prev => prev + 1);
+
+            // Mark that we've completed a speak step, so we don't show the warning again
+            if (!hasCompletedSpeak) setHasCompletedSpeak(true);
+
+        } catch (err) {
+            console.error('Transcription failed:', err);
+            alert('Transcription failed');
+        } finally {
+            setIsTranscribing(false);
+        }
+    };
+
     if (loading) {
         return (
             <Layout title="Loading Lesson...">
@@ -218,6 +313,58 @@ const LessonRunner: React.FC = () => {
                                     >
                                         Got it!
                                     </button>
+
+                                    {currentStep.content.audio_url && (
+                                        <div className="mt-4">
+                                            <audio controls src={currentStep.content.audio_url} className="w-full" />
+                                        </div>
+                                    )}
+                                </div>
+                            ) : currentStep.step_type === 'speak' ? (
+                                <div className="text-center">
+                                    <h2 className={styles.promptText}>{currentStep.content.title || 'Speak the phrase:'}</h2>
+                                    <p className="text-xl mb-4 text-kashmiri" lang="ks">{currentStep.content.kashmiri || currentStep.content.text}</p>
+                                    <p className="text-lg text-gray-500 mb-8">{currentStep.content.transliteration}</p>
+
+                                    <div className="flex flex-col items-center justify-center gap-6">
+                                        <button
+                                            onClick={isRecording ? stopRecording : startRecording}
+                                            disabled={isTranscribing || (sessionStatus === 'checked')}
+                                            className={`
+                                                relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl
+                                                ${isRecording
+                                                    ? 'bg-red-500 scale-110 ring-4 ring-red-200 animate-pulse'
+                                                    : 'bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] hover:scale-105'
+                                                }
+                                                disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                                            `}
+                                        >
+                                            {isRecording ? (
+                                                <Square size={32} fill="white" className="text-white" />
+                                            ) : (
+                                                <Mic size={40} className="text-white" />
+                                            )}
+                                        </button>
+                                        <p className="text-lg font-medium text-[var(--text-secondary)]">
+                                            {isRecording ? 'Listening...' : sessionStatus === 'checked' ? 'Recorded' : 'Tap to Record'}
+                                        </p>
+
+                                        {/* First time warning */}
+                                        <div className="flex items-start gap-2 bg-blue-50 text-blue-700 p-3 rounded-lg text-sm max-w-sm mx-auto mt-2">
+                                            <span className="text-xl">ℹ️</span>
+                                            <p className="text-left leading-tight">
+                                                <strong>Note:</strong> The first recording will take longer (~1 min) to download the AI model. Subsequent tries will be fast!
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {isTranscribing && <div className="mt-4 text-blue-600">Transcribing...</div>}
+                                    {transcription && (
+                                        <div className="mt-4 p-4 bg-secondary rounded-xl border border-border/10">
+                                            <p className="text-sm text-secondary-foreground/70">You said:</p>
+                                            <p className="text-lg font-medium text-secondary-foreground">{transcription}</p>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <>
@@ -250,7 +397,7 @@ const LessonRunner: React.FC = () => {
                                 {sessionStatus === 'checked' && (
                                     <div className={`${styles.feedbackArea} ${isCorrect ? styles.correct : styles.incorrect} mb-4`}>
                                         <h3>{isCorrect ? 'Excellent!' : 'That\'s not quite right.'}</h3>
-                                        {!isCorrect && <p className="text-lg mt-1">Answer: <strong>{currentStep.content.correct_answer}</strong></p>}
+                                        {!isCorrect && currentStep.step_type !== 'speak' && <p className="text-lg mt-1">Answer: <strong>{currentStep.content.correct_answer}</strong></p>}
                                     </div>
                                 )}
                                 <button

@@ -62,37 +62,37 @@ const AboutProjectPage: React.FC = () => {
       <div className="idioms-grid">
         <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
           <div className="card-content">
+            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🎓 Structured Learning Path</h3>
+            <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
+              Our "Hečhun" section offers step-by-step lessons, starting from alphabets
+              to complex phrases, designed to build fluency systematically.
+            </p>
+          </div>
+        </SpotlightCard>
+        <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
+          <div className="card-content">
+            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🤖 AI Speaking Practice</h3>
+            <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
+              Test your pronunciation with our real-time AI speech recognition model,
+              specifically fine-tuned for the Kashmiri language.
+            </p>
+          </div>
+        </SpotlightCard>
+        <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
+          <div className="card-content">
             <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>📖 Comprehensive Collection</h3>
             <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
               A growing database of authentic Kashmiri idioms with their meanings,
-              translations, and cultural context.
+              translations, audio pronunciations, and cultural context.
             </p>
           </div>
         </SpotlightCard>
         <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
           <div className="card-content">
-            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🔊 Audio Pronunciations</h3>
+            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🤝 Open Contributions</h3>
             <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
-              Native speaker recordings to help preserve the correct pronunciation
-              and intonation of each idiom.
-            </p>
-          </div>
-        </SpotlightCard>
-        <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
-          <div className="card-content">
-            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🔍 Easy Search & Discovery</h3>
-            <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
-              Advanced search functionality allowing users to find idioms by text,
-              meaning, or thematic tags.
-            </p>
-          </div>
-        </SpotlightCard>
-        <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
-          <div className="card-content">
-            <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>🤝 Community Contributions</h3>
-            <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
-              A platform for community members to contribute their knowledge
-              and help expand our collection.
+              A community-driven platform where anyone can submit idioms,
+              request translations, and help preserve our linguistic heritage.
             </p>
           </div>
         </SpotlightCard>

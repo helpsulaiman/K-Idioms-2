@@ -2,9 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'hdbmcwmgolmxmtllaclx.supabase.co' // Add your Supabase storage domain
-    ],
+
     // You also need to specify the dimensions for the Image component
     remotePatterns: [
       {

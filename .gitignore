@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+
+
+
+# AI Models (Large files)
+/model/kashmiri_wav2vec2_model/
+/model/My_Kashmiri_AI_Model2*/
+/model/__pycache__/
+*.pyc
+
+# Allow scripts in model directory
+!/model/*.py

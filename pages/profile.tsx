@@ -1,57 +1,87 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import { useUser, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
-import Layout from '../components/Layout';
 import Link from 'next/link';
-import styles from '../styles/learn.module.css';
-import { fetchUserStats, updateUserProfile } from '../lib/learning-api';
+import { fetchUserBadges, fetchUserStats, updateUserProfile } from '../lib/learning-api';
+import Layout from '../components/Layout'; // Re-using Layout for basic structure/head
 
 const ProfilePage: React.FC = () => {
-    const { isLoading, session } = useSessionContext();
+    const { isLoading } = useSessionContext();
     const user = useUser();
     const supabase = useSupabaseClient();
     const router = useRouter();
 
+    // Profile State
     const [username, setUsername] = useState('');
-    const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    // Progress State
+    const [stats, setStats] = useState({ totalStars: 0, lessonsCompleted: 0 });
+    const [badges, setBadges] = useState<any[]>([]);
 
     useEffect(() => {
         if (user) {
             loadProfile();
+            loadProgress();
+        } else if (!isLoading) {
+            loadGuestProgress();
         }
-    }, [user]);
+    }, [user, isLoading]);
 
     const loadProfile = async () => {
         if (!user) return;
         try {
-            const stats = await fetchUserStats(supabase, user.id);
-            if (stats?.username) {
-                setUsername(stats.username);
-            } else {
-                // Fallback to metadata or email prefix
-                setUsername(user.user_metadata?.full_name || user.email?.split('@')[0] || '');
-            }
+            const userStats = await fetchUserStats(supabase, user.id);
+            setUsername(userStats?.username || user.user_metadata?.full_name || user.email?.split('@')[0] || '');
         } catch (error) {
             console.error('Error loading profile:', error);
-        } finally {
-            setLoading(false);
+        }
+    };
+
+    const loadProgress = async () => {
+        if (!user) return;
+        try {
+            const [userBadges, userStats] = await Promise.all([
+                fetchUserBadges(supabase, user.id),
+                fetchUserStats(supabase, user.id)
+            ]);
+
+            setBadges(userBadges || []);
+            if (userStats) {
+                setStats({
+                    totalStars: userStats.total_stars,
+                    lessonsCompleted: userStats.lessons_completed
+                });
+            }
+        } catch (error) {
+            console.error('Error loading progress:', error);
+        }
+    };
+
+    const loadGuestProgress = () => {
+        try {
+            const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
+            const totalStars = Object.values(localProgress).reduce((sum: number, s: any) => sum + (Number(s) || 0), 0);
+            const lessonsCompleted = Object.keys(localProgress).length;
+            setStats({ totalStars, lessonsCompleted });
+            setBadges([]);
+        } catch (e) {
+            console.error("Error loading guest progress", e);
         }
     };
 
     const handleUpdateProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
-
         setSaving(true);
         setMessage(null);
-
         try {
             await updateUserProfile(supabase, user.id, username);
-            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            setMessage({ type: 'success', text: 'Profile updated!' });
         } catch (error: any) {
-            setMessage({ type: 'error', text: error.message || 'Failed to update profile' });
+            setMessage({ type: 'error', text: error.message || 'Failed to update' });
         } finally {
             setSaving(false);
         }
@@ -63,87 +93,113 @@ const ProfilePage: React.FC = () => {
     };
 
     if (isLoading) {
-        return (
-            <Layout title="Profile - Hečhun">
-                <div className={styles.learnContainer}>
-                    <div className="text-center py-20">Loading...</div>
-                </div>
-            </Layout>
-        );
-    }
-
-    if (!user) {
-        return (
-            <Layout title="Profile - Hečhun">
-                <div className={styles.learnContainer}>
-                    <div className="text-center py-20">
-                        <p className="text-xl mb-4">You are not logged in.</p>
-                        <Link href="/auth/login" className="btn btn-primary">
-                            Login
-                        </Link>
-                    </div>
-                </div>
-            </Layout>
-        );
+        return <div className="p-10 text-center">Loading...</div>;
     }
 
     return (
-        <Layout title="Profile - Hečhun">
-            <div className={styles.learnContainer}>
-                <div className="max-w-2xl mx-auto w-full p-4 pt-12">
-                    <div className={`${styles.lessonCard} p-8`}>
-                        <div className="text-center mb-8">
-                            <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl border-4 border-white shadow-lg">
-                                👤
-                            </div>
-                            <h1 className="text-3xl font-bold text-gray-800">My Profile</h1>
-                            <p className="text-gray-500 mt-1">{user.email}</p>
-                        </div>
+        <Layout title="Your Profile">
+            <div className="container mt-12 space-y-12">
 
-                        {message && (
-                            <div className={`p-4 mb-6 rounded-lg ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                {message.text}
-                            </div>
-                        )}
-
-                        <form onSubmit={handleUpdateProfile} className="mb-8">
-                            <div className="form-group mb-4">
-                                <label className="block text-gray-700 font-bold mb-2">Username (Display Name)</label>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                        placeholder="Enter your username"
-                                        required
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={saving}
-                                        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50"
-                                    >
-                                        {saving ? 'Saving...' : 'Save'}
-                                    </button>
-                                </div>
-                                <p className="text-sm text-gray-500 mt-1">This name will appear on the leaderboard.</p>
-                            </div>
-                        </form>
-
-                        <div className="space-y-4 border-t pt-6">
-                            <Link href="/hechun/progress" className="block w-full text-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition border border-blue-200 group">
-                                <span className="text-2xl block mb-1 group-hover:scale-110 transition-transform">📊</span>
-                                <span className="font-bold text-blue-700">View My Progress</span>
-                            </Link>
-
+                {/* Header Section */}
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-[var(--border-color)] pb-6">
+                    <div></div> {/* Spacer for centering */}
+                    <h1 className="page-title !m-0 !p-0 text-center">Dashboard</h1>
+                    <div className="flex justify-end">
+                        {user ? (
                             <button
                                 onClick={handleLogout}
-                                className="w-full p-4 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition border border-red-200 font-bold"
+                                className="btn btn-secondary btn-sm"
                             >
-                                Log Out
+                                Sign Out
                             </button>
+                        ) : (
+                            <Link href="/auth/login" className="btn btn-primary">
+                                Log In
+                            </Link>
+                        )}
+                    </div>
+                </div>
+
+                {/* Profile Settings */}
+                <section>
+                    <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">Profile Settings</h2>
+                    {user ? (
+                        <div className="form-container !m-0 !max-w-none">
+                            {message && (
+                                <div className={`p-3 mb-4 rounded ${message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                    {message.text}
+                                </div>
+                            )}
+                            <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-md">
+                                <div>
+                                    <label htmlFor="username" className="block text-sm font-medium mb-2 text-[var(--text-secondary)]">Display Name</label>
+                                    <input
+                                        id="username"
+                                        type="text"
+                                        value={username}
+                                        onChange={e => setUsername(e.target.value)}
+                                        className="search-input"
+                                        placeholder="Enter username"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={saving}
+                                    className="btn btn-primary"
+                                >
+                                    {saving ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </form>
+                        </div>
+                    ) : (
+                        <div className="dashboard-card text-center py-8">
+                            <p className="text-[var(--text-secondary)]">Log in to edit your profile.</p>
+                        </div>
+                    )}
+                </section>
+
+                {/* Statistics */}
+                <section>
+                    <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">Your Progress</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="dashboard-card items-center text-center py-8">
+                            <span className="block text-5xl font-bold text-[var(--color-primary)] mb-2">{stats.totalStars}</span>
+                            <span className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">Total Stars</span>
+                        </div>
+                        <div className="dashboard-card items-center text-center py-8">
+                            <span className="block text-5xl font-bold text-purple-600 mb-2">{stats.lessonsCompleted}</span>
+                            <span className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">Lessons Completed</span>
                         </div>
                     </div>
+                </section>
+
+                {/* Badges */}
+                <section>
+                    <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">Badges</h2>
+                    {badges.length === 0 ? (
+                        <div className="dashboard-card text-center py-10">
+                            <p className="text-[var(--text-secondary)] italic">No badges earned yet. Complete lessons to earn them!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            {badges.map((b: any) => (
+                                <div key={b.id} className="idiom-card flex flex-col items-center text-center">
+                                    <img
+                                        src={b.badge.icon_url || '/placeholder.png'}
+                                        alt={b.badge.name}
+                                        className="w-20 h-20 mb-4 object-contain"
+                                    />
+                                    <span className="font-semibold text-[var(--text-primary)]">{b.badge.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                <div className="pt-8 border-t border-[var(--border-color)]">
+                    <Link href="/" className="btn btn-secondary btn-sm">
+                        &larr; Back to Home
+                    </Link>
                 </div>
             </div>
         </Layout>

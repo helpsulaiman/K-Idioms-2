@@ -2,7 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
-import PillNav from './PillNav';
+import BubbleMenu from './BubbleMenu';
+import Footer from './Footer';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -19,12 +20,47 @@ const Layout: React.FC<LayoutProps> = ({
     const user = useUser();
 
     const navItems = React.useMemo(() => [
-        { label: 'Home', href: '/' },
-        { label: 'Hečhun (Learn)', href: '/hechun' },
-        { label: 'Submit Idiom', href: '/submit' },
-        { label: 'About Project', href: '/about-project' },
-        { label: 'About Us', href: '/about' },
-        user ? { label: 'Profile', href: '/profile' } : { label: 'Login', href: '/auth/login' }
+        {
+            label: 'Home',
+            href: '/',
+            rotation: -8,
+            hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' } // Blue
+        },
+        {
+            label: 'Hečhun (Learn)',
+            href: '/hechun',
+            rotation: 8,
+            hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' } // Green
+        },
+        {
+            label: 'Submit Idiom',
+            href: '/submit',
+            rotation: -8,
+            hoverStyles: { bgColor: '#f59e0b', textColor: '#ffffff' } // Orange
+        },
+        {
+            label: 'About Project',
+            href: '/about-project',
+            rotation: 8,
+            hoverStyles: { bgColor: '#8b5cf6', textColor: '#ffffff' } // Purple
+        },
+        {
+            label: 'About Us',
+            href: '/about',
+            rotation: -8,
+            hoverStyles: { bgColor: '#06b6d4', textColor: '#ffffff' } // Cyan 
+        },
+        user ? {
+            label: 'Profile',
+            href: '/profile',
+            rotation: 8,
+            hoverStyles: { bgColor: '#ec4899', textColor: '#ffffff' } // Pink 
+        } : {
+            label: 'Login',
+            href: '/auth/login',
+            rotation: 8,
+            hoverStyles: { bgColor: '#ef4444', textColor: '#ffffff' } // Red
+        }
     ], [user]);
 
     return (
@@ -46,39 +82,41 @@ const Layout: React.FC<LayoutProps> = ({
             </Head>
 
             <div className="min-h-screen flex flex-col">
-                <header className="container mx-auto flex pt-4 px-4">
-                    <PillNav
-                        logo="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritWOTextLight.png"
-                        logoDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDspiritWOtextDark.png"
-                        logoAlt="KashWords Logo"
+                <header className="container mx-auto flex pt-4 px-4 z-50 relative">
+                    <BubbleMenu
+                        logo={
+                            <div className="h-full flex items-center">
+                                {/* Light Mode Logo */}
+                                <img
+                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritWOTextLight.png"
+                                    alt="KashWords Logo"
+                                    className="h-full w-auto object-contain dark:hidden block"
+                                />
+                                {/* Dark Mode Logo */}
+                                <img
+                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDspiritWOtextDark.png"
+                                    alt="KashWords Logo"
+                                    className="h-full w-auto object-contain hidden dark:block"
+                                />
+                            </div>
+                        }
                         items={navItems}
-                        activeHref={router.pathname}
-                        baseColor="#1e293b" // Slate-800
-                        pillColor="#fdba74" // Light Orange (Orange-300)
-                        pillTextColor="#1e293b"
-                        hoveredPillTextColor="#ffffff"
+                        menuAriaLabel="Toggle navigation"
+                        menuBg="#ffffff"
+                        menuContentColor="#111111"
+                        useFixedPosition={true}
+                        animationEase="back.out(1.5)"
+                        animationDuration={0.5}
+                        staggerDelay={0.12}
                     />
                 </header>
 
-                <main className="flex-1 w-full max-w-[1400px] mx-auto">
+                <main className="flex-1 w-full max-w-[1400px] mx-auto pt-10 sm:pt-32 pb-16">
                     {/* FIX: This line was missing. It renders the actual page content. */}
                     {children}
                 </main>
 
-                <footer
-                    className="py-8 text-center border-t"
-                    style={{
-                        background: 'var(--bg-card)',
-                        borderColor: 'var(--border-light)',
-                        color: 'var(--text-secondary)'
-                    }}
-                >
-                    <div className="container">
-                        <p className="text-sm">
-                            © 2024 KashWords - Preserving the wisdom of Kashmir 🍁
-                        </p>
-                    </div>
-                </footer>
+                <Footer />
             </div>
         </>
     );

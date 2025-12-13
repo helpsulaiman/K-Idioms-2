@@ -22,7 +22,7 @@ export interface LearningLesson {
     is_locked?: boolean; // Computed on client
 }
 
-export type StepType = 'teach' | 'quiz_easy' | 'quiz_hard';
+export type StepType = 'teach' | 'quiz_easy' | 'quiz_hard' | 'speak';
 
 export interface LessonStep {
     id: number;

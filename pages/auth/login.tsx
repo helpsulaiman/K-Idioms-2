@@ -3,6 +3,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
+import radixStyles from '../../styles/RadixTabs.module.css';
 
 const HechunLoginPage: React.FC = () => {
     const supabase = useSupabaseClient();
@@ -54,9 +55,10 @@ const HechunLoginPage: React.FC = () => {
                     <p className="text-secondary mb-8">Sign in to continue your learning journey.</p>
                 </div>
 
+
                 <form onSubmit={handleLogin}>
-                    <div className="form-group">
-                        <label htmlFor="email" className="form-label">
+                    <fieldset className={radixStyles.Fieldset}>
+                        <label htmlFor="email" className={radixStyles.Label}>
                             Email
                         </label>
                         <input
@@ -64,12 +66,12 @@ const HechunLoginPage: React.FC = () => {
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="form-input"
+                            className={radixStyles.Input}
                             required
                         />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password" className="form-label">
+                    </fieldset>
+                    <fieldset className={radixStyles.Fieldset}>
+                        <label htmlFor="password" className={radixStyles.Label}>
                             Password
                         </label>
                         <input
@@ -77,17 +79,17 @@ const HechunLoginPage: React.FC = () => {
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="form-input"
+                            className={radixStyles.Input}
                             required
                         />
-                    </div>
+                    </fieldset>
 
                     {error && <p className="form-help-text text-red-500 mb-4">{error}</p>}
 
                     <div className="mt-6">
                         <button
                             type="submit"
-                            className="btn btn-primary w-full"
+                            className={`${radixStyles.Button} ${radixStyles.ButtonBlue} w-full`}
                             disabled={loading}
                         >
                             {loading ? 'Signing In...' : 'Sign In'}

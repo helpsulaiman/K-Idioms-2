@@ -253,17 +253,83 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
 }
 
 export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily' | 'weekly' | 'all_time' = 'all_time'): Promise<UserStats[]> {
-    // For now, we'll just return all-time stats sorted by stars
-    // Implementing true daily/weekly requires a separate 'activity_log' table
     try {
-        const { data, error } = await supabase
-            .from('user_stats')
-            .select('*')
-            .order('total_stars', { ascending: false })
-            .limit(50);
+        if (period === 'all_time') {
+            const { data, error } = await supabase
+                .from('user_stats')
+                .select('*')
+                .order('total_stars', { ascending: false })
+                .limit(50);
 
-        if (error) throw new ApiError(`Failed to fetch leaderboard: ${error.message}`);
-        return data || [];
+            if (error) throw new ApiError(`Failed to fetch leaderboard: ${error.message}`);
+            return data || [];
+        } else {
+            // Calculated Daily/Weekly stats from user_progress
+            const now = new Date();
+            let cutoffDate = new Date();
+
+            if (period === 'daily') {
+                cutoffDate.setHours(0, 0, 0, 0); // Start of today
+            } else if (period === 'weekly') {
+                const day = now.getDay();
+                const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is sunday
+                cutoffDate = new Date(now.setDate(diff));
+                cutoffDate.setHours(0, 0, 0, 0); // Start of week (Monday)
+            }
+
+            // Fetch progress updated/created after cutoff
+            const { data: progress, error: progressError } = await supabase
+                .from('user_progress')
+                .select('user_id, stars, updated_at')
+                .gte('updated_at', cutoffDate.toISOString());
+
+            if (progressError) throw new ApiError(`Failed to fetch progress: ${progressError.message}`);
+
+            // Aggregate stars by user
+            const userMap = new Map<string, { stars: number, lessons: number }>();
+            progress?.forEach(p => {
+                const current = userMap.get(p.user_id) || { stars: 0, lessons: 0 };
+                userMap.set(p.user_id, {
+                    stars: current.stars + p.stars,
+                    lessons: current.lessons + 1 // Simply counting entries in period as "activity"
+                });
+            });
+
+            if (userMap.size === 0) return [];
+
+            const userIds = Array.from(userMap.keys());
+
+            // Fetch user details for these IDs
+            const { data: userDetails, error: userError } = await supabase
+                .from('user_stats')
+                .select('user_id, username')
+                .in('user_id', userIds);
+
+            if (userError) throw new ApiError(`Failed to fetch user details: ${userError.message}`);
+
+            // Combine data
+            const leaderboard: UserStats[] = userIds.map(uid => {
+                const stats = userMap.get(uid)!;
+                const user = userDetails?.find(u => u.user_id === uid);
+                return {
+                    user_id: uid,
+                    username: user?.username || 'Learner',
+                    total_stars: stats.stars,
+                    lessons_completed: stats.lessons,
+                    current_streak: 0,
+                    // Mock other fields required by UserStats type if needed, 
+                    // assuming UserStats matches the table exactly.
+                    // If strict type checking complains, we might need to fill 
+                    // other fields with defaults or fetches.
+                    last_activity_date: new Date().toISOString(),
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                } as UserStats;
+            });
+
+            // Sort by stars descending
+            return leaderboard.sort((a, b) => b.total_stars - a.total_stars).slice(0, 50);
+        }
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
         throw error instanceof ApiError ? error : new ApiError('Failed to fetch leaderboard');
