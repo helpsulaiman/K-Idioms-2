@@ -1,7 +1,7 @@
 # Kashmiri Idioms: Preserving Cultural Heritage
 
 ## 🌟 Vision
-Kashmir has a rich oral tradition filled with proverbs (*kahawat*) and idioms that encapsulate centuries of wisdom. As generations shift, this linguistic heritage is at risk of fading. **Kashmiri Idioms** is a digital platform designed to preserve, celebrate, and teach this cultural treasure to the modern world using cutting-edge technology.
+Kashmir has a rich oral tradition filled with proverbs and idioms that encapsulate centuries of wisdom. As generations shift, this linguistic heritage is at risk of fading. **Kashmiri Idioms** is a digital platform designed to preserve, celebrate, and teach this cultural treasure to the modern world using cutting-edge technology.
 
 ## 🚀 Features
 
@@ -40,7 +40,7 @@ Users can submit new idioms (`/submit`) to grow the archive. Submissions are ver
 The project features a premium **Gold & Navy** aesthetic, inspired by Kashmiri craftsmanship (Papier-mâché, wood carving), offering a visually stunning experience.
 
 ## 👥 The Team
-Built by students from **Kashmir University** as part of the **Design Your Degree (DYD)** program. We are passionate about merging culture with technology.
+Our group **DYD's Spirit** includes students from **Kashmir University**, namely **Sulaiman Shabir, Tehniyah Rayaz, Furqan Malik, Farees Ahmed,** and **Anha Nabi** as part of the **Design Your Degree (DYD)** program. We are passionate about merging culture with technology.
 
 ---
 *Preserving the past, building for the future.*

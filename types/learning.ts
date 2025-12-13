@@ -16,6 +16,7 @@ export interface LearningLesson {
     title: string;
     description: string | null;
     lesson_order: number;
+    xp_reward: number;
     created_at: string;
     // Joined fields
     user_stars?: number; // From user_progress
