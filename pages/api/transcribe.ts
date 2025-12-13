@@ -56,7 +56,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         ]);
 
                         console.log('Cloud Response:', prediction.data);
-                        const transcription = prediction.data[0];
+                        const responseData = prediction.data as any[];
+                        const transcription = responseData[0];
 
                         // Cleanup
                         if (fs.existsSync(audioFile.filepath)) fs.unlinkSync(audioFile.filepath);
