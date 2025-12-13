@@ -94,10 +94,10 @@ const AboutPage: React.FC = () => {
                                 Have questions, suggestions, or just want to say hello? We&apos;d love to hear from you.
                             </p>
                             <div className="flex justify-center gap-4 flex-wrap">
-                                <a href="mailto:contact@kashmirculture.org" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
+                                <a href="mailto:dydspirit@gmail.com" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
                                     <i className="fas fa-envelope"></i> Email Us
                                 </a>
-                                <a href="https://instagram.com/helpsulaiman" target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
+                                <a href="https://instagram.com/helpsulaiman.clicks" target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
                                     <i className="fab fa-instagram"></i> Instagram
                                 </a>
                             </div>
