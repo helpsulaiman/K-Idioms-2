@@ -5,7 +5,8 @@ import {
     LearningLesson,
     LessonStep,
     UserProgress,
-    UserStats
+    UserStats,
+    Badge
 } from '../types/learning';
 
 // --- LEVELS & LESSONS ---
