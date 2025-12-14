@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { gsap } from 'gsap';
 // import './BubbleMenu.css'; // Moved to _app.tsx for Next.js global CSS rules
 
@@ -197,6 +198,8 @@ const BubbleMenu: React.FC<BubbleMenuProps> = ({
         };
     }, [isMenuOpen, onMenuClick]);
 
+    const router = useRouter(); // Initialize router
+
     return (
         <>
             <nav ref={containerRef} className={containerClassName} style={style} aria-label="Main navigation">
@@ -225,36 +228,48 @@ const BubbleMenu: React.FC<BubbleMenuProps> = ({
                     aria-hidden={!isMenuOpen}
                 >
                     <ul className="pill-list" role="menu" aria-label="Menu links">
-                        {menuItems.map((item, idx) => (
-                            <li key={idx} role="none" className="pill-col">
-                                <a
-                                    role="menuitem"
-                                    href={item.href}
-                                    aria-label={item.ariaLabel || item.label}
-                                    className="pill-link"
-                                    // We treat CSS variables as standard style properties here or use 'as any' if TS complains
-                                    style={{
-                                        '--item-rot': `${item.rotation ?? 0}deg`,
-                                        '--pill-bg': menuBg,
-                                        '--pill-color': menuContentColor,
-                                        '--hover-bg': item.hoverStyles?.bgColor || '#f3f4f6',
-                                        '--hover-color': item.hoverStyles?.textColor || menuContentColor
-                                    } as React.CSSProperties}
-                                    ref={el => {
-                                        bubblesRef.current[idx] = el;
-                                    }}
-                                >
-                                    <span
-                                        className="pill-label"
+                        {menuItems.map((item, idx) => {
+                            // Improved active state matching
+                            // Match if pathname is exactly href OR (if href is not root) starts with href
+                            // This allows /hechun/lesson/1 to highlight /hechun
+                            const isActive = item.href === '/'
+                                ? router.pathname === '/'
+                                : router.pathname.startsWith(item.href);
+
+                            // If active, use the hover color as the base bg/color
+                            const activeBg = item.hoverStyles?.bgColor || '#f3f4f6';
+                            const activeColor = item.hoverStyles?.textColor || menuContentColor;
+
+                            return (
+                                <li key={idx} role="none" className="pill-col">
+                                    <a
+                                        role="menuitem"
+                                        href={item.href}
+                                        aria-label={item.ariaLabel || item.label}
+                                        className={`pill-link ${isActive ? 'active' : ''}`}
+                                        style={{
+                                            '--item-rot': `${item.rotation ?? 0}deg`,
+                                            '--pill-bg': isActive ? activeBg : menuBg, // Force active color
+                                            '--pill-color': isActive ? activeColor : menuContentColor,
+                                            '--hover-bg': item.hoverStyles?.bgColor || '#f3f4f6',
+                                            '--hover-color': item.hoverStyles?.textColor || menuContentColor
+                                        } as React.CSSProperties}
                                         ref={el => {
-                                            labelRefs.current[idx] = el;
+                                            bubblesRef.current[idx] = el;
                                         }}
                                     >
-                                        {item.label}
-                                    </span>
-                                </a>
-                            </li>
-                        ))}
+                                        <span
+                                            className="pill-label"
+                                            ref={el => {
+                                                labelRefs.current[idx] = el;
+                                            }}
+                                        >
+                                            {item.label}
+                                        </span>
+                                    </a>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             )}

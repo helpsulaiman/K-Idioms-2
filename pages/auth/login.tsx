@@ -39,7 +39,9 @@ const HechunLoginPage: React.FC = () => {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    redirectTo: `${window.location.origin}/hechun`,
+                    // Redirect to root, usually safe and whitelisted. 
+                    // Auth state change will handle navigation to /hechun or dashboard.
+                    redirectTo: `${window.location.origin}/`,
                 },
             });
             if (error) throw error;
@@ -85,7 +87,16 @@ const HechunLoginPage: React.FC = () => {
                         />
                     </fieldset>
 
-                    {error && <p className="form-help-text text-red-500 mb-4">{error}</p>}
+                    {error && (
+                        <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <span className="text-red-500 mt-0.5">⚠️</span>
+                            <p className="text-sm font-medium text-red-600">
+                                {error === 'Invalid login credentials'
+                                    ? 'Incorrect email or password. Please try again.'
+                                    : error}
+                            </p>
+                        </div>
+                    )}
 
                     <div className="mt-6">
                         <button

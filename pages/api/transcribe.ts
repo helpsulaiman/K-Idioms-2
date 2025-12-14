@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Client } from "@gradio/client";
+import { Client, handle_file } from "@gradio/client";
 import formidable from 'formidable';
 import fs from 'fs';
 import os from 'os';
@@ -46,9 +46,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         console.log('Connecting to HF Space: helpsulaiman/kashmiri-asr-api');
 
                         // Direct fetch to Gradio API (more robust for Node.js uploads)
-                        const fileContent = fs.readFileSync(audioFile.filepath);
-                        const fileBlob = new Blob([fileContent], { type: audioFile.mimetype || 'audio/webm' });
-
                         // Gradio API requires specific payload structure
                         // For audio input, we often send the file as a base64 or via upload endpoint
                         // But easiest with Client is to let it handle it, IF it doesn't disconnect.
@@ -60,12 +57,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                         // Let's try to just read the file and send it as a base64 data URI
                         // This avoids the multipart streaming issues often seen in Node->Gradio
-                        const base64Data = fs.readFileSync(audioFile.filepath, { encoding: 'base64' });
-                        const dataUri = `data:${audioFile.mimetype || 'audio/webm'};base64,${base64Data}`;
 
+                        console.log('5. Connecting to HF Space...');
                         const app = await Client.connect("helpsulaiman/kashmiri-asr-api");
-                        const prediction = await app.predict("/predict", [
-                            dataUri
+
+                        // Read file buffer
+                        const audioBuffer = fs.readFileSync(audioFile.filepath);
+                        const mimeType = audioFile.mimetype || 'audio/webm';
+
+                        console.log('------------------------------------------------');
+                        console.log('AUDIO UPLOAD DEBUG:');
+                        console.log('1. File Path:', audioFile.filepath);
+                        console.log('2. File Size:', audioFile.size, 'bytes');
+                        console.log('3. Mime Type:', mimeType);
+                        console.log('4. Buffer Size:', audioBuffer.length);
+                        console.log('------------------------------------------------');
+
+                        const audioBlob = new Blob([audioBuffer], { type: mimeType });
+
+                        console.log('6. Sending prediction request to endpoint 0...');
+                        // Use index 0 as it's the safest way to target the default Interface function
+                        const prediction = await app.predict(0, [
+                            handle_file(audioBlob)
                         ]);
 
                         console.log('Cloud Response:', prediction.data);

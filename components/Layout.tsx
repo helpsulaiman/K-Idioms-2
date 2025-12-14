@@ -111,7 +111,7 @@ const Layout: React.FC<LayoutProps> = ({
                     />
                 </header>
 
-                <main className="flex-1 w-full max-w-[1400px] mx-auto pt-32 sm:pt-32 pb-16">
+                <main className="flex-1 w-full max-w-[1400px] mx-auto pt-16 sm:pt-20 pb-16">
                     {/* FIX: This line was missing. It renders the actual page content. */}
                     {children}
                 </main>

@@ -6,7 +6,8 @@ import Layout from '../../../components/Layout';
 import styles from '../../../styles/learn.module.css';
 import { Mic, Square } from 'lucide-react';
 import { fetchLessonWithSteps, submitLessonProgress, fetchNextLesson } from '../../../lib/learning-api';
-import { LearningLesson, LessonStep } from '../../../types/learning';
+import { LearningLesson, LessonStep, Badge } from '../../../types/learning';
+import BadgePopup from '../../../components/BadgePopup';
 
 const LessonRunner: React.FC = () => {
     const router = useRouter();
@@ -21,6 +22,7 @@ const LessonRunner: React.FC = () => {
     const [nextLesson, setNextLesson] = useState<LearningLesson | null>(null);
     const [isCompleted, setIsCompleted] = useState(false);
     const [earnedStars, setEarnedStars] = useState(0);
+    const [earnedBadge, setEarnedBadge] = useState<Badge | null>(null);
 
     // Quiz State
     const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
@@ -107,13 +109,27 @@ const LessonRunner: React.FC = () => {
 
         if (stars > 0) {
             try {
-                await submitLessonProgress(supabase, user?.id, lesson.id, stars);
+                const badge = await submitLessonProgress(supabase, user?.id, lesson.id, stars);
+                if (badge) {
+                    setEarnedBadge(badge);
+                    // Do not set isCompleted yet if we want to show popup first? 
+                    // Actually, BadgePopup is an overlay. We can show complete screen behind it or just popup.
+                    // Let's show popup OVER the lesson content or the complete screen.
+                    // But if we set isCompleted=true, the render returns the 'Lesson Complete' card. 
+                    // The BadgePopup is inside the main Layout, so it should be fine.
+                }
             } catch (error) {
                 console.error('Failed to save progress:', error);
             }
         }
 
         setIsCompleted(true);
+    };
+
+    const handleCloseBadgePopup = () => {
+        setEarnedBadge(null);
+        // Ensure we are redirecting or showing the complete screen after popup closes
+        // If we are on the 'Lesson Complete' screen (isCompleted=true), we just stay there.
     };
 
     const getChoiceClass = (choice: string) => {
@@ -263,6 +279,7 @@ const LessonRunner: React.FC = () => {
     if (isCompleted) {
         return (
             <Layout title="Lesson Complete!">
+                <BadgePopup badge={earnedBadge} onClose={handleCloseBadgePopup} />
                 <div className={styles.learnContainer}>
                     <main className={`${styles.mainContent} flex-col justify-center`}>
                         <div className={`${styles.lessonCard} text-center max-w-md mx-auto`}>
@@ -301,6 +318,7 @@ const LessonRunner: React.FC = () => {
 
     return (
         <Layout title={lesson?.title || 'Lesson'}>
+            <BadgePopup badge={earnedBadge} onClose={handleCloseBadgePopup} />
             <div className={styles.learnContainer}>
                 <div className={`${styles.lessonHeader} mb-2`}>
                     <h1 className="text-xl font-bold">{lesson?.title}</h1>

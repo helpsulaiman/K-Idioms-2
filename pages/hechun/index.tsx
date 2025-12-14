@@ -30,7 +30,7 @@ const HechunPage: React.FC = () => {
     return (
         <Layout title="Hechun - Learn Kashmiri">
             <div className={styles.learnContainer}>
-                <div className="text-center pt-10 pb-4 px-4">
+                <div className="text-center pt-0 pb-4 px-4">
                     <h1 className={styles.pagetitle}>Hečhun</h1>
                     <p className={styles.pagesubtitle}>
                         Master Kashmiri step by step.

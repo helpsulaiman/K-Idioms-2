@@ -168,7 +168,7 @@ export async function fetchUserStats(supabase: SupabaseClient, userId: string): 
 
 // --- PROGRESS & STATS ---
 
-export async function submitLessonProgress(supabase: SupabaseClient, userId: string | undefined, lessonId: number, stars: number): Promise<void> {
+export async function submitLessonProgress(supabase: SupabaseClient, userId: string | undefined, lessonId: number, stars: number): Promise<Badge | null> {
     try {
         if (!userId) {
             console.log('Submitting guest progress for lesson', lessonId, 'stars', stars);
@@ -182,7 +182,7 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
                     console.log('Guest progress saved to localStorage');
                 }
             }
-            return;
+            return null;
         }
 
         // Verify auth state inside the function
@@ -244,7 +244,8 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
         }
 
         // 3. Check for badges
-        await checkAndAwardBadges(supabase, userId, lessonId);
+        const earnedBadge = await checkAndAwardBadges(supabase, userId, lessonId);
+        return earnedBadge;
 
     } catch (error) {
         console.error('Error submitting progress:', error);
@@ -338,7 +339,7 @@ export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily'
 
 // --- BADGES ---
 
-async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, lessonId: number) {
+async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, lessonId: number): Promise<Badge | null> {
     try {
         console.log('Checking badges for user', userId, 'lesson', lessonId);
         // Get the lesson to find out which level it belongs to
@@ -350,7 +351,7 @@ async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, les
 
         if (!lesson) {
             console.log('Badge check: Lesson not found');
-            return;
+            return null;
         }
 
         console.log('Badge check: Lesson belongs to level', lesson.level_id);
@@ -363,7 +364,7 @@ async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, les
 
         if (!levelLessons) {
             console.log('Badge check: No lessons found for level');
-            return;
+            return null;
         }
 
         const { data: userProgress } = await supabase
@@ -401,15 +402,22 @@ async function checkAndAwardBadges(supabase: SupabaseClient, userId: string, les
                         awarded_at: new Date().toISOString()
                     }, { onConflict: 'user_id, badge_id' });
 
-                if (awardError) console.error('Badge check: Error awarding badge', awardError);
-                else console.log('Badge check: Badge awarded successfully');
+                if (awardError) {
+                    console.error('Badge check: Error awarding badge', awardError);
+                    return null;
+                } else {
+                    console.log('Badge check: Badge awarded successfully');
+                    return levelBadge as Badge;
+                }
             } else {
                 console.log('Badge check: No badge found for this level');
             }
         }
+        return null;
     } catch (error) {
         console.error('Error checking badges:', error);
-        // Don't throw here, as it shouldn't block progress submission
+        // Don't throw, as it shouldn't block progress submission
+        return null;
     }
 }
 

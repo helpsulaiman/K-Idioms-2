@@ -12,17 +12,32 @@ model = Wav2Vec2ForCTC.from_pretrained(MODEL_ID)
 
 print("Model loaded!")
 
-def transcribe(audio_path):
-    if audio_path is None:
+def transcribe(audio_tuple):
+    print("Received audio!")
+    if audio_tuple is None:
         return "No audio provided"
     
     try:
-        # Load audio (resample to 16kHz)
-        speech_array, sr = librosa.load(audio_path, sr=16000)
+        sr, y = audio_tuple
+        print(f"Original SR: {sr}, Shape: {y.shape}, Dtype: {y.dtype}")
+        
+        # Convert to float32 if needed
+        if y.dtype.kind == 'i':
+            y = y.astype(np.float32) / np.iinfo(y.dtype).max
+            
+        # Convert Stereo to Mono
+        if y.ndim > 1:
+            y = y.mean(axis=1)
+
+        # Resample to 16kHz if needed
+        if sr != 16000:
+            y = librosa.resample(y, orig_sr=sr, target_sr=16000)
+            
+        print(f"Processed Shape: {y.shape}")
         
         # Preprocess
         inputs = processor(
-            speech_array, 
+            y, 
             sampling_rate=16000, 
             return_tensors="pt", 
             padding=True
@@ -36,17 +51,18 @@ def transcribe(audio_path):
         predicted_ids = torch.argmax(logits, dim=-1)
         transcription = processor.batch_decode(predicted_ids)[0]
         
-        print(f"Transcription: {transcription}")
+        print(f"Transcription result: {transcription}")
         return transcription
         
     except Exception as e:
-        print(f"Error: {e}")
-        return f"Error: {str(e)}"
+        import traceback
+        traceback.print_exc()
+        return f"Backend Error: {str(e)}"
 
 # Create Interface
 iface = gr.Interface(
     fn=transcribe,
-    inputs=gr.Audio(type="filepath"),
+    inputs=gr.Audio(type="numpy"),
     outputs="text",
     title="Kashmiri ASR",
     description="Automatic Speech Recognition for Kashmiri Language"
