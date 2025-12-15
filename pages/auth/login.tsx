@@ -74,9 +74,14 @@ const HechunLoginPage: React.FC = () => {
                         />
                     </fieldset>
                     <fieldset className={radixStyles.Fieldset}>
-                        <label htmlFor="password" className={radixStyles.Label}>
-                            Password
-                        </label>
+                        <div className="flex justify-between items-center mb-1">
+                            <label htmlFor="password" className={radixStyles.Label} style={{ marginBottom: 0 }}>
+                                Password
+                            </label>
+                            <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:underline">
+                                Forgot password?
+                            </Link>
+                        </div>
                         <input
                             type="password"
                             id="password"

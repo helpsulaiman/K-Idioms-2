@@ -6,6 +6,8 @@ import { fetchLevelsWithLessons } from '../../lib/learning-api';
 import { LearningLevel } from '../../types/learning';
 import styles from '../../styles/learn.module.css';
 
+import ScrollingBanner from '../../components/ui/ScrollingBanner';
+
 const HechunPage: React.FC = () => {
     const user = useUser();
     const supabase = useSupabaseClient();
@@ -29,6 +31,7 @@ const HechunPage: React.FC = () => {
 
     return (
         <Layout title="Hechun - Learn Kashmiri">
+            <ScrollingBanner text="WORK IN PROGRESS • HEČHUN • WORK IN PROGRESS" />
             <div className={styles.learnContainer}>
                 <div className="text-center pt-0 pb-4 px-4">
                     <h1 className={styles.pagetitle}>Hečhun</h1>
@@ -62,7 +65,7 @@ const HechunPage: React.FC = () => {
                                         <p className={styles.levelDesc}>{level.description}</p>
                                     </div>
                                     {level.is_locked && (
-                                        <div className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-3 py-1 rounded-full font-bold">
+                                        <div className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-5 py-1 rounded-full font-bold">
                                             🔒 {level.min_stars_required}★
                                         </div>
                                     )}

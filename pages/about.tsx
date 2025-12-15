@@ -1,55 +1,63 @@
 import React from 'react';
 import Layout from '../components/Layout';
-import ChromaGrid, { ChromaGridItem } from '../components/ChromaGrid';
+// Removed ChromaGrid
 import ThemeImage from '../components/ThemeImage';
 import SpotlightCard from '../components/SpotlightCard';
 import styles from '../styles/learn.module.css';
+import { TestimonialCarousel, Testimonial } from '../components/ui/profile-card-testimonial-carousel';
 
-const teamMembers: ChromaGridItem[] = [
+// Transform team data to match Testimonial interface
+const teamMembers: Testimonial[] = [
     {
-        image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/helpsulaiman.png",
-        title: "Sulaiman Shabir",
-        subtitle: "Co-Leader & Developer",
-        handle: "@helpsulaiman",
-        borderColor: '#4F46E5', // Indigo
-        gradient: 'linear-gradient(145deg, #4F46E5, #000)',
-        url: "https://instagram.com/helpsulaiman.jpg"
+        name: "Sulaiman Shabir",
+        title: "Co-Leader & Main Developer",
+        description: "Leading the development of Hečhun. Passionate about preserving Kashmiri language through code.",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/helpsulaiman.jpeg",
+        githubUrl: "https://github.com/helpsulaiman",
+        instagramUrl: "https://instagram.com/helpsulaiman.clicks",
+        linkedinUrl: "https://linkedin.com/in/helpsulaiman"
     },
     {
-        image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/tehniyah.jpg",
-        title: "Tehniyah Rayaz",
-        subtitle: "Co-Leader & Creative Lead",
-        handle: "-",
-        borderColor: '#EC4899', // Pink
-        gradient: 'linear-gradient(145deg, #EC4899, #000)',
-        url: "https://linkedin.com/in/tehniyahrayaz"
+        name: "Tehniyah Rayaz",
+        title: "Co-Leader & Creative Lead",
+        description: "Driving the creative vision of Hečhun. Ensuring our visual language resonates with the culture.",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/tehniyah.jpg",
+        githubUrl: "#",
+        twitterUrl: "#",
+        youtubeUrl: "#",
+        linkedinUrl: "#"
     },
     {
-        image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/furqan.jpg",
-        title: "Furqan Malik",
-        subtitle: "Content & Research",
-        handle: "@ffurqann18",
-        borderColor: '#10B981', // Emerald
-        gradient: 'linear-gradient(145deg, #10B981, #000)',
-        url: "https://instagram.com/ffurqann18"
+        name: "Furqan Malik",
+        title: "Content & Research",
+        description: "Curating idioms and verifying cultural accuracy. Deeply invested in authentic representation.",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/furqan.jpg",
+        instagramUrl: "https://instagram.com/ffurqann18",
+        githubUrl: "#",
+        twitterUrl: "#",
+        youtubeUrl: "#",
+        linkedinUrl: "#"
     },
     {
-        image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Farees2.jpg",
-        title: "Farees Ahmed",
-        subtitle: "UX & Content Curation",
-        handle: "@ahangerfarees",
-        borderColor: '#F59E0B', // Amber
-        gradient: 'linear-gradient(145deg, #F59E0B, #000)',
-        url: "https://instagram.com/ahangerfarees"
+        name: "Farees Ahmed",
+        title: "UX & Content Curation",
+        description: "Enhancing user experience and content flow. Making learning Kashmiri seamless and fun.",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Farees2.jpg",
+        instagramUrl: "https://instagram.com/ahangerfarees",
+        githubUrl: "#",
+        twitterUrl: "#",
+        youtubeUrl: "#",
+        linkedinUrl: "#"
     },
     {
-        image: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritDark.png",
-        title: "Anha Nabi",
-        subtitle: "Content Verification",
-        handle: "-",
-        borderColor: '#8B5CF6', // Violet
-        gradient: 'linear-gradient(145deg, #8B5CF6, #000)',
-        url: ""
+        name: "Anha Nabi",
+        title: "Content Verification",
+        description: "Ensuring the correctness of every idiom. Committed to linguistic precision.",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritDark.png",
+        githubUrl: "#",
+        twitterUrl: "#",
+        youtubeUrl: "#",
+        linkedinUrl: "#"
     }
 ];
 
@@ -75,12 +83,13 @@ const AboutPage: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="w-full py-8">
-                    <ChromaGrid
-                        items={teamMembers}
-                        columns={3}
-                        radius={300}
-                    />
+                {/* Team Carousel Section */}
+                <div className="w-full py-16 my-8">
+                    <div className="text-center mb-12">
+                        <h2 className="text-5xl font-bold mb-4">Our Team</h2>
+                        <p className="text-xl text-muted-foreground">The minds behind Hečhun.</p>
+                    </div>
+                    <TestimonialCarousel items={teamMembers} />
                 </div>
 
                 {/* Contact Section */}
