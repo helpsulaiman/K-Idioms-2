@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import radixStyles from '../../styles/RadixTabs.module.css';
 import { Google } from '../../components/icons/Google';
+import { getURL } from '../../lib/getURL';
 
 const HechunLoginPage: React.FC = () => {
     const supabase = useSupabaseClient();
@@ -39,9 +40,8 @@ const HechunLoginPage: React.FC = () => {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    // Redirect to root, usually safe and whitelisted. 
-                    // Auth state change will handle navigation to /hechun or dashboard.
-                    redirectTo: `${window.location.origin}/`,
+                    // Use robust URL helper
+                    redirectTo: getURL(),
                 },
             });
             if (error) throw error;
