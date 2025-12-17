@@ -12,6 +12,8 @@ const kashmiriFont = localFont({
     variable: '--font-kashmiri', // 4. This creates a CSS variable for the font
 });
 
+import OfflineAlert from '../components/OfflineAlert';
+
 function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
     const [supabaseClient] = useState(() => createPagesBrowserClient());
 
@@ -21,6 +23,7 @@ function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
                 {/* This line is the fix. It renders the actual page you are visiting. */}
                 <Component {...pageProps} />
                 <Analytics />
+                <OfflineAlert />
             </div>
         </SessionContextProvider>
     );

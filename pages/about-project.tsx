@@ -132,6 +132,48 @@ const AboutProjectPage: React.FC = () => {
         </SpotlightCard>
       </div>
 
+      {/* --- Technical Details --- */}
+      <div className="about-section" style={{ marginBlock: '2rem' }}>
+        <h2 className={styles.pageTitle}>Technical Details</h2>
+      </div>
+      <div className="idioms-grid" style={{ maxWidth: '1000px', gridTemplateColumns: 'minmax(0, 1fr)' }}>
+        <SpotlightCard className="idiom-card" style={{ height: 'auto' }}>
+          <div className="card-content flex flex-col md:flex-row gap-8 items-center p-6">
+            <div className="flex-1">
+              <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>AI Model Architecture</h3>
+              <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
+                Our speech recognition system is built upon the robust{' '}
+                <a
+                  href="https://huggingface.co/facebook/wav2vec2-large-xlsr-53"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-inherit visited:text-inherit no-underline hover:text-[var(--color-primary)] hover:drop-shadow-[0_0_8px_var(--color-primary)] transition-all duration-300"
+                >
+                  Wav2Vec2-XLSR-53
+                </a>{' '}
+                architecture, a state-of-the-art model developed by Meta AI for cross-lingual speech representation.
+              </p>
+            </div>
+            <div className="hidden md:block w-px bg-[var(--border-color)] self-stretch"></div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Training Dataset</h3>
+              <p className="text-meaning" style={{ fontSize: '1.1rem' }}>
+                The model was fine-tuned using the{' '}
+                <a
+                  href="https://www.openslr.org/122/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-inherit visited:text-inherit no-underline hover:text-[var(--color-primary)] hover:drop-shadow-[0_0_8px_var(--color-primary)] transition-all duration-300"
+                >
+                  OpenSLR/SLR122
+                </a>{' '}
+                dataset, a publicly available corpus specifically designed for Kashmiri speech recognition tasks.
+              </p>
+            </div>
+          </div>
+        </SpotlightCard>
+      </div>
+
       {/* --- Join Our Mission (Restored) --- */}
       <div className="about-section" style={{ marginBlock: '2rem' }}>
         <h2 className={styles.pageTitle}>Join Our Mission</h2>

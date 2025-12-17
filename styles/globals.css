@@ -4,15 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@font-face {
-  font-family: 'kashmirifont';
-  /* You can name this whatever you like */
-  src: url('fonts/Afan.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-  /* Important for performance */
-}
+/* Font is loaded via Next.js localFont in _app.tsx */
+/* Using var(--font-kashmiri) */
 
 /* --- "KASHMIRI MEADOW" THEME --- */
 
@@ -98,8 +91,7 @@
   --border-color: var(--border);
   --text-kashmiri: #11516e;
   --text-transliteration: #047c81;
-  --font-kashmiri: 'KashmiriFont',
-    sans-serif;
+  --font-kashmiri: var(--font-kashmiri), sans-serif;
   --chinar-red: #c92a2a;
   --chinar-orange: #f59f00;
 }

@@ -223,7 +223,9 @@ const LessonRunner: React.FC = () => {
 
             if (data.error) {
                 console.error('API Error Details:', data.details);
-                throw new Error(data.details || data.error);
+                // throw new Error(data.details || data.error); // Don't crash the app
+                alert(`Transcription failed: ${data.details || data.error}`);
+                return;
             }
 
             if (!data.text) {
