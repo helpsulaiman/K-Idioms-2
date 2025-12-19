@@ -8,6 +8,8 @@ import styles from '../../styles/learn.module.css';
 
 import ScrollingBanner from '../../components/ui/ScrollingBanner';
 
+import ThemeImage from '../../components/ThemeImage';
+
 const HechunPage: React.FC = () => {
     const user = useUser();
     const supabase = useSupabaseClient();
@@ -34,7 +36,16 @@ const HechunPage: React.FC = () => {
             <ScrollingBanner text="WORK IN PROGRESS • HEČHUN • WORK IN PROGRESS" />
             <div className={styles.learnContainer}>
                 <div className="text-center pt-0 pb-4 px-4">
-                    <h1 className={styles.pagetitle}>Hečhun</h1>
+                    <div className="w-full flex justify-center mb-4">
+                        <ThemeImage
+                            srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
+                            srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
+                            alt="Hechun"
+                            width={240}
+                            height={120}
+                            style={{ objectFit: 'contain' }}
+                        />
+                    </div>
                     <p className={styles.pagesubtitle}>
                         Master Kashmiri step by step.
                     </p>

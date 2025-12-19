@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Layout from '../components/Layout';
+import ThemeImage from '../components/ThemeImage';
 import { fetchLeaderboard } from '../lib/learning-api';
+
 import { UserStats } from '../types/learning';
 
 const LeaderboardPage: React.FC = () => {
@@ -45,8 +47,18 @@ const LeaderboardPage: React.FC = () => {
     return (
         <Layout title="Leaderboard - Hechun">
             <div className="max-w-3xl mx-auto px-4 py-8">
-                {/* ... (header and selector code which is separate) */}
+                {/* ... */}
                 <div className="text-center mb-10">
+                    <div className="flex justify-center mb-4">
+                        <ThemeImage
+                            srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
+                            srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
+                            alt="Hechun"
+                            width={180}
+                            height={90}
+                            style={{ objectFit: 'contain' }}
+                        />
+                    </div>
                     <h1 className="text-4xl font-bold mb-4">🏆 Leaderboard</h1>
                     <p className="text-gray-600 dark:text-gray-300">
                         See who&apos;s mastering Kashmiri the fastest!

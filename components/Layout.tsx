@@ -88,14 +88,14 @@ const Layout: React.FC<LayoutProps> = ({
                             <div className="h-full flex items-center">
                                 {/* Light Mode Logo */}
                                 <img
-                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritWOTextLight.png"
-                                    alt="KashWords Logo"
+                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
+                                    alt="Hechun Logo"
                                     className="h-full w-auto object-contain dark:hidden block"
                                 />
                                 {/* Dark Mode Logo */}
                                 <img
-                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDspiritWOtextDark.png"
-                                    alt="KashWords Logo"
+                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
+                                    alt="Hechun Logo"
                                     className="h-full w-auto object-contain hidden dark:block"
                                 />
                             </div>
