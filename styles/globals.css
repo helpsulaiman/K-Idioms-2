@@ -11,6 +11,37 @@
 
 /* 1. Light Mode Color Palette (Default) */
 /* 1. Light Mode Color Palette (Default) */
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  }
+}
+
+/* Global Utility Classes */
+.gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.page-title-styled {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
 :root {
   /* New Color Scheme - Light */
   --background: #fdfcf9;
@@ -98,7 +129,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
+    --background: #020617;
+    /* Deep Slate - Richer Dark Blue */
     --foreground: #f5f1e6;
     --card: #0f1e38;
     --card-foreground: #f5f1e6;

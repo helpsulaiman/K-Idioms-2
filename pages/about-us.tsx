@@ -63,7 +63,7 @@ const teamMembers: Testimonial[] = [
 
 const AboutPage: React.FC = () => {
     return (
-        <Layout title="About Us - Hečhun">
+        <Layout title="About Us - Hečhun" fullWidth={true}>
             <div className={styles.learnContainer}>
                 <div className="text-center pt-10 pb-4 px-4 max-w-4xl mx-auto">
                     <div className={styles.teamLogoContainer}>
@@ -76,10 +76,14 @@ const AboutPage: React.FC = () => {
                             className={styles.teamLogo}
                         />
                     </div>
-                    <h1 className={styles.pagetitle}>About Us</h1>
+                    <h1 className={styles['page-title-styled']}>
+                        About <span className={styles['gradient-text']}>Us</span>
+                    </h1>
                     <p className={styles.pagesubtitle} style={{ maxWidth: '800px', margin: '0 auto' }}>
                         We are a group of passionate students from the <strong>University of Kashmir</strong>, part of the innovative <strong>Design Your Degree (DYD)</strong> program.
-                        Beyond digitally preserving Kashmiri idioms, we have built <strong>Hečhun</strong>—an interactive learning platform designed to teach the language to a new generation, ensuring our rich linguistic heritage thrives.
+                        Beyond digitally preserving Kashmiri idioms, we have built <strong>Hečhun</strong>—an interactive learning platform designed to teach the language to a new generation.
+                        <br /><br />
+                        Visit our main portal: <a href="https://dydsspirit.vercel.app" target="_blank" rel="noopener noreferrer" className="font-bold hover:opacity-80 transition-opacity ml-1 inline-block"><span className={styles['gradient-text']}>DYD&apos;s SPIRIT</span></a>
                     </p>
                 </div>
 

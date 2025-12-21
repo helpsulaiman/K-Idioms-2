@@ -16,7 +16,7 @@ const AboutProjectPage: React.FC = () => {
           alt="Project Logo"
           width={200}
           height={200}
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: "cover", filter: "drop-shadow(0 0 15px rgba(251, 191, 36, 0.4))" }}
           className="team-logo"
         />
       </div>

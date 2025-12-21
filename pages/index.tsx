@@ -78,8 +78,8 @@ const HomePage: React.FC = () => {
       <div className="main-content">
         {/* Page Header */}
         <div className="page-header">
-          <h1 className="page-title">
-            Kashmiri Idioms Collection
+          <h1 className="page-title-styled">
+            Kash<span className="gradient-text">Words</span>
           </h1>
           <p className="page-subtitle">
             Discover the wisdom and beauty of traditional Kashmiri sayings.

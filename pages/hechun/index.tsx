@@ -3,12 +3,11 @@ import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { fetchLevelsWithLessons } from '../../lib/learning-api';
-import { LearningLevel } from '../../types/learning';
+import { LearningLevel, LearningLesson } from '../../types/learning';
 import styles from '../../styles/learn.module.css';
-
-import ScrollingBanner from '../../components/ui/ScrollingBanner';
-
+import LevelNode from '../../components/hechun/LevelNode';
 import ThemeImage from '../../components/ThemeImage';
+import ScrollingBanner from '../../components/ui/ScrollingBanner';
 
 const HechunPage: React.FC = () => {
     const user = useUser();
@@ -16,11 +15,28 @@ const HechunPage: React.FC = () => {
     const [levels, setLevels] = useState<LearningLevel[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Flatten all lessons into a single array for the path
+    const [allLessons, setAllLessons] = useState<LearningLesson[]>([]);
+
     useEffect(() => {
         const loadData = async () => {
             try {
                 const data = await fetchLevelsWithLessons(supabase, user?.id);
                 setLevels(data);
+
+                // Flatten lessons
+                let flattened: LearningLesson[] = [];
+                data.forEach(level => {
+                    if (level.lessons) {
+                        flattened.push(...level.lessons);
+                    }
+                });
+
+                // Lessons are now driven purely by DB data seeded via SQL
+                setAllLessons(flattened);
+
+                setAllLessons(flattened);
+
             } catch (error) {
                 console.error('Failed to load learning path:', error);
             } finally {
@@ -29,111 +45,91 @@ const HechunPage: React.FC = () => {
         };
 
         loadData();
-    }, [user]);
+    }, [user, supabase]);
+
+    const totalStars = allLessons.reduce((acc, lesson) => acc + (lesson.user_stars || 0), 0);
 
     return (
-        <Layout title="Hechun - Learn Kashmiri">
+        <Layout title="Hechun - Learn Kashmiri" fullWidth={true}>
             <ScrollingBanner text="WORK IN PROGRESS • HEČHUN • WORK IN PROGRESS" />
             <div className={styles.learnContainer}>
-                <div className="text-center pt-0 pb-4 px-4">
-                    <div className="w-full flex justify-center mb-4">
-                        <ThemeImage
-                            srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
-                            srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
-                            alt="Hechun"
-                            width={240}
-                            height={120}
-                            style={{ objectFit: 'contain' }}
-                        />
+
+                {/* Hero / Header Section */}
+                <div className={styles.heroSection}>
+                    <div className={`flex justify-center mb-6`}>
+                        <div style={{ width: 200, height: 200 }} className={styles.logoContainer}>
+                            <ThemeImage
+                                srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
+                                srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
+                                alt="Hechun"
+                                width={200}
+                                height={200}
+                                style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                            />
+                        </div>
                     </div>
-                    <p className={styles.pagesubtitle}>
-                        Master Kashmiri step by step.
+
+                    <h1 className={styles['page-title-styled']}>
+                        Your <span className={styles['gradient-text']}>Journey</span>
+                    </h1>
+                    <p className={styles.heroSubtitle}>
+                        Master Kashmiri step by step. Complete lessons to earn stars and unlock new levels.
                     </p>
 
-                    <div className={styles.buttonContainer}>
-                        <Link href="/hechun/alphabet" className={`btn ${styles.headerButton}`}>
-                            🔤 Alphabet
-                        </Link>
-                        <Link href="/leaderboard" className={`btn ${styles.headerButton}`}>
-                            🏆 Leaderboard
-                        </Link>
-                        <Link href="/profile" className={`btn ${styles.headerButton}`}>
-                            👤 My Progress
+                    <div className="flex flex-col items-center gap-4">
+                        <div className={styles.statsBar}>
+                            <div className={styles.statItem}>
+                                <i className="fas fa-star text-yellow-500 text-xl"></i>
+                                <span>{totalStars} Stars</span>
+                            </div>
+                            <div className={styles.statItem}>
+                                <i className="fas fa-crown text-purple-500 text-xl"></i>
+                                <span>Level {levels.length > 0 ? levels[0].id : 1}</span>
+                            </div>
+                        </div>
+
+                        <Link href="/leaderboard" className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+                            <i className="fas fa-trophy"></i>
+                            Leaderboard
                         </Link>
                     </div>
                 </div>
 
+                {/* Path Section */}
                 {loading ? (
-                    <div className="text-center py-20">Loading your path...</div>
+                    <div className="flex justify-center py-20">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                    </div>
                 ) : (
                     <div className={styles.pathContainer}>
-                        {levels.map((level) => (
-                            <div key={level.id} className={styles.levelSection}>
-                                {/* Level Header */}
-                                <div className={`${styles.levelHeader} ${level.is_locked ? 'opacity-75' : ''}`}>
-                                    <div>
-                                        <h2 className={styles.levelTitle}>{level.name}</h2>
-                                        <p className={styles.levelDesc}>{level.description}</p>
-                                    </div>
-                                    {level.is_locked && (
-                                        <div className="text-xs bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-5 py-1 rounded-full font-bold">
-                                            🔒 {level.min_stars_required}★
-                                        </div>
-                                    )}
-                                </div>
+                        {/* Lessons Nodes */}
+                        {allLessons.map((lesson, index) => {
+                            // Determine status
+                            // Logic: If previous lesson is completed (3 stars? or just completed?), unlock this one.
+                            // For MVP simplicity: if it's the first one, or previous one has stars, it's unlocked.
+                            // Real logic might need 'is_locked' from DB or stricter rules.
 
-                                {/* Nodes Container */}
-                                <div className={styles.nodesContainer}>
-                                    {/* Connecting Line */}
-                                    <div className={styles.connectingLine} />
+                            // Using the is_locked prop from API if available, else infer
+                            let status: 'locked' | 'unlocked' | 'completed' = 'locked';
 
-                                    {/* Lesson Nodes */}
-                                    {/* @ts-ignore - lessons is joined in API */}
-                                    {level.lessons?.map((lesson, index) => {
-                                        const isLocked = !!(level.is_locked || lesson.is_locked);
+                            if (lesson.is_locked || lesson.title === 'Coming Soon') {
+                                status = 'locked';
+                            } else if ((lesson.user_stars || 0) > 0) {
+                                status = 'completed';
+                            } else {
+                                status = 'unlocked';
+                            }
 
-                                        return (
-                                            <Link
-                                                href={isLocked ? '#' : `/hechun/lesson/${lesson.id}`}
-                                                key={lesson.id}
-                                                className="transform transition-transform group"
-                                            >
-                                                <div className={`${styles.lessonNode} ${isLocked ? styles.locked : ''} flex flex-col items-center justify-center gap-1`}>
-                                                    {isLocked ? (
-                                                        <span className="text-2xl">🔒</span>
-                                                    ) : (
-                                                        <>
-                                                            <span className="text-xl font-bold leading-none">{lesson.lesson_order}</span>
-                                                            {/* Stars (Inside circle) */}
-                                                            <div className="flex gap-0.5">
-                                                                {[1, 2, 3].map(star => {
-                                                                    const isEarned = star <= (lesson.user_stars || 0);
-                                                                    return (
-                                                                        <svg
-                                                                            key={star}
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 24 24"
-                                                                            fill={isEarned ? "currentColor" : "none"}
-                                                                            stroke="currentColor"
-                                                                            strokeWidth="2"
-                                                                            strokeLinecap="round"
-                                                                            strokeLinejoin="round"
-                                                                            className={`w-3 h-3 ${isEarned ? 'text-yellow-500' : 'text-gray-300'}`}
-                                                                        >
-                                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                                                        </svg>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </Link>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        ))}
+                            return (
+                                <LevelNode
+                                    key={lesson.id}
+                                    lesson={lesson}
+                                    status={status}
+                                    position={index % 2 === 0 ? 'left' : 'right'}
+                                    index={index}
+                                />
+                            );
+                        })}
                     </div>
                 )}
             </div>

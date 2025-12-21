@@ -9,12 +9,14 @@ interface LayoutProps {
     children: React.ReactNode;
     title?: string;
     description?: string;
+    fullWidth?: boolean;
 }
 
 const Layout: React.FC<LayoutProps> = ({
     children,
     title = 'Kashmiri Idioms - Preserving Cultural Heritage',
-    description = 'Discover traditional Kashmiri idioms and their meanings. Explore our collection of cultural expressions that carry the wisdom of Kashmir.'
+    description = 'Discover traditional Kashmiri idioms and their meanings. Explore our collection of cultural expressions that carry the wisdom of Kashmir.',
+    fullWidth = false
 }) => {
     const router = useRouter();
     const user = useUser();
@@ -46,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({
         },
         {
             label: 'About Us',
-            href: '/about',
+            href: '/about-us',
             rotation: -8,
             hoverStyles: { bgColor: '#06b6d4', textColor: '#ffffff' } // Cyan 
         },
@@ -111,8 +113,7 @@ const Layout: React.FC<LayoutProps> = ({
                     />
                 </header>
 
-                <main className="flex-1 w-full max-w-[1400px] mx-auto pt-16 sm:pt-20 pb-16">
-                    {/* FIX: This line was missing. It renders the actual page content. */}
+                <main className={`flex-1 w-full ${fullWidth ? '' : 'max-w-[1400px] mx-auto pt-16 sm:pt-20 pb-16'}`}>
                     {children}
                 </main>
 
