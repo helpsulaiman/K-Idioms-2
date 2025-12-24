@@ -3,6 +3,7 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Layout from '../components/Layout';
 import ThemeImage from '../components/ThemeImage';
 import { fetchLeaderboard } from '../lib/learning-api';
+import FeedbackButton from '../components/ui/FeedbackButton';
 
 import { UserStats } from '../types/learning';
 
@@ -54,8 +55,9 @@ const LeaderboardPage: React.FC = () => {
                             srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
                             srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
                             alt="Hechun"
-                            width={180}
-                            height={90}
+                            width={300}
+                            height={150}
+                            className="w-40 sm:w-64 md:w-80 h-auto"
                             style={{ objectFit: 'contain' }}
                         />
                     </div>
@@ -63,6 +65,8 @@ const LeaderboardPage: React.FC = () => {
                     <p className="text-gray-600 dark:text-gray-300">
                         See who&apos;s mastering Kashmiri the fastest!
                     </p>
+
+
                 </div>
 
                 {/* Period Selector */}
@@ -107,26 +111,49 @@ const LeaderboardPage: React.FC = () => {
                                 return { ...u, rank: currentRank };
                             });
 
-                            const currentUser = usersWithRank.find(u => u.user_id === user?.id);
+                            // Find current user OR guest user
+                            const currentUser = usersWithRank.find(u => u.user_id === user?.id || u.user_id === 'guest');
 
                             if (currentUser) {
                                 return (
-                                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg transform hover:scale-[1.02] transition-transform">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-indigo-100 font-medium mb-1">Your Current Rank</p>
-                                                <h2 className="text-3xl font-bold">#{currentUser.rank}</h2>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-indigo-100 font-medium mb-1">Total Stars</p>
-                                                <p className="text-2xl font-bold">{currentUser.total_stars} ★</p>
-                                            </div>
-                                            <div className="text-right hidden sm:block">
-                                                <p className="text-indigo-100 font-medium mb-1">Lessons</p>
-                                                <p className="text-2xl font-bold">{currentUser.lessons_completed}</p>
+                                    <>
+                                        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg transform hover:scale-[1.02] transition-transform">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-indigo-100 font-medium mb-1">Your Current Rank</p>
+                                                    <h2 className="text-3xl font-bold">#{currentUser.rank}</h2>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-indigo-100 font-medium mb-1">Total Stars</p>
+                                                    <p className="text-2xl font-bold">{currentUser.total_stars} ★</p>
+                                                </div>
+                                                <div className="text-right hidden sm:block">
+                                                    <p className="text-indigo-100 font-medium mb-1">Lessons</p>
+                                                    <p className="text-2xl font-bold">{currentUser.lessons_completed}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        {/* Prompt for Guest Users - Displayed BELOW the score card */}
+                                        {currentUser.user_id === 'guest' && (
+                                            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl p-4 max-w-md mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500 text-center">
+                                                <p className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                                                    Excellent work! 🌟
+                                                </p>
+                                                <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-3">
+                                                    Don't lose your progress. Log in now to save your score to the leaderboard.
+                                                </p>
+                                                <div className="flex justify-center gap-3">
+                                                    <a href="/auth/login" className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                                        Log In to Save
+                                                    </a>
+                                                    <a href="/auth/register" className="px-4 py-2 bg-white dark:bg-gray-800 border border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-300 text-sm font-medium rounded-lg hover:bg-yellow-50 dark:hover:bg-yellow-900/30 transition-colors">
+                                                        Sign Up
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 );
                             }
                             return null;
@@ -143,7 +170,7 @@ const LeaderboardPage: React.FC = () => {
                                         <tr>
                                             <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Rank</th>
                                             <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-                                            <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Lessons</th>
+                                            <th className="hidden sm:table-cell px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Lessons</th>
                                             <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Stars</th>
                                         </tr>
                                     </thead>
@@ -177,7 +204,7 @@ const LeaderboardPage: React.FC = () => {
                                                                 {item.user_id === user?.id && <span className="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">You</span>}
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-gray-500">
+                                                        <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-right text-gray-500">
                                                             {item.lessons_completed}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-right font-bold text-yellow-600 dark:text-yellow-400">
@@ -194,6 +221,7 @@ const LeaderboardPage: React.FC = () => {
                     </div>
                 )}
             </div>
+            <FeedbackButton />
         </Layout>
     );
 };

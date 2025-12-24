@@ -121,6 +121,18 @@
   }
 }
 
+@media (min-width: 900px) {
+  .bubble-menu .logo-bubble {
+    --bubble-size: 80px;
+    width: auto;
+    padding: 0 24px;
+  }
+
+  .bubble-menu .logo-bubble .logo-content {
+    width: 100px;
+  }
+}
+
 .bubble-menu-items {
   position: absolute;
   inset: 0;

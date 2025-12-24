@@ -5,6 +5,8 @@ import { useUser } from '@supabase/auth-helpers-react';
 import BubbleMenu from './BubbleMenu';
 import Footer from './Footer';
 
+import Link from 'next/link';
+
 interface LayoutProps {
     children: React.ReactNode;
     title?: string;
@@ -80,7 +82,7 @@ const Layout: React.FC<LayoutProps> = ({
                 <header className="container mx-auto flex pt-4 px-4 z-50 relative">
                     <BubbleMenu
                         logo={
-                            <div className="h-full flex items-center">
+                            <Link href="/hechun" className="h-full flex items-center hover:opacity-80 transition-opacity duration-200">
                                 {/* Light Mode Logo */}
                                 <img
                                     src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
@@ -93,7 +95,7 @@ const Layout: React.FC<LayoutProps> = ({
                                     alt="Hechun Logo"
                                     className="h-full w-auto object-contain hidden dark:block"
                                 />
-                            </div>
+                            </Link>
                         }
                         items={navItems}
                         menuAriaLabel="Toggle navigation"

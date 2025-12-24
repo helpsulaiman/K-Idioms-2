@@ -28,6 +28,16 @@ const HechunRegisterPage: React.FC = () => {
             });
 
             if (error) throw error;
+
+            // Try to migrate if session exists immediately (e.g. if email confirmation is off)
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user) {
+                    const { migrateGuestProgress } = await import('../../lib/learning-api');
+                    await migrateGuestProgress(supabase, session.user.id);
+                }
+            } catch (ignore) { }
+
             alert('Registration successful! Please check your email to confirm your account.');
             router.push('/auth/login');
         } catch (err: any) {

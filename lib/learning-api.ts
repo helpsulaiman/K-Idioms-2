@@ -267,6 +267,33 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
     }
 }
 
+export async function migrateGuestProgress(supabase: SupabaseClient, userId: string): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    try {
+        const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
+        const lessonIds = Object.keys(localProgress);
+
+        if (lessonIds.length === 0) return;
+
+        console.log(`Migrating ${lessonIds.length} guest lessons for user ${userId}`);
+
+        for (const lessonIdStr of lessonIds) {
+            const lessonId = parseInt(lessonIdStr);
+            const stars = localProgress[lessonIdStr];
+
+            // Re-use submit logic which handles upsert and stats aggregation
+            await submitLessonProgress(supabase, userId, lessonId, stars);
+        }
+
+        // Clear local storage after successful migration
+        localStorage.removeItem('hechun_guest_progress');
+        console.log('Guest progress migrated and cleared.');
+    } catch (error) {
+        console.error('Failed to migrate guest progress:', error);
+    }
+}
+
 export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily' | 'weekly' | 'all_time' = 'all_time'): Promise<UserStats[]> {
     try {
         if (period === 'all_time') {
@@ -277,7 +304,34 @@ export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily'
                 .limit(50);
 
             if (error) throw new ApiError(`Failed to fetch leaderboard: ${error.message}`);
-            return data || [];
+
+            let allUsers = data || [];
+
+            // Inject Guest User if applicable (Client-side only merge)
+            if (typeof window !== 'undefined') {
+                try {
+                    const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
+                    const totalStars = Object.values(localProgress).reduce((sum: number, stars: any) => sum + (Number(stars) || 0), 0);
+                    const lessonsCompleted = Object.values(localProgress).filter((s: any) => s > 0).length;
+
+                    if (totalStars > 0) {
+                        const guestUser: UserStats = {
+                            user_id: 'guest',
+                            username: 'You',
+                            total_stars: totalStars,
+                            lessons_completed: lessonsCompleted,
+                            current_streak: 0,
+                            last_activity_date: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        };
+                        allUsers.push(guestUser);
+                        // Re-sort
+                        allUsers.sort((a, b) => b.total_stars - a.total_stars);
+                    }
+                } catch (e) { /* ignore localStorage errors */ }
+            }
+
+            return allUsers.slice(0, 50);
         } else {
             // Calculated Daily/Weekly stats from user_progress
             const now = new Date();
@@ -332,18 +386,38 @@ export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily'
                     total_stars: stats.stars,
                     lessons_completed: stats.lessons,
                     current_streak: 0,
-                    // Mock other fields required by UserStats type if needed, 
-                    // assuming UserStats matches the table exactly.
-                    // If strict type checking complains, we might need to fill 
-                    // other fields with defaults or fetches.
                     last_activity_date: new Date().toISOString(),
-                    created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 } as UserStats;
             });
 
             // Sort by stars descending
-            return leaderboard.sort((a, b) => b.total_stars - a.total_stars).slice(0, 50);
+            const sorted = leaderboard.sort((a, b) => b.total_stars - a.total_stars);
+
+            // Inject Guest User if applicable
+            if (typeof window !== 'undefined') {
+                const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
+                const totalStars = Object.values(localProgress).reduce((sum: number, stars: any) => sum + (Number(stars) || 0), 0);
+                const lessonsCompleted = Object.values(localProgress).filter((s: any) => s > 0).length;
+
+                if (totalStars > 0) {
+                    const guestUser: UserStats = {
+                        user_id: 'guest',
+                        username: 'You',
+                        total_stars: totalStars,
+                        lessons_completed: lessonsCompleted,
+                        current_streak: 0,
+                        last_activity_date: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    };
+
+                    // Insert into sorted array
+                    sorted.push(guestUser);
+                    sorted.sort((a, b) => b.total_stars - a.total_stars);
+                }
+            }
+
+            return sorted.slice(0, 50);
         }
     } catch (error) {
         console.error('Error fetching leaderboard:', error);

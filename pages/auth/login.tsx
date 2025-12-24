@@ -27,6 +27,19 @@ const HechunLoginPage: React.FC = () => {
             });
 
             if (error) throw error;
+
+            // Migrate guest progress if exists
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user) {
+                    // Dynamic import to avoid SSR issues if any, or just direct
+                    const { migrateGuestProgress } = await import('../../lib/learning-api');
+                    await migrateGuestProgress(supabase, session.user.id);
+                }
+            } catch (migrationError) {
+                console.error("Migration failed", migrationError);
+            }
+
             router.push('/hechun');
         } catch (err: any) {
             setError(err.message);
