@@ -4,6 +4,7 @@ import IdiomCardFlip from '../components/IdiomCardFlip';
 import SearchBar from '../components/SearchBar';
 import { Idiom, SearchFilters } from '../types/idiom';
 import { fetchIdioms, searchIdioms } from '../lib/api';
+import FeedbackButton from '../components/ui/FeedbackButton';
 
 
 const HomePage: React.FC = () => {
@@ -146,6 +147,7 @@ const HomePage: React.FC = () => {
           </>
         )}
       </div>
+      <FeedbackButton />
     </Layout>
   );
 };

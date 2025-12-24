@@ -21,7 +21,7 @@ const teamMembers: Testimonial[] = [
         name: "Tehniyah Rayaz",
         title: "Co-Leader & Creative Lead",
         description: "Driving the creative vision of Hečhun. Ensuring our visual language resonates with the culture.",
-        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/tehniyah.jpg",
+        imageUrl: "https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/tehniyah2.jpg",
         githubUrl: "#",
         twitterUrl: "#",
         youtubeUrl: "#",

@@ -8,6 +8,7 @@ import styles from '../../styles/learn.module.css';
 import LevelNode from '../../components/hechun/LevelNode';
 import ThemeImage from '../../components/ThemeImage';
 import ScrollingBanner from '../../components/ui/ScrollingBanner';
+import FeedbackButton from '../../components/ui/FeedbackButton';
 
 const HechunPage: React.FC = () => {
     const user = useUser();
@@ -52,18 +53,19 @@ const HechunPage: React.FC = () => {
     return (
         <Layout title="Hechun - Learn Kashmiri" fullWidth={true}>
             <ScrollingBanner text="WORK IN PROGRESS • HEČHUN • WORK IN PROGRESS" />
+            <FeedbackButton />
             <div className={styles.learnContainer}>
 
                 {/* Hero / Header Section */}
                 <div className={styles.heroSection}>
                     <div className={`flex justify-center mb-6`}>
-                        <div style={{ width: 200, height: 200 }} className={styles.logoContainer}>
+                        <div style={{ width: 400, height: 400 }} className={styles.logoContainer}>
                             <ThemeImage
                                 srcLight="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
                                 srcDark="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
                                 alt="Hechun"
-                                width={200}
-                                height={200}
+                                width={400}
+                                height={400}
                                 style={{ objectFit: 'contain', width: '100%', height: '100%' }}
                             />
                         </div>
