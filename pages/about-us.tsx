@@ -113,6 +113,9 @@ const AboutPage: React.FC = () => {
                                 <a href="https://instagram.com/helpsulaiman.clicks" target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
                                     <i className="fab fa-instagram"></i> Instagram
                                 </a>
+                                <a href="https://buymeacoffee.com/helpsulaiman" target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
+                                    <i className="fas fa-coffee"></i> Support Us
+                                </a>
                             </div>
                         </div>
                     </SpotlightCard>

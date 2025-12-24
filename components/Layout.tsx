@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
 import BubbleMenu from './BubbleMenu';
 import Footer from './Footer';
+import FeedbackButton from './ui/FeedbackButton';
 
 import Link from 'next/link';
 
@@ -113,6 +114,7 @@ const Layout: React.FC<LayoutProps> = ({
                 </main>
 
                 <Footer />
+                {!router.pathname.startsWith('/dashboard') && <FeedbackButton />}
             </div>
         </>
     );

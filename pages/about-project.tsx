@@ -195,6 +195,11 @@ const AboutProjectPage: React.FC = () => {
             <Link href="/submit" className="btn btn-primary self-center mt-2">
               Contribute an Idiom
             </Link>
+            <div className="flex justify-center mt-4">
+              <a href="https://buymeacoffee.com/helpsulaiman" target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform">
+                <i className="fas fa-coffee"></i> Support the project
+              </a>
+            </div>
           </div>
         </SpotlightCard>
       </div>

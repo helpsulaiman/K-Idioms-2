@@ -36,7 +36,7 @@ const FeedbackButton: React.FC = () => {
             color: "text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
         },
         {
-            label: "Buy me a coffee",
+            label: "Support us",
             icon: "fas fa-coffee",
             href: "https://buymeacoffee.com/helpsulaiman",
             color: "text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20"

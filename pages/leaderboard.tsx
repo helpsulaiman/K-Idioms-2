@@ -3,7 +3,6 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import Layout from '../components/Layout';
 import ThemeImage from '../components/ThemeImage';
 import { fetchLeaderboard } from '../lib/learning-api';
-import FeedbackButton from '../components/ui/FeedbackButton';
 
 import { UserStats } from '../types/learning';
 
@@ -221,7 +220,6 @@ const LeaderboardPage: React.FC = () => {
                     </div>
                 )}
             </div>
-            <FeedbackButton />
         </Layout>
     );
 };
