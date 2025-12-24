@@ -116,7 +116,20 @@ export async function fetchLessonWithSteps(supabase: SupabaseClient, lessonId: n
 
         if (stepsError) throw new ApiError(`Failed to fetch steps: ${stepsError.message}`);
 
-        return { lesson, steps: steps || [] };
+        // Parse content if it's a string (defensive coding against double-encoding)
+        const parsedSteps = (steps || []).map(step => {
+            if (typeof step.content === 'string') {
+                try {
+                    return { ...step, content: JSON.parse(step.content) };
+                } catch (e) {
+                    console.error(`Failed to parse step content for step ${step.id}:`, e);
+                    return step;
+                }
+            }
+            return step;
+        });
+
+        return { lesson, steps: parsedSteps };
     } catch (error) {
         console.error('Error fetching lesson content:', error);
         throw error instanceof ApiError ? error : new ApiError('Failed to fetch lesson content');

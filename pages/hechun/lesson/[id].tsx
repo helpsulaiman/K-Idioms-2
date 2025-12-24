@@ -341,10 +341,10 @@ const LessonRunner: React.FC = () => {
                             {currentStep.step_type === 'teach' ? (
                                 <div className="text-center">
                                     <h2 className={styles.promptText}>{currentStep.content.title}</h2>
-                                    <p className="text-xl mb-8">{currentStep.content.text}</p>
-                                    {currentStep.content.kashmiri && (
+                                    <p className="text-xl mb-8">{currentStep.content.text || currentStep.content.description}</p>
+                                    {(currentStep.content.kashmiri || currentStep.content.kashmiri_text) && (
                                         <p className={styles.sentenceText} lang="ks">
-                                            {currentStep.content.kashmiri}
+                                            {currentStep.content.kashmiri || currentStep.content.kashmiri_text}
                                         </p>
                                     )}
                                     {currentStep.content.transliteration && (

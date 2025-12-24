@@ -43,9 +43,46 @@ const EditLessonPage: React.FC = () => {
         setLesson(prev => ({ ...prev, [field]: value }));
     };
 
+    const STEP_TEMPLATES: Record<string, string> = {
+        teach: JSON.stringify({
+            title: "Lesson Title",
+            description: "Brief explanation of the concept.",
+            kashmiri_text: "",
+            transliteration: "",
+            audio_url: null
+        }, null, 2),
+        quiz_easy: JSON.stringify({
+            question: "Question text here?",
+            options: ["Correct Answer", "Option 2", "Option 3", "Option 4"],
+            correct_answer: "Correct Answer",
+            hint: "Optional hint"
+        }, null, 2),
+        quiz_hard: JSON.stringify({
+            question: "Complex question text here?",
+            options: ["Correct Answer", "Option 2", "Option 3", "Option 4"],
+            correct_answer: "Correct Answer",
+            hint: "Optional hint"
+        }, null, 2),
+        speak: JSON.stringify({
+            title: "Speak the following",
+            kashmiri_text: "Text to speak",
+            transliteration: "Pronunciation guide"
+        }, null, 2)
+    };
+
     const handleStepChange = (index: number, field: keyof LessonStep, value: any) => {
         const newSteps = [...steps];
-        newSteps[index] = { ...newSteps[index], [field]: value };
+        let updatedStep = { ...newSteps[index], [field]: value };
+
+        // Auto-fill template if type changes
+        if (field === 'step_type' && STEP_TEMPLATES[value as string]) {
+            // Only overwrite if it looks like a default empty object or another template? 
+            // For "easiness", let's just do it. The user can always Undo if we had undo, but we don't.
+            // Let's assume if they change type, they want the new schema.
+            updatedStep.content = STEP_TEMPLATES[value as string];
+        }
+
+        newSteps[index] = updatedStep;
         setSteps(newSteps);
     };
 
@@ -67,7 +104,8 @@ const EditLessonPage: React.FC = () => {
             lesson_id: lesson.id,
             step_type: 'teach',
             step_order: maxOrder + 1,
-            content: '{}' // Start as string for editing
+            // Default to teach template
+            content: STEP_TEMPLATES['teach']
         }]);
     };
 
@@ -107,8 +145,8 @@ const EditLessonPage: React.FC = () => {
                 if (deleteError) throw deleteError;
             }
 
-            // 3. Upsert steps
-            const stepsToUpsert = steps.map((s, index) => {
+            // 3. Prepare steps
+            const preparedSteps = steps.map((s, index) => {
                 let content = s.content;
                 // Parse JSON content if it's a string (from textarea)
                 if (typeof content === 'string') {
@@ -126,14 +164,25 @@ const EditLessonPage: React.FC = () => {
                 };
             });
 
-            // Remove 'created_at' if it exists to avoid issues if we are just updating
-            // Actually upsert handles it, but let's be clean.
+            // Split into updates (existing IDs) and inserts (new)
+            const stepsToUpdate = preparedSteps.filter(s => s.id);
+            const stepsToInsert = preparedSteps.filter(s => !s.id).map(({ id, ...rest }) => rest); // Remove id property typically undefined
 
-            const { error: stepsError } = await supabase
-                .from('lesson_steps')
-                .upsert(stepsToUpsert);
+            // Update existing
+            if (stepsToUpdate.length > 0) {
+                const { error: updateError } = await supabase
+                    .from('lesson_steps')
+                    .upsert(stepsToUpdate);
+                if (updateError) throw updateError;
+            }
 
-            if (stepsError) throw stepsError;
+            // Insert new
+            if (stepsToInsert.length > 0) {
+                const { error: insertError } = await supabase
+                    .from('lesson_steps')
+                    .insert(stepsToInsert);
+                if (insertError) throw insertError;
+            }
 
             setMessage({ type: 'success', text: 'Lesson saved successfully!' });
             // Reload to get fresh IDs for new steps
@@ -274,10 +323,23 @@ const EditLessonPage: React.FC = () => {
                                     <div>
                                         <label className="block text-xs font-semibold uppercase text-muted-foreground mb-1">Content (JSON)</label>
                                         <textarea
-                                            className="form-input w-full bg-background border-border text-foreground font-mono text-sm min-h-[150px]"
+                                            className={`form-input w-full bg-background border-border text-foreground font-mono text-sm min-h-[150px] ${(typeof step.content === 'string' &&
+                                                (() => { try { JSON.parse(step.content); return false; } catch { return true; } })())
+                                                ? 'border-red-500 ring-1 ring-red-500' : ''
+                                                }`}
                                             value={typeof step.content === 'string' ? step.content : JSON.stringify(step.content, null, 2)}
                                             onChange={e => handleContentChange(index, e.target.value)}
                                         />
+
+                                        {typeof step.content === 'string' && (() => {
+                                            try {
+                                                JSON.parse(step.content);
+                                                return null;
+                                            } catch (e: any) {
+                                                return <p className="text-xs text-red-500 mt-1">Invalid JSON: {e.message}</p>;
+                                            }
+                                        })()}
+
                                         <p className="text-xs text-muted-foreground mt-1">
                                             Edit the JSON content for this step. Ensure it is valid JSON before saving.
                                         </p>
