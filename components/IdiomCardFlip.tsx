@@ -34,7 +34,7 @@ const IdiomCardFlip: React.FC<IdiomCardFlipProps> = ({ idiom, isFlipped, onFlip 
         <div className={`card-flip ${isFlipped ? 'flipped' : ''}`}>
           {/* FRONT SIDE */}
           <div className="card-flip-front" style={{ background: 'transparent', border: 'none', boxShadow: 'none', padding: 0 }}>
-            <SpotlightCard className="h-full flex flex-col justify-between bg-card border border-border shadow-md rounded-xl p-6 text-foreground">
+            <SpotlightCard className="h-full flex flex-col justify-between bg-card border border-border shadow-md rounded-xl !px-4 !py-4   text-foreground">
               <div className="card-content">
                 <div className="text-kashmiri text-xl font-bold mb-2 text-primary">
                   {idiom.idiom_kashmiri}
@@ -47,26 +47,13 @@ const IdiomCardFlip: React.FC<IdiomCardFlipProps> = ({ idiom, isFlipped, onFlip 
                 </div>
               </div>
 
-              {idiom.tags && idiom.tags.length > 0 && (
-                <div className="card-tags">
-                  {idiom.tags.slice(0, 3).map((tag, index) => (
-                    <span key={index} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                      {tag}
-                    </span>
-                  ))}
-                  {idiom.tags.length > 3 && (
-                    <span className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                      +{idiom.tags.length - 3} more
-                    </span>
-                  )}
-                </div>
-              )}
+
             </SpotlightCard>
           </div>
 
           {/* BACK SIDE */}
           <div className="card-flip-back" style={{ background: 'transparent', border: 'none', boxShadow: 'none', padding: 0 }}>
-            <SpotlightCard className="h-full bg-card border border-border shadow-md rounded-xl p-6 text-foreground">
+            <SpotlightCard className="h-full bg-card border border-border shadow-md rounded-xl !p-4 text-foreground">
               <div className="flip-back-content h-full flex flex-col gap-2 overflow-y-auto pr-1">
                 {/* Audio Section */}
                 <div className="flip-audio-section shrink-0">

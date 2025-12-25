@@ -76,7 +76,7 @@ const ManageIdiomsPage: React.FC = () => {
         setFormData(idiom);
         setTags(idiom.tags || []);
         setIsFormVisible(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Scroll removed to keep context
     };
 
     const handleDelete = async (id: string) => {
@@ -125,64 +125,120 @@ const ManageIdiomsPage: React.FC = () => {
                     />
                 </div>
 
+                {/* Modal Overlay */}
                 {isFormVisible && (
-                    <form onSubmit={handleSubmit} className="mb-8 p-6 border border-border rounded-lg bg-card shadow-sm fade-in">
-                        <h2 className="text-xl font-semibold mb-4 text-foreground">{editingId ? `Editing: ${formData.idiom_kashmiri}` : 'Add New Idiom'}</h2>
-
-                        <div className="form-group">
-                            <label className="form-label text-foreground">Kashmiri Idiom</label>
-                            <input name="idiom_kashmiri" onChange={handleInputChange} value={formData.idiom_kashmiri || ''} className="form-input bg-background text-foreground border-border" required />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-                            <div className="form-group">
-                                <label className="form-label text-foreground">Transliteration</label>
-                                <input name="transliteration" onChange={handleInputChange} value={formData.transliteration || ''} className="form-input bg-background text-foreground border-border" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                        <div
+                            className="bg-card w-full max-w-3xl rounded-xl shadow-2xl border border-border flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Modal Header */}
+                            <div className="flex justify-between items-center p-6 border-b border-border">
+                                <h2 className="text-xl font-bold text-foreground">
+                                    {editingId ? `Editing: ${formData.idiom_kashmiri}` : 'Add New Idiom'}
+                                </h2>
+                                <button onClick={cancelEdit} className="text-muted-foreground hover:text-foreground">
+                                    <i className="fas fa-times text-xl"></i>
+                                </button>
                             </div>
-                            <div className="form-group">
-                                <label className="form-label text-foreground">Literal Translation</label>
-                                <input name="translation" onChange={handleInputChange} value={formData.translation || ''} className="form-input bg-background text-foreground border-border" />
-                            </div>
-                        </div>
 
-                        <div className="form-group">
-                            <label className="form-label text-foreground">Meaning</label>
-                            <textarea name="meaning" onChange={handleInputChange} value={formData.meaning || ''} className="form-textarea bg-background text-foreground border-border" rows={3} required />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label text-foreground">Audio URL (Optional)</label>
-                            <input name="audio_url" placeholder="https://example.com/audio.mp3" onChange={handleInputChange} value={formData.audio_url || ''} className="form-input bg-background text-foreground border-border" />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label text-foreground">Tags / Categories</label>
-                            <div className="tag-input-row">
-                                <input
-                                    type="text"
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); } }}
-                                    className="form-input bg-background text-foreground border-border"
-                                    placeholder="Type a tag and press Enter"
-                                />
-                                <button type="button" onClick={handleAddTag} className="btn btn-secondary">Add</button>
-                            </div>
-                            <div className="tag-display">
-                                {tags.map(tag => (
-                                    <div key={tag} className="tag-removable">
-                                        <span>{tag}</span>
-                                        <button type="button" onClick={() => handleRemoveTag(tag)} className="tag-remove-btn">×</button>
+                            {/* Modal Body - Scrollable */}
+                            <div className="p-6 overflow-y-auto custom-scrollbar">
+                                <form id="idiomForm" onSubmit={handleSubmit} className="space-y-4">
+                                    <div className="form-group">
+                                        <label className="form-label text-foreground font-medium mb-1 block">Kashmiri Idiom</label>
+                                        <input
+                                            name="idiom_kashmiri"
+                                            onChange={handleInputChange}
+                                            value={formData.idiom_kashmiri || ''}
+                                            className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                                            placeholder="Enter idiom in Kashmiri script..."
+                                            required
+                                        />
                                     </div>
-                                ))}
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="form-group">
+                                            <label className="form-label text-foreground font-medium mb-1 block">Transliteration</label>
+                                            <input
+                                                name="transliteration"
+                                                onChange={handleInputChange}
+                                                value={formData.transliteration || ''}
+                                                className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                                                placeholder="e.g., kath baath"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label text-foreground font-medium mb-1 block">Literal Translation</label>
+                                            <input
+                                                name="translation"
+                                                onChange={handleInputChange}
+                                                value={formData.translation || ''}
+                                                className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                                                placeholder="Literal meaning in English"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label text-foreground font-medium mb-1 block">Meaning / Moral</label>
+                                        <textarea
+                                            name="meaning"
+                                            onChange={handleInputChange}
+                                            value={formData.meaning || ''}
+                                            className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all min-h-[100px]"
+                                            rows={3}
+                                            placeholder="The deeper meaning or moral of the idiom..."
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label text-foreground font-medium mb-1 block">Audio URL (Optional)</label>
+                                        <input
+                                            name="audio_url"
+                                            onChange={handleInputChange}
+                                            value={formData.audio_url || ''}
+                                            className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                                            placeholder="https://example.com/audio.mp3"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label className="form-label text-foreground font-medium mb-1 block">Tags / Categories</label>
+                                        <div className="flex gap-2 mb-2">
+                                            <input
+                                                type="text"
+                                                value={tagInput}
+                                                onChange={(e) => setTagInput(e.target.value)}
+                                                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); } }}
+                                                className="flex-1 px-4 py-2 rounded-lg bg-background border border-border focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                                                placeholder="Type a tag and press Enter"
+                                            />
+                                            <button type="button" onClick={handleAddTag} className="btn btn-secondary whitespace-nowrap px-4">Add Tag</button>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {tags.map(tag => (
+                                                <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+                                                    {tag}
+                                                    <button type="button" onClick={() => handleRemoveTag(tag)} className="hover:text-destructive transition-colors ml-1">×</button>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="p-6 border-t border-border bg-muted/20 rounded-b-xl flex justify-end gap-3">
+                                <button type="button" onClick={cancelEdit} className="btn btn-secondary">Cancel</button>
+                                <button type="submit" form="idiomForm" className="btn btn-primary">{editingId ? 'Update Idiom' : 'Add Idiom'}</button>
                             </div>
                         </div>
 
-                        <div className="flex gap-4 pt-4 border-t border-border">
-                            <button type="submit" className="btn btn-primary">{editingId ? 'Update Idiom' : 'Add Idiom'}</button>
-                            <button type="button" onClick={cancelEdit} className="btn btn-secondary">Cancel</button>
-                        </div>
-                    </form>
+                        {/* Backdrop Click to Close */}
+                        <div className="absolute inset-0 -z-10" onClick={cancelEdit}></div>
+                    </div>
                 )}
 
                 <div className="dashboard-grid">

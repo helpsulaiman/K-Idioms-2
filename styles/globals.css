@@ -325,10 +325,16 @@ body {
 
 .idiom-card .text-kashmiri,
 .dashboard-card .text-kashmiri,
+.text-kashmiri,
 [lang="ks"] {
   font-family: var(--font-kashmiri, sans-serif), serif;
   word-break: break-word;
-  /* Prevents overflow */
+  direction: rtl;
+  /* Enforce Right-to-Left direction */
+  unicode-bidi: embed;
+  /* Ensure proper bidirectional handling */
+  line-height: 1.8 !important;
+  /* Improve readability with more spacing */
 }
 
 /* --- FIX for Mobile Menu Links --- */
@@ -424,17 +430,17 @@ body {
 /* Typography System */
 .text-kashmiri {
   /* Kashmiri text - largest and most prominent */
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   line-height: 1.4;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Legacy styles removed. Using Tailwind utilities in components. */
 .text-transliteration {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-style: italic;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   /* Color handled by utility classes */
 }
 
@@ -457,7 +463,7 @@ body {
 .idioms-grid {
   display: grid;
   /* This is the default desktop style: multiple columns */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 4rem 6rem;
   padding: 2rem;
   margin: 0 auto;
@@ -470,8 +476,8 @@ body {
     /* This overrides the desktop style for mobile */
     grid-template-columns: minmax(0, 400px);
     justify-content: center;
-    padding: 1rem;
-    gap: 2rem 3rem;
+    padding: 0.7rem;
+    gap: 2.5rem 3rem;
   }
 }
 
@@ -820,12 +826,9 @@ body {
 
   .card-flip-front,
   .card-flip-back {
-    padding: 2rem;
+    padding: 1rem;
   }
 
-  .card-flip-back {
-    padding: 1.25rem;
-  }
 
   .flip-meaning-text {
     font-size: 0.85rem;

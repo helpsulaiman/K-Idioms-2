@@ -83,8 +83,7 @@ const HomePage: React.FC = () => {
             Kash<span className="gradient-text">Words</span>
           </h1>
           <p className="page-subtitle">
-            Discover the wisdom and beauty of traditional Kashmiri sayings.
-            Each idiom carries centuries of cultural heritage and timeless insights.
+            The traditional Kashmiri sayings are a repository of wisdom and beauty, encapsulating centuries of cultural heritage and timeless insights. As Kashmiri is recognized as a vulnerable language by <strong>UNESCO</strong>, it is imperative to preserve this legacy.
           </p>
         </div>
 
