@@ -2,6 +2,7 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const supabase = createServerSupabaseClient({ req, res });
 
@@ -16,6 +17,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // This is the APPROVE action
         const suggestion = req.body;
         const { id, created_at, ...newIdiom } = suggestion; // Exclude suggestion-specific fields
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+        // Check admin status
+        const { data: userStats } = await supabase
+            .from('user_stats')
+            .select('is_admin')
+            .eq('user_id', session.user.id)
+            .single();
+        if (!userStats?.is_admin) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
 
         // 1. Insert the approved suggestion into the main 'idioms' table
         const { error: insertError } = await supabase.from('idioms').insert({ ...newIdiom, status: 'approved' });

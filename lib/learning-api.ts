@@ -201,13 +201,10 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
 
         // Verify auth state inside the function
         const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
-        console.log('API Internal Auth Check:', authUser?.id, 'Error:', authError);
 
         if (authUser?.id !== userId) {
-            console.warn('MISMATCH: Argument userId', userId, 'does not match authUser', authUser?.id);
+            // Auth mismatch - this shouldn't happen in normal flow
         }
-
-        console.log('Submitting user progress for', userId, 'lesson', lessonId, 'stars', stars);
 
         // 1. Upsert user_progress
         const { data: progressData, error: progressError } = await supabase
@@ -225,7 +222,7 @@ export async function submitLessonProgress(supabase: SupabaseClient, userId: str
             throw new ApiError(`Failed to save progress: ${progressError.message}`);
         }
 
-        console.log('Supabase WRITE SUCCESS:', progressData);
+        // Progress saved successfully
 
         // 2. Update user_stats (re-calculate totals)
         // Fetch all progress for this user to calculate total stars
@@ -294,7 +291,7 @@ export async function migrateGuestProgress(supabase: SupabaseClient, userId: str
     }
 }
 
-export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily' | 'weekly' | 'all_time' = 'all_time'): Promise<UserStats[]> {
+export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily' | 'weekly' | 'all_time' = 'all_time', currentUserId?: string): Promise<UserStats[]> {
     try {
         if (period === 'all_time') {
             const { data, error } = await supabase
@@ -307,8 +304,8 @@ export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily'
 
             let allUsers = data || [];
 
-            // Inject Guest User if applicable (Client-side only merge)
-            if (typeof window !== 'undefined') {
+            // Inject Guest User ONLY if user is NOT logged in (Client-side only merge)
+            if (typeof window !== 'undefined' && !currentUserId) {
                 try {
                     const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
                     const totalStars = Object.values(localProgress).reduce((sum: number, stars: any) => sum + (Number(stars) || 0), 0);
@@ -394,8 +391,8 @@ export async function fetchLeaderboard(supabase: SupabaseClient, period: 'daily'
             // Sort by stars descending
             const sorted = leaderboard.sort((a, b) => b.total_stars - a.total_stars);
 
-            // Inject Guest User if applicable
-            if (typeof window !== 'undefined') {
+            // Inject Guest User ONLY if user is NOT logged in
+            if (typeof window !== 'undefined' && !currentUserId) {
                 const localProgress = JSON.parse(localStorage.getItem('hechun_guest_progress') || '{}');
                 const totalStars = Object.values(localProgress).reduce((sum: number, stars: any) => sum + (Number(stars) || 0), 0);
                 const lessonsCompleted = Object.values(localProgress).filter((s: any) => s > 0).length;

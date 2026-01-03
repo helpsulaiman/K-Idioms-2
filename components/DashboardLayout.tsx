@@ -8,6 +8,7 @@ import {
     Lightbulb,
     Languages,
     GraduationCap,
+    Users,
     LogOut,
     Hexagon,
     Menu,
@@ -26,6 +27,7 @@ const navItems = [
     { href: '/dashboard/suggestions', label: 'Manage Suggestions', icon: <Lightbulb className="w-5 h-5 flex-shrink-0" /> },
     { href: '/dashboard/alphabet', label: 'Manage Alphabet', icon: <Languages className="w-5 h-5 flex-shrink-0" /> },
     { href: '/dashboard/lessons', label: 'Manage Lessons', icon: <GraduationCap className="w-5 h-5 flex-shrink-0" /> },
+    { href: '/dashboard/users', label: 'Manage Users', icon: <Users className="w-5 h-5 flex-shrink-0" /> },
 ];
 
 interface SidebarProps {

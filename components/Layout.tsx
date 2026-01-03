@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import BubbleMenu from './BubbleMenu';
 import Footer from './Footer';
 import FeedbackButton from './ui/FeedbackButton';
@@ -23,50 +23,82 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
     const router = useRouter();
     const user = useUser();
+    const supabase = useSupabaseClient();
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    const navItems = React.useMemo(() => [
-        {
-            label: 'Home',
-            href: '/',
-            rotation: -8,
-            hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' } // Blue
-        },
-        {
-            label: 'Hečhun (Learn)',
-            href: '/hechun',
-            rotation: 8,
-            hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' } // Green
-        },
-        {
-            label: 'Submit Idiom',
-            href: '/submit',
-            rotation: -8,
-            hoverStyles: { bgColor: '#f59e0b', textColor: '#ffffff' } // Orange
-        },
-        {
-            label: 'About Project',
-            href: '/about-project',
-            rotation: 8,
-            hoverStyles: { bgColor: '#8b5cf6', textColor: '#ffffff' } // Purple
-        },
-        {
-            label: 'About Us',
-            href: '/about-us',
-            rotation: -8,
-            hoverStyles: { bgColor: '#06b6d4', textColor: '#ffffff' } // Cyan 
-        },
-        user ? {
-            label: 'Profile',
-            href: '/profile',
-            rotation: 8,
-            hoverStyles: { bgColor: '#ec4899', textColor: '#ffffff' } // Pink 
-        } : {
-            label: 'Login',
-            href: '/auth/login',
-            rotation: 8,
-            hoverStyles: { bgColor: '#ef4444', textColor: '#ffffff' } // Red
+    // Check admin status when user changes
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            if (!user) {
+                setIsAdmin(false);
+                return;
+            }
+            const { data } = await supabase
+                .from('user_stats')
+                .select('is_admin')
+                .eq('user_id', user.id)
+                .maybeSingle();
+
+            setIsAdmin(data?.is_admin === true);
+        };
+        checkAdminStatus();
+    }, [user, supabase]);
+
+    const navItems = React.useMemo(() => {
+        const items = [
+            {
+                label: 'Hečhun',
+                href: '/',
+                rotation: -8,
+                hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' } // Green
+            },
+            {
+                label: 'Kashmiri Idioms',
+                href: '/idioms',
+                rotation: 8,
+                hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' } // Blue
+            },
+            {
+                label: 'About Project',
+                href: '/about-project',
+                rotation: 8,
+                hoverStyles: { bgColor: '#8b5cf6', textColor: '#ffffff' } // Purple
+            },
+            {
+                label: 'About Us',
+                href: '/about-us',
+                rotation: -8,
+                hoverStyles: { bgColor: '#06b6d4', textColor: '#ffffff' } // Cyan 
+            },
+        ];
+
+        // Add Dashboard link for admins
+        if (isAdmin) {
+            items.push({
+                label: 'Dashboard',
+                href: '/dashboard',
+                rotation: 8,
+                hoverStyles: { bgColor: '#dc2626', textColor: '#ffffff' } // Red
+            });
         }
-    ], [user]);
+
+        // Add Profile or Login
+        items.push(
+            user ? {
+                label: 'Profile',
+                href: '/profile',
+                rotation: isAdmin ? -8 : 8,
+                hoverStyles: { bgColor: '#ec4899', textColor: '#ffffff' } // Pink 
+            } : {
+                label: 'Login',
+                href: '/auth/login',
+                rotation: 8,
+                hoverStyles: { bgColor: '#ef4444', textColor: '#ffffff' } // Red
+            }
+        );
+
+        return items;
+    }, [user, isAdmin]);
 
     return (
         <>

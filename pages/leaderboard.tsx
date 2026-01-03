@@ -19,7 +19,7 @@ const LeaderboardPage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const data = await fetchLeaderboard(supabase, period);
+                const data = await fetchLeaderboard(supabase, period, user?.id);
                 setUsers(data);
             } catch (err: any) {
                 console.error('Failed to load leaderboard:', err);
@@ -199,7 +199,7 @@ const LeaderboardPage: React.FC = () => {
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <div className="font-medium text-gray-900 dark:text-gray-100">
-                                                                {item.username || `User ${item.user_id.slice(0, 8)}...`}
+                                                                {item.username || `Learner #${index + 1}`}
                                                                 {item.user_id === user?.id && <span className="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">You</span>}
                                                             </div>
                                                         </td>
