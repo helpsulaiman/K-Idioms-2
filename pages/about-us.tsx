@@ -75,12 +75,12 @@ const AboutPage: React.FC = () => {
                     {/* DYD Spirit Logo */}
                     <div className="relative w-80 h-80 mx-auto mb-10">
                         <img
-                            src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritLight.png"
+                            src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritDark.png"
                             alt="DYD's Spirit Logo"
                             className="absolute inset-0 w-full h-full object-contain hidden dark:block"
                         />
                         <img
-                            src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritDark.png"
+                            src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/DYDsSpiritLight.png"
                             alt="DYD's Spirit Logo"
                             className="absolute inset-0 w-full h-full object-contain dark:hidden block"
                         />

@@ -27,6 +27,7 @@ interface BubbleMenuProps {
     animationEase?: string;
     animationDuration?: number;
     staggerDelay?: number;
+    children?: React.ReactNode;
 }
 
 const DEFAULT_ITEMS: BubbleMenuItem[] = [
@@ -79,7 +80,8 @@ const BubbleMenu: React.FC<BubbleMenuProps> = ({
     items,
     animationEase = 'back.out(1.5)',
     animationDuration = 0.5,
-    staggerDelay = 0.12
+    staggerDelay = 0.12,
+    children
 }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showOverlay, setShowOverlay] = useState(false);
@@ -210,6 +212,8 @@ const BubbleMenu: React.FC<BubbleMenuProps> = ({
                         </span>
                     </div>
                 )}
+
+                {children}
 
                 <button
                     type="button"

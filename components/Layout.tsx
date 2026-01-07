@@ -5,6 +5,7 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import BubbleMenu from './BubbleMenu';
 import Footer from './Footer';
 import FeedbackButton from './ui/FeedbackButton';
+import ThemeToggle from './ThemeToggle';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -106,7 +107,9 @@ const Layout: React.FC<LayoutProps> = ({
                         animationEase="back.out(1.5)"
                         animationDuration={0.5}
                         staggerDelay={0.12}
-                    />
+                    >
+                        <ThemeToggle />
+                    </BubbleMenu>
                 </header>
 
                 <main className={`flex-1 w-full ${fullWidth ? '' : 'max-w-[1400px] mx-auto pt-16 sm:pt-20 pb-16'}`}>
