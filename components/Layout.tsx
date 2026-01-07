@@ -6,8 +6,6 @@ import BubbleMenu from './BubbleMenu';
 import Footer from './Footer';
 import FeedbackButton from './ui/FeedbackButton';
 
-import Link from 'next/link';
-
 interface LayoutProps {
     children: React.ReactNode;
     title?: string;
@@ -47,14 +45,14 @@ const Layout: React.FC<LayoutProps> = ({
     const navItems = React.useMemo(() => {
         const items = [
             {
-                label: 'Hečhun',
+                label: 'Kashmiri Idioms',
                 href: '/',
                 rotation: -8,
                 hoverStyles: { bgColor: '#10b981', textColor: '#ffffff' } // Green
             },
             {
-                label: 'Kashmiri Idioms',
-                href: '/idioms',
+                label: 'Submit Idiom',
+                href: '/submit',
                 rotation: 8,
                 hoverStyles: { bgColor: '#3b82f6', textColor: '#ffffff' } // Blue
             },
@@ -82,23 +80,8 @@ const Layout: React.FC<LayoutProps> = ({
             });
         }
 
-        // Add Profile or Login
-        items.push(
-            user ? {
-                label: 'Profile',
-                href: '/profile',
-                rotation: isAdmin ? -8 : 8,
-                hoverStyles: { bgColor: '#ec4899', textColor: '#ffffff' } // Pink 
-            } : {
-                label: 'Login',
-                href: '/auth/login',
-                rotation: 8,
-                hoverStyles: { bgColor: '#ef4444', textColor: '#ffffff' } // Red
-            }
-        );
-
         return items;
-    }, [user, isAdmin]);
+    }, [isAdmin]);
 
     return (
         <>
@@ -114,22 +97,7 @@ const Layout: React.FC<LayoutProps> = ({
             <div className="min-h-screen flex flex-col">
                 <header className="container mx-auto flex pt-4 px-4 z-50 relative">
                     <BubbleMenu
-                        logo={
-                            <Link href="/hechun" className="h-full flex items-center hover:opacity-80 transition-opacity duration-200">
-                                {/* Light Mode Logo */}
-                                <img
-                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_L.png"
-                                    alt="Hechun Logo"
-                                    className="h-full w-auto object-contain dark:hidden block"
-                                />
-                                {/* Dark Mode Logo */}
-                                <img
-                                    src="https://hdbmcwmgolmxmtllaclx.supabase.co/storage/v1/object/public/images/Hechun_D.png"
-                                    alt="Hechun Logo"
-                                    className="h-full w-auto object-contain hidden dark:block"
-                                />
-                            </Link>
-                        }
+                        logo={null}
                         items={navItems}
                         menuAriaLabel="Toggle navigation"
                         menuBg="#ffffff"

@@ -203,11 +203,13 @@ const BubbleMenu: React.FC<BubbleMenuProps> = ({
     return (
         <>
             <nav ref={containerRef} className={containerClassName} style={style} aria-label="Main navigation">
-                <div className="bubble logo-bubble" aria-label="Logo" style={{ background: menuBg }}>
-                    <span className="logo-content">
-                        {typeof logo === 'string' ? <img src={logo} alt="Logo" className="bubble-logo" /> : logo}
-                    </span>
-                </div>
+                {logo && (
+                    <div className="bubble logo-bubble" aria-label="Logo" style={{ background: menuBg }}>
+                        <span className="logo-content">
+                            {typeof logo === 'string' ? <img src={logo} alt="Logo" className="bubble-logo" /> : logo}
+                        </span>
+                    </div>
+                )}
 
                 <button
                     type="button"
