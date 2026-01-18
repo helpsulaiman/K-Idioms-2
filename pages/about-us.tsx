@@ -93,7 +93,7 @@ const AboutPage: React.FC = () => {
 
                         <div className="prose dark:prose-invert max-w-none">
                             <p className="text-lg text-muted-foreground/90 leading-relaxed">
-                                <strong>KashWords</strong> is our initiative to digitally preserve Kashmiri idioms and traditional sayings, making them accessible and searchable for future generations. We also develop <strong>Hečhun</strong>, an interactive learning platform available at <a href="https://hechun.vercel.app" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline">hechun.vercel.app</a>.
+                                <strong>KashWords</strong> is our initiative to digitally preserve Kashmiri idioms and traditional sayings, making them accessible and searchable for future generations. We also develop <strong>Hečhun</strong>, an interactive learning platform available at <a href="https://hechun.tech" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline">hechun.vercel.app</a>.
                             </p>
                         </div>
 

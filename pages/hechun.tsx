@@ -37,12 +37,12 @@ const HechunRedirectPage: React.FC = () => {
 
                             {/* CTA Button */}
                             <a
-                                href="https://hechun.vercel.app"
+                                href="https://hechun.tech"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full hover:shadow-xl hover:shadow-emerald-500/30 hover:scale-105 transition-all duration-300"
                             >
-                                Visit hechun.vercel.app
+                                Visit hechun.tech
                                 <ExternalLink className="w-5 h-5" />
                             </a>
 
